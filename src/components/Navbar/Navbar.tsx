@@ -26,17 +26,35 @@ import Image from "next/image";
 import logo from "../../assets/images/ChatGPTImageApr18202602_35_14AM 2.svg";
 import ReactCountryFlag from "react-country-flag";
 import { useRef, useState } from "react";
-import { Currency } from "@/Types/currency";
+import { Currency, lang } from "@/Types/currency";
+import { useTranslation } from "react-i18next";
+import { changeLanguage } from "i18next";
 
 export default function Navbar() {
   const inputRef = useRef<HTMLInputElement | null>(null);
-  const [selectedCategory, setSelectedCategory] = useState("All Categories");
+  const [selectedCategory, setSelectedCategory] = useState("all");
   const [currency, setCurrency] = useState<Currency>("USD");
+  const [language, setLanguage] = useState<lang>("ENG");
+  const { t } = useTranslation();
 
-  const currencySymbol= {
+  const currencySymbol = {
     USD: "$",
     EUR: "€",
   };
+
+  const categories = [
+    "all",
+    "fashion",
+    "bags",
+    "shoes",
+    "sports",
+    "games",
+    "headphones",
+    "clothing",
+    "camera",
+    "electronics",
+    "watches",
+  ];
   return (
     <>
       <header>
@@ -69,14 +87,14 @@ export default function Navbar() {
                     />
                   </svg>
 
-                  <p className="mt-1 text-[11px]">Find Wolmart Store</p>
+                  <p className="mt-1 text-[11px]"> {t("topbar.findStore")}</p>
                 </a>
                 <a
                   href="#"
                   className="flex justify-center items-center gap-1 text-[#666666] hover:text-[#fe4407] transition-all duration-300"
                 >
                   <CircleAlert width={16} height={16} />
-                  <p className="mt-1 text-[11px]">Free Standard Shipping</p>
+                  <p className="mt-1 text-[11px]"> {t("topbar.freeShipping")}</p>
                 </a>
               </div>
               <div className="top_bar_right flex justify-center items-center gap-5">
@@ -128,7 +146,7 @@ export default function Navbar() {
                       <HoverCardTrigger className="text-[11px] text-[#666666] hover:text-[#fe4407] transition-all duration-300 cursor-pointer flex justify-center items-center gap-1">
                         <span>
                           <ReactCountryFlag
-                            countryCode="GB"
+                            countryCode={language === "ENG" ? "GB" : "EG"}
                             svg
                             style={{
                               width: "14px",
@@ -136,7 +154,7 @@ export default function Navbar() {
                             }}
                           />
                         </span>
-                        ENG
+                        {language}
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
                           fill="none"
@@ -155,7 +173,13 @@ export default function Navbar() {
 
                       <HoverCardContent className="w-16 p-2 border-none outline-none ring-0 focus:outline-none focus:ring-0 flex justify-center bg-white">
                         <ul className="space-y-2">
-                          <li className="flex justify-center items-center gap-2 rounded text-[11px] text-[#666666] hover:text-[#fe4407] transition-all duration-300 cursor-pointer">
+                          <li
+                            onClick={() => {
+                              changeLanguage("en");
+                              setLanguage("ENG");
+                            }}
+                            className=" flex justify-center items-center gap-2 rounded text-[11px] text-[#666666] hover:text-[#fe4407] transition-all duration-300 cursor-pointer"
+                          >
                             <span>
                               <ReactCountryFlag
                                 countryCode="GB"
@@ -168,10 +192,16 @@ export default function Navbar() {
                             </span>
                             ENG
                           </li>
-                          <li className="flex justify-center items-center gap-2 rounded text-[11px] text-[#666666] hover:text-[#fe4407] transition-all duration-300 cursor-pointer">
+                          <li
+                            onClick={() => {
+                              setLanguage("EGY");
+                              changeLanguage("ar");
+                            }}
+                            className="flexg flex justify-center items-center gap-2 rounded text-[11px] text-[#666666] hover:text-[#fe4407] transition-all duration-300 cursor-pointer"
+                          >
                             <span>
                               <ReactCountryFlag
-                                countryCode="FR"
+                                countryCode="EG"
                                 svg
                                 style={{
                                   width: "14px",
@@ -179,7 +209,7 @@ export default function Navbar() {
                                 }}
                               />
                             </span>
-                            FAR
+                            EGY
                           </li>
                         </ul>
                       </HoverCardContent>
@@ -192,14 +222,14 @@ export default function Navbar() {
                     className="flex justify-center items-center gap-1 hover:text-[#fe4407] transition-all duration-300"
                   >
                     <User width={20} height={20} />
-                    Sign in
+                    {t("navbar.login")}
                   </a>
                   <span>/</span>
                   <a
                     href="/SignUp"
                     className="hover:text-[#fe4407] transition-all duration-300"
                   >
-                    Register
+                    {t("navbar.signup")}
                   </a>
                 </div>
               </div>
@@ -222,16 +252,16 @@ export default function Navbar() {
                     <div className="left-side ">
                       <ul className="flex items-center gap-12 text-[14px] font-semibold">
                         <li className="tap-item py-6">
-                          <a href="#">Home</a>
+                          <a href="#">{t("navbar.home")}</a>
                         </li>
                         <li className="tap-item py-6">
-                          <a href="#">Shop</a>
+                          <a href="#">{t("navbar.shop")}</a>
                         </li>
                         <li className="tap-item py-6">
-                          <a href="#">Vendors</a>
+                          <a href="#">{t("navbar.vendors")}</a>
                         </li>
                         <li className="tap-item py-6">
-                          <a href="#">Deals</a>
+                          <a href="#">{t("navbar.deals")}</a>
                         </li>
                         <li className="tap-item py-6"></li>
                       </ul>
@@ -259,7 +289,7 @@ export default function Navbar() {
                       >
                         <span>
                           <p className="text-border text-[11px] font-medium group-hover:text-primary transition-all">
-                            Shopping Cart
+                            {t("navbar.cart")}
                           </p>
                           <span className="font-bold text-end block group-hover:text-primary transition-all">
                             <span id="Currency">
@@ -299,7 +329,7 @@ export default function Navbar() {
                               variant="outline"
                               className="border-0 bg-transparent text-xs font-normal gap-12 px-10 text-[#AAAAAA]"
                             >
-                              <p>{selectedCategory}</p>
+                              <p>{t(`categories.${selectedCategory}`)}</p>
                               <ChevronDown />
                             </Button>
                           </DropdownMenuTrigger>
@@ -308,25 +338,13 @@ export default function Navbar() {
                             className="text-[#AAAAAA] bg-[#F8F8F8] ring-0 rounded-none relative -bottom-2 w-[227px]"
                           >
                             <DropdownMenuGroup>
-                              {[
-                                "All Categories",
-                                "Fashion",
-                                "Bags",
-                                "Shoes",
-                                "Sports",
-                                "Games",
-                                "Headphones",
-                                "Clothing & Apparel",
-                                "Camera",
-                                "Electronics",
-                                "Watches",
-                              ].map((item) => (
+                              {categories.map((item) => (
                                 <DropdownMenuItem
                                   key={item}
                                   onClick={() => setSelectedCategory(item)}
                                   className="text-xs focus:bg-transparent hover:!bg-textMain outline-none  hover:!text-white px-0 w-full ps-10"
                                 >
-                                  {item}
+                                  {t(`categories.${item}`)}
                                 </DropdownMenuItem>
                               ))}
                             </DropdownMenuGroup>
@@ -338,7 +356,7 @@ export default function Navbar() {
                         <input
                           ref={inputRef}
                           type="text"
-                          placeholder="Search in..."
+                          placeholder={t("navbar.search")}
                           className="bg-transparent 
                         text-[#AAAAAA] 
                         placeholder:text-[#AAAAAA] 
@@ -378,7 +396,7 @@ export default function Navbar() {
                             d="m3.75 13.5 10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75Z"
                           />
                         </svg>
-                        Flash Sale
+                        {t("navbar.flashSale")}
                       </a>
                       <a
                         href="#"
@@ -401,7 +419,7 @@ export default function Navbar() {
                           <path d="M9 9h.01" />
                           <path d="M15 15h.01" />
                         </svg>
-                        Special Offers
+                        {t("navbar.offers")}
                       </a>
                     </div>
                   </div>
