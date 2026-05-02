@@ -26,10 +26,17 @@ import Image from "next/image";
 import logo from "../../assets/images/ChatGPTImageApr18202602_35_14AM 2.svg";
 import ReactCountryFlag from "react-country-flag";
 import { useRef, useState } from "react";
+import { Currency } from "@/Types/currency";
 
 export default function Navbar() {
   const inputRef = useRef<HTMLInputElement | null>(null);
   const [selectedCategory, setSelectedCategory] = useState("All Categories");
+  const [currency, setCurrency] = useState<Currency>("USD");
+
+  const currencySymbol= {
+    USD: "$",
+    EUR: "€",
+  };
   return (
     <>
       <header>
@@ -77,7 +84,7 @@ export default function Navbar() {
                   <div>
                     <HoverCard openDelay={100}>
                       <HoverCardTrigger className="text-[11px] text-[#666666] hover:text-[#fe4407] transition-all duration-300 cursor-pointer flex justify-center items-center gap-1">
-                        USD
+                        {currency}
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
                           fill="none"
@@ -96,10 +103,20 @@ export default function Navbar() {
 
                       <HoverCardContent className="w-11 p-2 border-none outline-none ring-0 focus:outline-none focus:ring-0 flex justify-center bg-white">
                         <ul className="space-y-2">
-                          <li className="rounded text-[11px] text-[#666666] hover:text-[#fe4407] transition-all duration-300 cursor-pointer">
+                          <li
+                            onClick={() => {
+                              setCurrency("EUR");
+                            }}
+                            className="rounded text-[11px] text-[#666666] hover:text-[#fe4407] transition-all duration-300 cursor-pointer"
+                          >
                             EUR
                           </li>
-                          <li className="rounded text-[11px] text-[#666666] hover:text-[#fe4407] transition-all duration-300 cursor-pointer">
+                          <li
+                            onClick={() => {
+                              setCurrency("USD");
+                            }}
+                            className="rounded text-[11px] text-[#666666] hover:text-[#fe4407] transition-all duration-300 cursor-pointer"
+                          >
                             USD
                           </li>
                         </ul>
@@ -245,7 +262,10 @@ export default function Navbar() {
                             Shopping Cart
                           </p>
                           <span className="font-bold text-end block group-hover:text-primary transition-all">
-                            <span id="Currency">$</span>0.00
+                            <span id="Currency">
+                              {currencySymbol[currency]}
+                            </span>
+                            0.00
                           </span>
                         </span>
                         <span className="relative mb-1 group-hover:text-primary transition-all">
@@ -285,7 +305,7 @@ export default function Navbar() {
                           </DropdownMenuTrigger>
                           <DropdownMenuContent
                             align="start"
-                            className="text-[#AAAAAA] bg-[#F8F8F8] ring-0 rounded-none relative -bottom-2 w-[227px] "
+                            className="text-[#AAAAAA] bg-[#F8F8F8] ring-0 rounded-none relative -bottom-2 w-[227px]"
                           >
                             <DropdownMenuGroup>
                               {[
