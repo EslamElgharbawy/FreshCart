@@ -21,9 +21,9 @@ import {
   User,
 } from "lucide-react";
 import Image from "next/image";
-import logo from "../../assets/images/ChatGPTImageApr18202602_35_14AM 2.svg";
+import logo from "../../assets/images/logo1.svg";
 import ReactCountryFlag from "react-country-flag";
-import { useEffect, useRef, useState } from "react";
+import {useRef, useState } from "react";
 import { Currency, lang } from "@/Types/currency";
 import { useTranslation } from "react-i18next";
 import { changeLanguage } from "i18next";
@@ -302,7 +302,7 @@ export default function Navbar() {
                         </span>
                         <span className="relative mb-1 group-hover:text-primary transition-all">
                           <span
-                            className={`absolute -top-1  ${language === "EGY" ? "-left-2" : "-right-2"} w-[18px] h-[18px] bg-accent text-[#272b37] text-[11px] rounded-full flex justify-center items-center`}
+                            className={`absolute -top-1  ${language === "EGY" ? "-left-1" : "-right-1"} w-[18px] h-[18px] bg-accent text-[#272b37] text-[11px] rounded-full flex justify-center items-center`}
                           >
                             0
                           </span>
