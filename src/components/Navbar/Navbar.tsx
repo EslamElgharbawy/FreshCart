@@ -23,17 +23,18 @@ import {
 import Image from "next/image";
 import logo from "../../assets/images/logo1.svg";
 import ReactCountryFlag from "react-country-flag";
-import {useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { Currency, lang } from "@/Types/currency";
 import { useTranslation } from "react-i18next";
 import { changeLanguage } from "i18next";
+import Link from "next/link";
 
 export default function Navbar() {
   const inputRef = useRef<HTMLInputElement | null>(null);
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [currency, setCurrency] = useState<Currency>("USD");
   const [language, setLanguage] = useState<lang>("ENG");
-  const [active, setactive] = useState("Home");
+  const [active, setactive] = useState("home");
   const { t } = useTranslation();
 
   const currencySymbol = {
@@ -55,7 +56,12 @@ export default function Navbar() {
     "watches",
   ];
 
-  const sections = ["home", "shop", "vendors", "deals"];
+  const sections = [
+    { name: "home", path: "/" },
+    { name: "shop", path: "/Shop" },
+    { name: "vendors", path: "/Vendors" },
+    { name: "deals", path: "/Deals" },
+  ];
   return (
     <>
       <header>
@@ -257,11 +263,13 @@ export default function Navbar() {
                       <ul className="flex items-center gap-12 text-[14px] font-semibold">
                         {sections.map((item) => (
                           <li
-                            key={item}
-                            onClick={() => setactive(item)}
-                            className={`tap-item py-6 transition-all duration-300 ${active === item ? "text-primary" : "hover:text-primary"}`}
+                            key={item.name}
+                            onClick={() => setactive(item.name)}
+                            className={`tap-item py-6 transition-all duration-300 ${active === item.name ? "text-primary" : "hover:text-primary"}`}
                           >
-                            <a href={`#${item}`}>{t(`navbar.${item}`)}</a>
+                            <Link href={item.path}>
+                              {t(`navbar.${item.name}`)}
+                            </Link>
                           </li>
                         ))}
                       </ul>
