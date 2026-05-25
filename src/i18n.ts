@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import i18n from "i18next";
 import { initReactI18next } from "react-i18next";
 
@@ -34,6 +34,16 @@ const resources = {
         camera: "Camera",
         electronics: "Electronics",
         watches: "Watches",
+      },
+      hero: {
+        running: "Running",
+        nikeShoes: "Nike Shoes",
+        startingAt: "Starting at",
+        shopCollection: "Shop Collection",
+
+        fashion: "Fashion",
+        sportswear: "Sportswear",
+        from: "From",
       },
       footer: {
         supportText: "Got Question? Call us 24/7",
@@ -106,6 +116,16 @@ const resources = {
         camera: "كاميرات",
         electronics: "إلكترونيات",
         watches: "ساعات",
+      },
+      hero: {
+        running: "الجري",
+        nikeShoes: "أحذية نايكي",
+        startingAt: "يبدأ من",
+        shopCollection: "تسوق المجموعة",
+
+        fashion: "الأزياء",
+        sportswear: "الملابس الرياضية",
+        from: "من",
       },
       footer: {
         supportText: "هل لديك سؤال؟ اتصل بنا 24/7",

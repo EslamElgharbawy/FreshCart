@@ -24,10 +24,11 @@ import Image from "next/image";
 import logo from "../../assets/images/logo1.svg";
 import ReactCountryFlag from "react-country-flag";
 import { useRef, useState } from "react";
-import { Currency, lang } from "@/Types/currency";
+import { Currency} from "@/Types/currency";
 import { useTranslation } from "react-i18next";
 import { changeLanguage } from "i18next";
 import Link from "next/link";
+import { lang } from "@/Types/Lang";
 
 export default function Navbar() {
   const inputRef = useRef<HTMLInputElement | null>(null);
