@@ -8,7 +8,7 @@ import Image from "next/image";
 import img1 from "../assets/images/intro-banner1.jpg";
 import img2 from "../assets/images/intro-banner2.jpg";
 import { motion } from "framer-motion";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import i18n from "@/i18n";
 import PromoBanner from "@/components/PromoBanner/PromoBanner";
@@ -16,9 +16,13 @@ import HeadphonesCard from "@/components/HeadphonesCard/HeadphonesCard";
 import FashionPromoCard from "@/components/FashionPromoCard/FashionPromoCard";
 import ElectronicPromoCard from "@/components/ElectronicPromoCard/ElectronicPromoCard";
 import ShoesPromoCard from "@/components/ShoesPromoCard/ShoesPromoCard";
+import { useAppDispatch, useAppSelector } from "@/hooks/store.hooks";
+import { getProducts } from "@/Features/Product.slice";
 
 export default function Home() {
   const [activeSlide, setActiveSlide] = useState(0);
+ const {products , loading} = useAppSelector((store)=>{return store.ProductSlice})
+  const dispatch = useAppDispatch();
   const { t } = useTranslation();
 
   const features_data = [
@@ -115,6 +119,9 @@ export default function Home() {
     },
   ];
 
+  useEffect(() => {
+    dispatch(getProducts());
+  }, []);
   return (
     <>
       <section id="hero">
@@ -387,21 +394,19 @@ export default function Home() {
           <div className="grid grid-cols-12">
             <div className="promo-grid col-span-9 grid grid-cols-3 gap-5">
               <div className="col-span-2">
-                <PromoBanner  />
+                <PromoBanner />
               </div>
               <div className="col-span-1">
-              <HeadphonesCard />
+                <HeadphonesCard />
               </div>
-              <FashionPromoCard  />
+              <FashionPromoCard />
               <ElectronicPromoCard />
               <ShoesPromoCard />
             </div>
             <div className="col-span-3">
               <div>
                 <h2>Top Daily Deals</h2>
-                <div>
-                  
-                </div>
+                <div></div>
               </div>
               <div></div>
             </div>
