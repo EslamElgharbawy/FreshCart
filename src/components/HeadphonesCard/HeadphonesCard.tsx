@@ -37,7 +37,7 @@ export default function HeadphonesCard() {
           </div>
           <a
             href=""
-            className="text-[#333] text-lg font-semibold leading-none flex justify-center items-center gap-2 uppercase mt-[71px]"
+            className="text-[#333] text-lg font-semibold leading-none flex justify-center items-center gap-2 uppercase mt-[71px] group"
           >
             Shop Now
             <svg
@@ -46,7 +46,7 @@ export default function HeadphonesCard() {
               viewBox="0 0 24 24"
               strokeWidth="2"
               stroke="currentColor"
-              className={`size-5 ${i18n.language === "ar" ? "rotate-180" : ""}`}
+              className={`size-5 ${i18n.language === "ar" ? "rotate-180" : ""}group-hover:transform group-hover:translate-x-2 transition-transform duration-200`}
             >
               <path
                 strokeLinecap="round"

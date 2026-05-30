@@ -22,7 +22,7 @@ export default function FashionPromoCard() {
             </h3>
           </div>
           <a
-            className="text-white text-lg font-semibold leading-none flex justify-center items-center gap-2"
+            className="text-white text-lg font-semibold leading-none flex justify-center items-center gap-2 group"
             href=""
           >
             Shop Now
@@ -32,7 +32,7 @@ export default function FashionPromoCard() {
               viewBox="0 0 24 24"
               strokeWidth="2"
               stroke="currentColor"
-              className={`size-5 ${i18n.language === "ar" ? "rotate-180" : ""}`}
+              className={`size-5 ${i18n.language === "ar" ? "rotate-180" : ""}group-hover:transform group-hover:translate-x-3 transition-transform duration-200`}
             >
               <path
                 strokeLinecap="round"

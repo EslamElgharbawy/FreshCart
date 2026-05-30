@@ -27,7 +27,7 @@ const ProductSlice = createSlice({
   extraReducers: (builder) => {
     builder.addCase(getProducts.pending, (prevState) => {
       prevState.loading = true;
-      console.log("not now",prevState);
+      console.log("not yet",prevState);
       
     });
     builder.addCase(getProducts.fulfilled, (prevState, action) => {
