@@ -16,13 +16,11 @@ import HeadphonesCard from "@/components/HeadphonesCard/HeadphonesCard";
 import FashionPromoCard from "@/components/FashionPromoCard/FashionPromoCard";
 import ElectronicPromoCard from "@/components/ElectronicPromoCard/ElectronicPromoCard";
 import ShoesPromoCard from "@/components/ShoesPromoCard/ShoesPromoCard";
-import { useAppDispatch, useAppSelector } from "@/hooks/store.hooks";
-import { getProducts } from "@/Features/Product.slice";
+import ProductLittleCard from "@/components/ProductLittleCard/ProductLittleCard";
 
 export default function Home() {
   const [activeSlide, setActiveSlide] = useState(0);
- const {products , loading} = useAppSelector((store)=>{return store.ProductSlice})
-  const dispatch = useAppDispatch();
+ 
   const { t } = useTranslation();
 
   const features_data = [
@@ -119,9 +117,6 @@ export default function Home() {
     },
   ];
 
-  useEffect(() => {
-    dispatch(getProducts());
-  }, []);
   return (
     <>
       <section id="hero">
@@ -391,7 +386,7 @@ export default function Home() {
 
       <section id="DealsSection">
         <div className="mt-[70px] mb-[50px] mx-5">
-          <div className="grid grid-cols-12">
+          <div className="grid grid-cols-12 gap-5">
             <div className="promo-grid col-span-9 grid grid-cols-3 gap-5">
               <div className="col-span-2">
                 <PromoBanner />
@@ -405,8 +400,16 @@ export default function Home() {
             </div>
             <div className="col-span-3">
               <div>
-                <h2>Top Daily Deals</h2>
-                <div></div>
+                <div className="bg-secondary py-6 text-center">
+                  <h2 className="text-2xl text-[#FFFFFFB3]">{t("deals.topDailyDeals")}</h2>
+                </div>
+                <div className="bg-white">
+                  <div className="p-5">
+                    <div className="flex flex-col gap-5">
+                      <ProductLittleCard/>
+                    </div>
+                  </div>
+                </div>
               </div>
               <div></div>
             </div>

@@ -63,6 +63,30 @@ const resources = {
           desc: "Call or email us 24/7",
         },
       },
+      deals: {
+        topDailyDeals: "Top Daily Deals",
+
+        trending: "Trending",
+        collection: "Collection",
+        dealsAndPromotion: "Deals and Promotion",
+        from: "From",
+        shopNow: "Shop Now",
+
+        bestSeller: "Best Seller",
+        electricHeadphone: "Electric Headphone",
+
+        weekendSale: "Weekend Sale",
+        tradeInYourCurrent: "Trade In Your Current",
+        camera: "Camera",
+
+        upTo: "Up To 50%",
+        ultimateSaleCollection: "Ultimate Sale Collection",
+
+        bestSelling: "Best Selling",
+        fashionSale: "Fashion Sale",
+
+        reviews: "Reviews",
+      },
       footer: {
         supportText: "Got Question? Call us 24/7",
         description: "Register now to get updates on promotions & coupons.",
@@ -162,6 +186,30 @@ const resources = {
           title: "دعم العملاء",
           desc: "اتصل أو راسلنا 24/7",
         },
+      },
+      deals: {
+        topDailyDeals: "أفضل العروض اليومية",
+
+        dealsAndPromotion: "العروض والتخفيضات",
+        trending: "الرائجة",
+        collection: "المجموعة",
+        from: "من",
+        shopNow: "تسوق الآن",
+
+        bestSeller: "الأكثر مبيعاً",
+        electricHeadphone: "سماعات كهربائية",
+
+        weekendSale: "تخفيضات نهاية الأسبوع",
+        tradeInYourCurrent: "استبدل كاميرتك الحالية",
+        camera: "كاميرا",
+
+        upTo: "خصم حتى 50%",
+        ultimateSaleCollection: "مجموعة التخفيضات الكبرى",
+
+        bestSelling: "الأكثر مبيعاً",
+        fashionSale: "تخفيضات الأزياء",
+
+        reviews: "مراجعة",
       },
       footer: {
         supportText: "هل لديك سؤال؟ اتصل بنا 24/7",
