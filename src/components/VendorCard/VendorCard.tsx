@@ -1,9 +1,11 @@
 import { getProducts } from "@/Features/Product.slice";
 import { useAppDispatch, useAppSelector } from "@/hooks/store.hooks";
-import MiniProductCardSkeleton from "@/MiniProductCardSkeleton";
 import Image from "next/image";
 import { useEffect } from "react";
+import { useTranslation } from "react-i18next";
+import BrandCardSkeleton from "../Skeletons/BrandCardSkeleton";
 export default function VendorCard() {
+  const {t} = useTranslation();
   const dispatch = useAppDispatch();
   const { products, loading } = useAppSelector((store) => store.ProductSlice);
 
@@ -32,7 +34,7 @@ export default function VendorCard() {
   return (
     <>
       {loading ? (
-        <MiniProductCardSkeleton />
+        <BrandCardSkeleton/>
       ) : (
         <>
           {brands.map((brand) => {
@@ -54,7 +56,7 @@ export default function VendorCard() {
                       {brand.name}
                     </a>
                     <p className="text-[#777] text-sm mt-1">
-                      ({brand.products.length} products)
+                      ({brand.products.length} {t("vendors.products")})
                     </p>
                   </div>
                 </div>

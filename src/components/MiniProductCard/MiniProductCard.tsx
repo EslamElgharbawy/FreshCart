@@ -1,9 +1,9 @@
 import { getProducts } from "@/Features/Product.slice";
 import { useAppDispatch, useAppSelector } from "@/hooks/store.hooks";
-import Loading from "@/MiniProductCardSkeleton";
 import Image from "next/image";
 import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
+import MiniProductCardSkeleton from "../Skeletons/MiniProductCardSkeleton";
 
 export default function MiniProductCard() {
   const { t } = useTranslation();
@@ -17,7 +17,7 @@ export default function MiniProductCard() {
   return (
     <>
       {loading ? (
-        <Loading />
+        <MiniProductCardSkeleton />
       ) : (
         <>
           {products?.slice(0, 5).map((product) => {

@@ -87,6 +87,10 @@ const resources = {
 
         reviews: "Reviews",
       },
+      vendors: {
+        topWeeklyVendors: "Top Weekly Vendors",
+        products: "Products",
+      },
       footer: {
         supportText: "Got Question? Call us 24/7",
         description: "Register now to get updates on promotions & coupons.",
@@ -210,6 +214,11 @@ const resources = {
         fashionSale: "تخفيضات الأزياء",
 
         reviews: "مراجعة",
+      },
+
+      vendors: {
+        topWeeklyVendors: "أفضل البائعين الأسبوعيين",
+        products: "منتج",
       },
       footer: {
         supportText: "هل لديك سؤال؟ اتصل بنا 24/7",

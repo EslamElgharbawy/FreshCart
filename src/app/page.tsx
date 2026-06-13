@@ -422,12 +422,27 @@ export default function Home() {
         <div className=" mx-5">
           <div className="mb-8">
             <h2 className="capitalize text-2xl font-bold leading-7 text-[#333]">
-              top selling vendors
+              {t("vendors.topWeeklyVendors")}
             </h2>
           </div>
           <div>
             <div className="flex justify-center items-center gap-5">
               <VendorCard />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="categories">
+        <div className="mx-5 mt-20">
+          <div className="mb-8">
+            <h2 className="capitalize text-2xl font-bold leading-7 text-[#333]">
+              Shop By Categories
+            </h2>
+          </div>
+          <div>
+            <div className="flex justify-center items-center">
+              
             </div>
           </div>
         </div>
