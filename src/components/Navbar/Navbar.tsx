@@ -24,11 +24,12 @@ import Image from "next/image";
 import logo from "../../assets/images/logo1.svg";
 import ReactCountryFlag from "react-country-flag";
 import { useRef, useState } from "react";
-import { Currency} from "@/Types/currency";
+import { Currency } from "@/Types/currency";
 import { useTranslation } from "react-i18next";
 import { changeLanguage } from "i18next";
 import Link from "next/link";
 import { lang } from "@/Types/Lang";
+import { useAppSelector } from "@/hooks/store.hooks";
 
 export default function Navbar() {
   const inputRef = useRef<HTMLInputElement | null>(null);
@@ -43,19 +44,7 @@ export default function Navbar() {
     EUR: "€",
   };
 
-  const categories = [
-    "all",
-    "fashion",
-    "bags",
-    "shoes",
-    "sports",
-    "games",
-    "headphones",
-    "clothing",
-    "camera",
-    "electronics",
-    "watches",
-  ];
+  const { categories } = useAppSelector((store) => store.categoriesSlice);
 
   const sections = [
     { name: "home", path: "/" },
@@ -247,11 +236,7 @@ export default function Navbar() {
             <div className="flex justify-center items-center">
               <div className="logo w-[20%] h-[140px] p-4 bg-primary flex justify-center items-center">
                 <a href="#">
-                  <Image
-                    src={logo}
-                    alt="logo"
-                    className="w-full h-full"
-                  />
+                  <Image src={logo} alt="logo" className="w-full h-full" />
                 </a>
               </div>
               <div className="nav-taps w-[80%] bg-secondary">
@@ -339,7 +324,7 @@ export default function Navbar() {
                             <p
                               className={`flex-1 ${language === "EGY" ? "text-right" : "text-left"}`}
                             >
-                              {t(`categories.${selectedCategory}`)}
+                              {t(`categories_menu.${selectedCategory}`)}
                             </p>
                             <ChevronDown />
                           </Button>
@@ -349,14 +334,14 @@ export default function Navbar() {
                           className="text-[#AAAAAA] bg-[#F8F8F8] ring-0 rounded-none relative -bottom-2 w-[240px] py-1 px-0"
                         >
                           <DropdownMenuGroup>
-                            {categories.map((item) => (
+                            {categories?.map((item) => (
                               <DropdownMenuItem
-                                key={item}
-                                onClick={() => setSelectedCategory(item)}
+                                key={item._id}
+                                onClick={() => setSelectedCategory(item.slug)}
                                 className={`text-xs focus:bg-transparent hover:!bg-textMain outline-none  hover:!text-white px-0 w-full ps-10 rounded-none
                                    ${language === "EGY" ? "justify-end pe-10" : "justify-start"}`}
                               >
-                                {t(`categories.${item}`)}
+                                {t(`categories_menu.${item.slug}`)}
                               </DropdownMenuItem>
                             ))}
                           </DropdownMenuGroup>

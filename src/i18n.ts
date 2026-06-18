@@ -22,19 +22,6 @@ const resources = {
         findStore: "Find FreshCart Store",
         freeShipping: "Free Standard Shipping",
       },
-      categories_menu: {
-        all: "All Categories",
-        fashion: "Fashion",
-        bags: "Bags",
-        shoes: "Shoes",
-        sports: "Sports",
-        games: "Games",
-        headphones: "Headphones",
-        clothing: "Clothing & Apparel",
-        camera: "Camera",
-        electronics: "Electronics",
-        watches: "Watches",
-      },
       hero: {
         running: "Running",
         nikeShoes: "Nike Shoes",
@@ -91,7 +78,8 @@ const resources = {
         topWeeklyVendors: "Top Weekly Vendors",
         products: "Products",
       },
-      categories: {
+      categories_menu: {
+        all: "All Categories",
         shopByCategories: "Shop By Categories",
         music: "Music",
         "men's-fashion": "Men's Fashion",
@@ -103,6 +91,19 @@ const resources = {
         "beauty-and-health": "Beauty & Health",
         mobiles: "Mobiles",
         electronics: "Electronics",
+      },
+      electronicsSidebar: {
+        title: "Electronics",
+        "networking-products": "Networking Products",
+        "printers-and-accessories": "Printers & Accessories",
+        "cameras-and-accessories": "Cameras & Accessories",
+        "video-games": "Video Games",
+        "laptops-and-accessories": "Laptops & Accessories",
+        browseAll: "Browse All",
+      },
+      products: {
+        addToCart: "Add To Cart",
+        quickView: "Quick View",
       },
       footer: {
         supportText: "Got Question? Call us 24/7",
@@ -163,19 +164,7 @@ const resources = {
         findStore: "اعثر على متجر فريش كارت",
         freeShipping: "شحن قياسي مجاني",
       },
-      categories_menu: {
-        all: "كل الأقسام",
-        fashion: "أزياء",
-        bags: "حقائب",
-        shoes: "أحذية",
-        sports: "رياضة",
-        games: "ألعاب",
-        headphones: "سماعات",
-        clothing: "ملابس",
-        camera: "كاميرات",
-        electronics: "إلكترونيات",
-        watches: "ساعات",
-      },
+
       hero: {
         running: "الجري",
         nikeShoes: "أحذية نايكي",
@@ -233,7 +222,8 @@ const resources = {
         topWeeklyVendors: "أفضل البائعين الأسبوعيين",
         products: "منتج",
       },
-      categories: {
+      categories_menu: {
+        all: "كل الأقسام",
         shopByCategories: "تسوق حسب الأقسام",
         music: "الموسيقى",
         "men's-fashion": "أزياء رجالية",
@@ -245,6 +235,20 @@ const resources = {
         "beauty-and-health": "الجمال والصحة",
         mobiles: "الهواتف المحمولة",
         electronics: "الإلكترونيات",
+      },
+
+      electronicsSidebar: {
+        title: "الإلكترونيات",
+        "networking-products": "منتجات الشبكات",
+        "printers-and-accessories": "الطابعات وملحقاتها",
+        "cameras-and-accessories": "الكاميرات وملحقاتها",
+        "video-games": "ألعاب الفيديو",
+        "laptops-and-accessories": "أجهزة اللابتوب وملحقاتها",
+        browseAll: "عرض الكل",
+      },
+      products: {
+        addToCart: "أضف إلى السلة",
+        quickView: "عرض سريع",
       },
       footer: {
         supportText: "هل لديك سؤال؟ اتصل بنا 24/7",

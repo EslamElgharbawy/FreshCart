@@ -23,11 +23,13 @@ import ProductCard from "@/components/ProductCard/ProductCard";
 import SidebarCategories from "@/components/SidebarCategories/SidebarCategories";
 import { useAppDispatch, useAppSelector } from "@/hooks/store.hooks";
 import { getProducts } from "@/Features/Product.slice";
+import LoaderProducts from "@/components/LoaderProducts/LoaderProducts";
 
 export default function Home() {
   const dispatch = useAppDispatch();
   const [activeSlide, setActiveSlide] = useState(0);
   const [selectedSubCategory, setSelectedSubCategory] = useState("");
+  const [filterLoading, setFilterLoading] = useState(false);
   const { t } = useTranslation();
 
   const features_data = [
@@ -127,7 +129,6 @@ export default function Home() {
   const { products, productDetails, loading } = useAppSelector(
     (store) => store.ProductSlice,
   );
-  
 
   const electronicsProducts = products.filter(
     (product) => product.category.name === "Electronics",
@@ -413,7 +414,7 @@ export default function Home() {
       <section id="DealsSection">
         <div className="mt-[70px] mb-[50px] mx-5">
           <div className="grid grid-cols-12 gap-5">
-            <div className="promo-grid col-span-9 grid grid-cols-3 gap-5">
+            <div className="promo-grid col-span-9 grid grid-cols-3 gap-5 mb-8">
               <div className="col-span-2">
                 <PromoBanner />
               </div>
@@ -446,7 +447,7 @@ export default function Home() {
 
       <section id="vendors">
         <div className=" mx-5">
-          <div className="mb-8">
+          <div className="mb-5">
             <h2 className="capitalize text-2xl font-bold leading-7 text-[#333]">
               {t("vendors.topWeeklyVendors")}
             </h2>
@@ -463,7 +464,7 @@ export default function Home() {
         <div className="mx-5 mt-20">
           <div className="mb-8">
             <h2 className="capitalize text-2xl font-bold leading-7 text-[#333]">
-              {t("categories.shopByCategories")}
+              {t("categories_menu.shopByCategories")}
             </h2>
           </div>
           <div>
@@ -476,12 +477,18 @@ export default function Home() {
 
       <section>
         <div className="mt-9 mx-5 p-2">
-          <div className="grid md:grid-cols-12 gap-5">
+          <div className="grid md:grid-cols-12 gap-5 ">
             <div className="col-span-3">
-              <SidebarCategories setSelectedSubCategory={setSelectedSubCategory} />
+              <SidebarCategories
+                setSelectedSubCategory={setSelectedSubCategory}
+                setFilterLoading={setFilterLoading}
+              />
             </div>
-            <div className="col-span-9">
-              <div className="grid grid-cols-4 gap-5">
+            <div className="col-span-9 relative">
+                {filterLoading && <LoaderProducts />}
+              <div
+                className={`grid md:grid-cols-4 gap-5 ${filterLoading ? "opacity-30" : ""} `}
+              >
                 {filteredProducts.map((product) => (
                   <ProductCard key={product._id} {...product} />
                 ))}
