@@ -38,15 +38,13 @@ export default function Home() {
       icon: (
         <svg
           xmlns="http://www.w3.org/2000/svg"
-          width="47"
-          height="47"
           viewBox="0 0 24 24"
           fill="none"
           stroke="currentColor"
           strokeWidth="1"
           strokeLinecap="round"
           strokeLinejoin="round"
-          className="lucide lucide-truck-icon lucide-truck"
+          className="lucide lucide-truck-icon lucide-truck w-9 h-9"
         >
           <path d="M14 18V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v11a1 1 0 0 0 1 1h2" />
           <path d="M15 18H9" />
@@ -62,13 +60,12 @@ export default function Home() {
       id: 2,
       icon: (
         <svg
-          width={47}
-          height={47}
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
           viewBox="0 0 24 24"
           strokeWidth="1"
           stroke="currentColor"
+          className="w-9 h-9"
         >
           <path
             strokeLinecap="round"
@@ -85,15 +82,13 @@ export default function Home() {
       icon: (
         <svg
           xmlns="http://www.w3.org/2000/svg"
-          width="47"
-          height="47"
           viewBox="0 0 24 24"
           fill="none"
           stroke="currentColor"
           strokeWidth="1"
           strokeLinecap="round"
           strokeLinejoin="round"
-          className="lucide lucide-wallet-icon lucide-wallet"
+          className="lucide lucide-wallet-icon lucide-wallet w-9 h-9"
         >
           <path d="M19 7V4a1 1 0 0 0-1-1H5a2 2 0 0 0 0 4h15a1 1 0 0 1 1 1v4h-3a2 2 0 0 0 0 4h3a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1" />
           <path d="M3 5v14a2 2 0 0 0 2 2h15a1 1 0 0 0 1-1v-4" />
@@ -106,13 +101,12 @@ export default function Home() {
       id: 4,
       icon: (
         <svg
-          width={47}
-          height={47}
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
           viewBox="0 0 24 24"
           strokeWidth="1"
           stroke="currentColor"
+          className="w-9 h-9"
         >
           <path
             strokeLinecap="round"
@@ -126,9 +120,7 @@ export default function Home() {
     },
   ];
 
-  const { products, productDetails, loading } = useAppSelector(
-    (store) => store.ProductSlice,
-  );
+  const { products } = useAppSelector((store) => store.ProductSlice);
 
   const electronicsProducts = products.filter(
     (product) => product.category.name === "Electronics",
@@ -156,7 +148,7 @@ export default function Home() {
           onSlideChangeTransitionEnd={(swiper) =>
             setActiveSlide(swiper.realIndex)
           }
-          className="Swiper_hero !h-[689px]"
+          className="Swiper_hero !h-64 md:!h-72 lg:!h-80 xl:!h-[480px] 2xl:!h-[689px]"
         >
           {/* //* Slide 1 */}
           <SwiperSlide className="relative">
@@ -173,15 +165,15 @@ export default function Home() {
               <Image
                 src={img1}
                 alt="Image 1"
-                className={`w-full h-full object-cover object-[40%_center] ${
+                className={`w-full h-full object-cover object-[36%_center] xl:object-[40%_center] 2xl:object-[40%_center] ${
                   i18n.language === "ar" ? "scale-x-[-1]" : ""
                 }`}
               />
 
               <div
-                className={`absolute top-[50%] mt-[23px] z-10 uppercase transform -translate-y-1/2 ${
+                className={`absolute top-[50%] xl:mt-[23px] z-10 uppercase transform -translate-y-1/2 ${
                   i18n.language === "en"
-                    ? "left-[9.3%] text-left"
+                    ? "left-8 lg:left-[30px] xl:left-[6.3%] 2xl:left-[9.3%] text-left"
                     : "right-[5.35%] text-right"
                 }`}
               >
@@ -191,7 +183,7 @@ export default function Home() {
                     show: { opacity: 1, y: 0 },
                   }}
                   transition={{ duration: 1, delay: 0.2 }}
-                  className={`text-[110px] font-extrabold text-transparent leading-none ${i18n.language === "en" ? "mb-3" : "mb-5"}`}
+                  className={`text-[37px] md:text-[43px] lg:text-[48px] xl:text-[80px] 2xl:text-[110px] font-extrabold text-transparent leading-none ${i18n.language === "en" ? "mb-3" : "mb-5"}`}
                   style={{ WebkitTextStroke: "1px white" }}
                 >
                   {t("hero.running")}
@@ -203,14 +195,14 @@ export default function Home() {
                     show: { opacity: 1, y: 0 },
                   }}
                   transition={{ duration: 1, delay: 0.5 }}
-                  className={`text-[100px] font-extrabold tracking-[2.5px] text-white leading-none ${i18n.language === "en" ? "mb-2" : "mb-5"}`}
+                  className={`text-[37px] md:text-[43px] lg:text-[48px] xl:text-[70px] 2xl:text-[100px] font-extrabold tracking-[2.5px] text-white leading-none ${i18n.language === "en" ? "mb-2" : "mb-5"}`}
                 >
                   {t("hero.nikeShoes")}
                 </motion.h3>
 
                 <div
-                  className={`leading-none ${
-                    i18n.language === "ar" ? "me-[327px]" : "ms-[327px]"
+                  className={`leading-none mb-4 xl:mb-0 ${
+                    i18n.language === "ar" ? "xl:me-[327px]" : "xl:ms-[327px]"
                   }`}
                 >
                   <motion.p
@@ -219,11 +211,11 @@ export default function Home() {
                       show: { opacity: 1, y: 0 },
                     }}
                     transition={{ duration: 1, delay: 0.8 }}
-                    className="relative text-[46px] font-extrabold text-accent"
+                    className="relative text-xl lg:text-[26px] xl:text-4xl 2xl:text-[46px] font-extrabold text-accent"
                   >
                     <sup
-                      className={`text-2xl text-border font-normal tracking-wide ${
-                        i18n.language === "ar" ? "ms-4" : "me-4"
+                      className={`text-[10px] md:text-xs lg:text-sm xl:text-lg 2xl:text-2xl text-border font-normal tracking-wide ${
+                        i18n.language === "ar" ? "ms-2 xl:ms-4" : "me-2 xl:me-4"
                       }`}
                     >
                       {t("hero.startingAt")}
@@ -239,7 +231,7 @@ export default function Home() {
                   }}
                   transition={{ duration: 1, delay: 0.8 }}
                   href=""
-                  className={`text-[14px] py-4 px-8 text-white bg-[#333] rounded-[4px] font-semibold flex items-center gap-2 w-fit transition-colors duration-300 hover:bg-[#454545]
+                  className={`text-[10px] md:text-xs lg:text-sm xl:text-[14px] py-2 px-4 md:py-3 md:px-5 xl:py-4 xl:px-8  text-white bg-[#333] rounded-[4px] font-semibold flex items-center gap-2 w-fit transition-colors duration-300 hover:bg-[#454545]
                    ${i18n.language === "ar" ? "flex-row-reverse ms-auto" : ""}`}
                 >
                   {t("hero.shopCollection")}
@@ -250,7 +242,7 @@ export default function Home() {
                     viewBox="0 0 24 24"
                     strokeWidth="1.5"
                     stroke="currentColor"
-                    className={`size-5 ${
+                    className={`size-4 xl:size-5 ${
                       i18n.language === "ar" ? "rotate-180" : ""
                     }`}
                   >
@@ -280,10 +272,10 @@ export default function Home() {
               <Image
                 src={img2}
                 alt="Image 2"
-                className={`w-full h-full object-cover object-[60%_center]${i18n.language === "ar" ? " scale-x-[-1]" : ""}`}
+                className={`w-full h-full object-cover object-[70%_center] 2xl:object-[56%_center] ${i18n.language === "ar" ? " scale-x-[-1]" : ""}`}
               />
               <div
-                className={`absolute top-[50%] ${i18n.language === "en" ? "right-[5.35%]" : "left-[5.35%]"} mt-[23px] ${i18n.language === "ar" ? "text-left" : "text-right"} z-10 uppercase transform -translate-y-1/2 `}
+                className={`absolute top-[50%] ${i18n.language === "en" ? "right-[5.35%]" : "left-[5.35%]"} xl:mt-[23px] ${i18n.language === "ar" ? "text-left" : "text-right"} z-10 uppercase transform -translate-y-1/2 `}
               >
                 {i18n.language === "ar" ? (
                   <>
@@ -293,7 +285,7 @@ export default function Home() {
                         show: { opacity: 1, y: 0 },
                       }}
                       transition={{ duration: 1, delay: 0.2 }}
-                      className={`text-[110px] inline-block font-extrabold text-transparent leading-none mb-3 ${i18n.language === "ar" ? "me-4" : "ms-4"} w-fit`}
+                      className={`text-[37px] md:text-[43px] lg:text-[48px] xl:text-[80px] 2xl:text-[110px] inline-block font-extrabold text-transparent leading-none mb-3 ${i18n.language === "ar" ? "me-4" : "ms-4"} w-fit`}
                       style={{ WebkitTextStroke: "1px white" }}
                     >
                       {t("hero.fashion")}
@@ -304,10 +296,10 @@ export default function Home() {
                         show: { opacity: 1, y: 0 },
                       }}
                       transition={{ duration: 1, delay: 0.2 }}
-                      className="relative inline-block text-[46px] font-extrabold text-accent -tracking-[1.25px]"
+                      className="relative inline-block text-xl lg:text-[26px] md:text-2xl xl:text-[46px] font-extrabold text-accent -tracking-[1.25px]"
                     >
                       <sub
-                        className={`text-2xl text-border font-normal tracking-wide ${i18n.language === "ar" ? "ms-3" : "me-3"}`}
+                        className={`text-[10px] md:text-xs xl:text-2xl text-border font-normal tracking-wide ${i18n.language === "ar" ? "ms-3" : "me-1 xl:me-3"}`}
                       >
                         {t("hero.from")}
                       </sub>
@@ -322,10 +314,10 @@ export default function Home() {
                         show: { opacity: 1, y: 0 },
                       }}
                       transition={{ duration: 1, delay: 0.2 }}
-                      className="relative inline-block text-[46px] font-extrabold text-accent -tracking-[1.25px]"
+                      className="relative inline-block text-xl lg:text-[26px] md:text-2xl xl:text-[36px] 2xl:text-[46px] font-extrabold text-accent -tracking-[1.25px]"
                     >
                       <sub
-                        className={`text-2xl text-border font-normal tracking-wide ${i18n.language === "ar" ? "me-3" : "ms-3"}`}
+                        className={`text-[10px] md:text-xs xl:text-[17px] 2xl:text-2xl text-border font-normal tracking-wide ${i18n.language === "ar" ? "ms-3" : "me-1 xl:me-3"}`}
                       >
                         {t("hero.from")}
                       </sub>
@@ -337,7 +329,7 @@ export default function Home() {
                         show: { opacity: 1, y: 0 },
                       }}
                       transition={{ duration: 1, delay: 0.2 }}
-                      className="text-[110px] inline-block font-extrabold text-transparent leading-none mb-3 ms-4 w-fit"
+                      className="text-[37px] md:text-[43px] lg:text-[48px] xl:text-[74px] 2xl:text-[110px] inline-block font-extrabold text-transparent leading-none mb-3 ms-4 w-fit md:max-lg:tracking-tight"
                       style={{ WebkitTextStroke: "1px white" }}
                     >
                       {t("hero.fashion")}
@@ -351,7 +343,7 @@ export default function Home() {
                     show: { opacity: 1, y: 0 },
                   }}
                   transition={{ duration: 1, delay: 0.5 }}
-                  className="text-[94px] font-extrabold tracking-[2.5px] text-[#fff] leading-none mb-12 w-fit"
+                  className="text-[37px] md:text-[43px] lg:text-[48px] xl:text-[66px] 2xl:text-[94px] font-extrabold tracking-normal xl:tracking-[2.5px] text-[#fff] leading-none mb-5 2xl:mb-12 sm:max-xl:w-fit"
                 >
                   {t("hero.sportswear")}
                 </motion.h3>
@@ -363,7 +355,7 @@ export default function Home() {
                   }}
                   transition={{ duration: 1, delay: 0.8 }}
                   href=""
-                  className="text-[14px] py-4 px-8 text-white bg-[#333] rounded-[4px] font-semibold flex items-center gap-2 w-fit transition-colors duration-300 hover:bg-[#454545]"
+                  className="text-[10px] md:text-xs lg:text-sm xl:text-[14px] py-2 px-4 md:py-3 md:px-5 2xl:py-4 2xl:px-8 text-white bg-[#333] rounded-[4px] font-semibold flex justify-center items-center gap-2 w-fit  transition-colors duration-300 hover:bg-[#454545] sm:max-xl:ms-auto "
                 >
                   {t("hero.shopCollection")}
                   <svg
@@ -372,7 +364,7 @@ export default function Home() {
                     viewBox="0 0 24 24"
                     strokeWidth="1.5"
                     stroke="currentColor"
-                    className="size-5"
+                    className="size-4 xl:size-5"
                   >
                     <path
                       strokeLinecap="round"
@@ -388,8 +380,8 @@ export default function Home() {
       </section>
 
       <section id="Features">
-        <div className="py-8 mx-5 ">
-          <div className="flex justify-center items-center py-6 w-full bg-white">
+        <div className="py-8 mx-5">
+          <div className="hidden 2xl:flex justify-center items-center py-6 w-full bg-white">
             {features_data.map((feature) => (
               <div
                 key={feature.id}
@@ -407,6 +399,43 @@ export default function Home() {
                 </div>
               </div>
             ))}
+          </div>
+          <div className="2xl:hidden py-3 bg-white">
+            <Swiper
+              breakpoints={{
+                0: {
+                  slidesPerView: 1,
+                },
+                800: {
+                  slidesPerView: 2,
+                },
+              }}
+              spaceBetween={10}
+              pagination={{ clickable: true }}
+            >
+              {features_data.map((feature) => (
+                <SwiperSlide
+                  key={feature.id}
+                  style={{ backgroundColor: "transparent" }}
+                >
+                  <div className="flex justify-center items-center flex-col gap-2 2xl:gap-5 p-2">
+                    <div className="flex justify-center items-center p-4 rounded-full bg-[#8CD42F1A] text-secondary">
+                      {feature.icon}
+                    </div>
+
+                    <div>
+                      <h3 className="text-sm xl:text-lg font-semibold mb-1">
+                        {feature.title}
+                      </h3>
+
+                      <p className="text-gray-600 text-xs xl:text-sm">
+                        {feature.description}
+                      </p>
+                    </div>
+                  </div>
+                </SwiperSlide>
+              ))}
+            </Swiper>
           </div>
         </div>
       </section>
@@ -445,7 +474,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section id="vendors">
+      <section id="Vendors">
         <div className=" mx-5">
           <div className="mb-5">
             <h2 className="capitalize text-2xl font-bold leading-7 text-[#333]">
@@ -460,7 +489,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section id="categories">
+      <section id="Categories">
         <div className="mx-5 mt-20">
           <div className="mb-8">
             <h2 className="capitalize text-2xl font-bold leading-7 text-[#333]">
@@ -475,7 +504,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section>
+      <section id="Products">
         <div className="mt-9 mx-5 p-2">
           <div className="grid md:grid-cols-12 gap-5 ">
             <div className="col-span-3">
@@ -485,7 +514,7 @@ export default function Home() {
               />
             </div>
             <div className="col-span-9 relative">
-                {filterLoading && <LoaderProducts />}
+              {filterLoading && <LoaderProducts />}
               <div
                 className={`grid md:grid-cols-4 gap-5 ${filterLoading ? "opacity-30" : ""} `}
               >

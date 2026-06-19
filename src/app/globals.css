@@ -42,6 +42,12 @@
   opacity: 0;
   transition: all 0.4s ease;
 }
+@media (max-width: 1320px) {
+  .Swiper_hero .swiper-button-prev,
+  .Swiper_hero .swiper-button-next {
+    display: none;
+  }
+}
 
 .Swiper_hero .swiper-button-prev {
   left: 3% !important;

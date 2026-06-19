@@ -8,7 +8,7 @@ export default function Layout({ children }) {
   return (
     <>
       <div className="min-h-screen flex-col flex bg-background">
-        <Navbar />
+        {/* <Navbar /> */}
         <main className="flex-1">{children}</main>
         <Footer1 />
         <Footer2 />
