@@ -33,9 +33,9 @@ export default function SidebarCategories({
 
   return (
     <>
-      <div className="flex justify-center flex-col gap-4 bg-white py-5 px-8">
+      <div className="flex justify-center flex-col gap-4 bg-white py-5 px-4 2xl:px-8">
         <div>
-          <h1 className="text-xl font-bold text-[#333] leading-6">
+          <h1 className="text-sm md:text-lg xl:text-base 2xl:text-xl font-bold text-[#333] leading-6">
             {t("electronicsSidebar.title")}
           </h1>
         </div>
@@ -52,7 +52,7 @@ export default function SidebarCategories({
                   setFilterLoading(false);
                 }, 500);
               }}
-              className="text-textMain text-start hover:text-primary transition-colors duration-300"
+              className="text-xs md:text-sm xl:text-xs 2xl:text-base text-textMain text-start hover:text-primary transition-colors duration-300"
             >
               {t(`electronicsSidebar.${sub.slug}`)}
               
@@ -61,7 +61,7 @@ export default function SidebarCategories({
         </div>
         <button className="group mt-2">
           <h1
-            className="text-sm font-semibold text-[#333] uppercase flex items-center gap-3 w-fit relative after:absolute after:left-1/2 after:-translate-x-1/2 after:-bottom-1
+            className="text-xs md:text-sm xl:text-xs 2xl:text-sm font-semibold text-[#333] uppercase flex items-center gap-3 w-fit relative after:absolute after:left-1/2 after:-translate-x-1/2 after:-bottom-1
     after:h-[3px] after:w-0
     after:bg-[#333] after:transition-all after:duration-500 group-hover:after:w-full"
           >

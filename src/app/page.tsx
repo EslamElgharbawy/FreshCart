@@ -476,12 +476,12 @@ export default function Home() {
       <section id="Vendors">
         <div className=" mx-5">
           <div className="mb-5">
-            <h2 className="capitalize text-2xl font-bold leading-7 text-[#333]">
+            <h2 className="capitalize text-lg xl:text-2xl font-bold leading-7 text-[#333]">
               {t("vendors.topWeeklyVendors")}
             </h2>
           </div>
           <div>
-            <div className="grid grid-cols-1 md:grid-cols-5 gap-5">
+            <div className="grid grid-cols-1 2xl:grid-cols-5 gap-5">
               <VendorCard />
             </div>
           </div>
@@ -490,13 +490,13 @@ export default function Home() {
 
       <section id="Categories">
         <div className="mx-5 mt-20">
-          <div className="mb-8">
-            <h2 className="capitalize text-2xl font-bold leading-7 text-[#333]">
+          <div className="mb-4 md:mb-6 2xl:mb-8">
+            <h2 className="capitalize text-lg md:text-xl xl:text-2xl font-bold leading-7 text-[#333]">
               {t("categories_menu.shopByCategories")}
             </h2>
           </div>
           <div>
-            <div className="grid grid-cols-3 md:grid-cols-8 items-center">
+            <div className="grid grid-cols-3 xl:grid-cols-5 2xl:grid-cols-8 items-center">
               <MiniCategoryCard />
             </div>
           </div>
@@ -504,18 +504,18 @@ export default function Home() {
       </section>
 
       <section id="Products">
-        <div className="mt-9 mx-5 p-2">
-          <div className="grid md:grid-cols-12 gap-5 ">
-            <div className="col-span-3">
+        <div className="mt-9 mx-2 2xl:mx-5 p-2">
+          <div className="grid xl:grid-cols-12 gap-5 ">
+            <div className="xl:col-span-3">
               <SidebarCategories
                 setSelectedSubCategory={setSelectedSubCategory}
                 setFilterLoading={setFilterLoading}
               />
             </div>
-            <div className="col-span-9 relative">
+            <div className="xl:col-span-9 relative">
               {filterLoading && <LoaderProducts />}
               <div
-                className={`grid md:grid-cols-4 gap-5 ${filterLoading ? "opacity-30" : ""} `}
+                className={`grid grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-5 ${filterLoading ? "opacity-30" : ""} `}
               >
                 {filteredProducts.map((product) => (
                   <ProductCard key={product._id} {...product} />

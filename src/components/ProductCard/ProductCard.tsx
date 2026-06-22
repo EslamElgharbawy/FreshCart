@@ -60,16 +60,16 @@ leading-4
           >
             {t("products.quickView")}
           </a>
-          <div className="flex justify-center items-center flex-col gap-2 absolute top-4 right-4 opacity-0 transition-all duration-300 group-hover:opacity-100">
+          <div className="flex justify-center items-center flex-col gap-2 absolute top-[10px] right-[10px] xl:top-4 xl:right-4 opacity-0 transition-all duration-300 group-hover:opacity-100">
             <a
               href="#"
-              className="w-10 h-10 rounded-full bg-white flex justify-center items-center border-[1px] text-[#999999] hover:bg-primary hover:border-transparent hover:text-white transition-colors duration-300 group"
+              className="w-9 h-9 2xl:w-10 2xl:h-10 rounded-full bg-white flex justify-center items-center border-[1px] text-[#999999] hover:bg-primary hover:border-transparent hover:text-white transition-colors duration-300 group"
             >
               <Heart size={20} className="" />
             </a>
             <a
               href="#"
-              className="w-10 h-10 rounded-full bg-white flex justify-center items-center border-[1px] text-[#999999] hover:bg-primary hover:border-transparent hover:text-white transition-colors duration-300 group"
+              className="w-9 h-9 2xl:w-10 2xl:h-10 rounded-full bg-white flex justify-center items-center border-[1px] text-[#999999] hover:bg-primary hover:border-transparent hover:text-white transition-colors duration-300 group"
             >
               <Scale size={22} strokeWidth={1.8} className="" />
             </a>
