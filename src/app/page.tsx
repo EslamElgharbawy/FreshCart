@@ -148,7 +148,7 @@ export default function Home() {
           onSlideChangeTransitionEnd={(swiper) =>
             setActiveSlide(swiper.realIndex)
           }
-          className="Swiper_hero !h-64 md:!h-72 lg:!h-80 xl:!h-[480px] 2xl:!h-[689px]"
+          className="Swiper_hero !h-64 md:!h-72 lg:!h-80 xl:!h-[480px] 2xl:!h-[689px] sm:max-lg:mt-[109px] lg:max-xl:mt-[127px] xl:max-2xl:mt-[180px]"
         >
           {/* //* Slide 1 */}
           <SwiperSlide className="relative">
@@ -391,7 +391,7 @@ export default function Home() {
                 <div className="flex justify-center items-center p-4 rounded-full bg-[#8CD42F1A] text-secondary">
                   {feature.icon}
                 </div>
-                <div>
+                <div >
                   <h3 className="text-lg font-semibold leading-6 tracking-normal mb-1">
                     {feature.title}
                   </h3>
@@ -424,7 +424,7 @@ export default function Home() {
                       {feature.icon}
                     </div>
 
-                    <div>
+                    <div className="text-center">
                       <h3 className="text-sm xl:text-lg font-semibold mb-1">
                         {feature.title}
                       </h3>

@@ -39,8 +39,10 @@ export default function VendorCard() {
         <BrandCardSkeleton />
       ) : (
         <>
+        {/* //* Mobile */}
           <div className="2xl:hidden">
             <Swiper
+            dir="ltr"
               spaceBetween={10}
               breakpoints={{
                 0: { slidesPerView: 1 },
@@ -119,6 +121,9 @@ export default function VendorCard() {
               })}
             </Swiper>
           </div>
+
+
+        {/* //* Desktop */}
 
           {brands.map((brand) => {
             const vendorProducts = brand.products.slice(0, 3);
