@@ -31,6 +31,7 @@ import { changeLanguage } from "i18next";
 import Link from "next/link";
 import { lang } from "@/Types/Lang";
 import { useAppSelector } from "@/hooks/store.hooks";
+import { MobileMenu } from "../MobileMenu/MobileMenu";
 
 export default function Navbar() {
   const inputRef = useRef<HTMLInputElement | null>(null);
@@ -622,7 +623,7 @@ export default function Navbar() {
                     </ul>
                   </div> */}
                     <div className="right-side flex justify-between items-center w-full">
-                      <div>scac</div>
+                      <MobileMenu />
                       <div className="flex justify-center items-center gap-5 ms-auto">
                         <a
                           href="/Login"

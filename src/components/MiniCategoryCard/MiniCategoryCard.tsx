@@ -15,7 +15,6 @@ export default function MiniCategoryCard() {
   useEffect(() => {
     dispatch(getCategories());
   }, []);
-  console.log(categories);
   
   return (
     <>
