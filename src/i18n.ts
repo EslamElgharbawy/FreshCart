@@ -22,6 +22,11 @@ const resources = {
         findStore: "Find FreshCart Store",
         freeShipping: "Free Standard Shipping",
       },
+      Menu: {
+  search: "Search...",
+  pages: "Pages",
+  categories: "Categories",
+},
       hero: {
         running: "Running",
         nikeShoes: "Nike Shoes",
@@ -164,7 +169,11 @@ const resources = {
         findStore: "اعثر على متجر فريش كارت",
         freeShipping: "شحن قياسي مجاني",
       },
-
+Menu: {
+  search: "بحث...",
+  pages: "الصفحات",
+  categories: "الأقسام",
+},
       hero: {
         running: "الجري",
         nikeShoes: "أحذية نايكي",

@@ -45,7 +45,7 @@ const inputGroupAddonVariants = cva(
 
 function InputGroupAddon({
   className,
-  align = "inline-start",
+  align = "inline-end",
   ...props
 }: React.ComponentProps<"div"> & VariantProps<typeof inputGroupAddonVariants>) {
   return (

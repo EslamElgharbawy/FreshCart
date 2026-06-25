@@ -6,6 +6,7 @@ import { Dialog as SheetPrimitive } from "radix-ui"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { XIcon } from "lucide-react"
+import i18n from "@/i18n"
 
 function Sheet({ ...props }: React.ComponentProps<typeof SheetPrimitive.Root>) {
   return <SheetPrimitive.Root data-slot="sheet" {...props} />
@@ -37,7 +38,7 @@ function SheetOverlay({
     <SheetPrimitive.Overlay
       data-slot="sheet-overlay"
       className={cn(
-        "fixed inset-0 z-50 bg-black/70 duration-100 supports-backdrop-filter:backdrop-blur-xs data-open:animate-in data-open:fade-in-0 data-closed:animate-out data-closed:fade-out-0",
+        "fixed inset-0 z-50 bg-black/80 duration-100 supports-backdrop-filter:backdrop-blur-xs data-open:animate-in data-open:fade-in-0 data-closed:animate-out data-closed:fade-out-0",
         className
       )}
       {...props}
@@ -48,6 +49,7 @@ function SheetOverlay({
 function SheetContent({
   className,
   children,
+  
   side = "right",
   showCloseButton = true,
   ...props
@@ -72,7 +74,7 @@ function SheetContent({
           <SheetPrimitive.Close data-slot="sheet-close" asChild>
             <Button
               variant="ghost"
-              className="absolute top-3 left-[340px]"
+              className={`absolute top-3 xl:!w-[40px] xl:!h-[40px]  ${i18n.language === "ar" ? 'right-[340px] md:top-5 md:right-[380px] lg:right-[420px] xl:right-[750px]':'left-[340px] md:top-5 md:left-[380px] lg:left-[420px] xl:left-[750px]'}`}
               size="icon-lg"
             >
               <XIcon

@@ -32,6 +32,7 @@ import {
   InputGroupAddon,
   InputGroupInput,
 } from "@/components/ui/input-group";
+import i18n from "@/i18n";
 
 const sections = [
   { name: "home", path: "/" },
@@ -60,17 +61,26 @@ export function MobileMenu() {
 
   return (
     <Sheet>
-      <SheetTrigger asChild>
-        <Menu size={28} />
+      <SheetTrigger asChild className="cursor-pointer">
+        <Menu className="w-7 h-7 xl:w-8 xl:h-8" />
       </SheetTrigger>
-      <SheetContent side="left" className="z-50 bg-[#222] !w-[80%] !border-0">
+      <SheetContent
+        side={i18n.language === "ar" ? "right" : "left"}
+        onOpenAutoFocus={(e) => e.preventDefault()}
+        className="z-50 bg-[#222] !w-[80%] md:!w-[70%] lg:!w-[62%] xl:!w-[36%] !border-0"
+      >
         <SheetHeader>
-          <InputGroup className="max-w-xs">
-            <InputGroupInput placeholder="Search..." />
-            <InputGroupAddon>
-              <Search />
+          <SheetTitle className="sr-only">Mobile Menu</SheetTitle>
+          <InputGroup className="max-w-xs !h-10 !rounded-sm border-[1px] border-[#333] ">
+            <InputGroupAddon
+              className={`${i18n.language === "ar" ? "!pe-4" : "!pr-4"}`}
+            >
+              <Search className="text-white" />
             </InputGroupAddon>
-            <InputGroupAddon align="inline-end">12 results</InputGroupAddon>
+            <InputGroupInput
+              placeholder={t("Menu.search")}
+              className=" placeholder:!text-[#999] text-sm focus:placeholder:opacity-0 placeholder:transition-opacity placeholder:duration-300 "
+            />
           </InputGroup>
         </SheetHeader>
 
@@ -80,17 +90,19 @@ export function MobileMenu() {
               value="Pages"
               className="uppercase text-white p-2 text-sm font-semibold"
             >
-              Pages
+              {t("Menu.pages")}
             </TabsTrigger>
             <TabsTrigger
               value="Categories"
               className="uppercase text-white p-2 text-sm font-semibold"
             >
-              Categories
+              {t("Menu.categories")}
             </TabsTrigger>
           </TabsList>
           <TabsContent value="Pages">
-            <div className="left-side">
+            <div
+              className={`left-side ${i18n.language === "ar" ? " text-end " : " text-start"}`}
+            >
               <ul className="flex flex-col text-[14px] px-4">
                 {sections.map((item) => (
                   <li
@@ -112,7 +124,7 @@ export function MobileMenu() {
                   <a
                     href=""
                     key={item._id}
-                    className="flex gap-3 text-border focus:bg-transparent outline-none px-2 py-4 w-full rounded-none border-b-[1px] border-b-[#333] last:border-b-0"
+                    className={`flex gap-3 text-border focus:bg-transparent outline-none px-2 py-4 w-full rounded-none border-b-[1px] border-b-[#333] last:border-b-0 ${i18n.language === "ar" ? " flex-row-reverse " : ""}`}
                   >
                     {Icon && <Icon size={20} />}
                     <span>{t(`categories_menu.${item.slug}`)}</span>
