@@ -16,7 +16,7 @@ export default function BreadCrumb({
   const { t } = useTranslation();
   return (
     <>
-      <section className="py-3">
+      <section className="py-3 2xl:py-4">
         <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-xs sm:text-sm">
           <Link
             href="/"
