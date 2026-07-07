@@ -4,6 +4,7 @@ import axios from "axios";
 
 const initialState: ProductState = {
   products: [],
+  relatedProducts: [],
   productDetails: null,
   loading: false,
 };
@@ -27,6 +28,16 @@ export const getProductDetails = createAsyncThunk<Product, string>(
     return data.data;
   },
 );
+export const getRelatedProducts = createAsyncThunk<Product[], string>(
+  "Products/getRelatedProducts",
+  async (categoryId) => {
+    const { data } = await axios.get(
+      `https://ecommerce.routemisr.com/api/v1/products?category[in]=${categoryId}`,
+    );
+    console.log(data.data);
+    return data.data;
+  },
+);
 const ProductSlice = createSlice({
   name: "Products",
   initialState,
@@ -44,7 +55,7 @@ const ProductSlice = createSlice({
       prevState.loading = false;
     });
 
-        // *productsDetails
+    // *productsDetails
     builder.addCase(getProductDetails.pending, (prevState) => {
       prevState.loading = true;
     });
@@ -53,6 +64,18 @@ const ProductSlice = createSlice({
       prevState.productDetails = action.payload;
     });
     builder.addCase(getProductDetails.rejected, (prevState) => {
+      prevState.loading = false;
+    });
+
+    // *RelatedProducts
+    builder.addCase(getRelatedProducts.pending, (prevState) => {
+      prevState.loading = true;
+    });
+    builder.addCase(getRelatedProducts.fulfilled, (prevState, action) => {
+      prevState.loading = false;
+      prevState.relatedProducts = action.payload;
+    });
+    builder.addCase(getRelatedProducts.rejected, (prevState) => {
       prevState.loading = false;
     });
   },

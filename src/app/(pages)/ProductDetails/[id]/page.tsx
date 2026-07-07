@@ -1,13 +1,13 @@
 "use client";
 import BreadCrumb from "@/components/BreadCrumb/BreadCrumb";
-import { getProductDetails } from "@/Features/Product.slice";
+import {
+  getProductDetails,
+  getRelatedProducts,
+} from "@/Features/Product.slice";
 import { useAppDispatch, useAppSelector } from "@/hooks/store.hooks";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import { useRef } from "react";
-import ImageGallery from "react-image-gallery";
 import "react-image-gallery/styles/image-gallery.css";
-import type { GalleryItem, ImageGalleryRef } from "react-image-gallery";
 import { FreeMode, Navigation, Thumbs } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 import type { Swiper as SwiperType } from "swiper/types";
@@ -31,14 +31,18 @@ import {
 } from "@fortawesome/free-brands-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Heart, Scale } from "lucide-react";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import LoaderProducts from "@/components/LoaderProducts/LoaderProducts";
+import ProductCard from "@/components/ProductCard/ProductCard";
 
 export default function page() {
   const [thumbsSwiper, setThumbsSwiper] = useState<SwiperType | null>(null);
 
   const [open, setOpen] = useState(false);
   const [index, setIndex] = useState(0);
+  const [counter, setCounter] = useState(1);
   const dispatch = useAppDispatch();
-  const { productDetails, loading } = useAppSelector(
+  const { productDetails, relatedProducts, loading } = useAppSelector(
     (store) => store.ProductSlice,
   );
 
@@ -74,7 +78,13 @@ export default function page() {
 
   useEffect(() => {
     dispatch(getProductDetails(id as string));
-  }, [dispatch]);
+  }, [dispatch, id]);
+
+  useEffect(() => {
+    if (productDetails?.category?._id) {
+      dispatch(getRelatedProducts(productDetails.category._id));
+    }
+  }, [dispatch, productDetails]);
   return (
     <>
       <section>
@@ -88,11 +98,12 @@ export default function page() {
           )}
 
           <div>
-            <div className="grid grid-cols-1 xl:grid-cols-2 pt-4">
+            <section className="grid grid-cols-1 xl:grid-cols-2 pt-4 mb-10">
               <div className="img_gallery w-[90%]">
                 <div>
                   <Swiper
                     loop
+                    dir="ltr"
                     speed={800}
                     thumbs={{
                       swiper:
@@ -120,6 +131,7 @@ export default function page() {
                   <Swiper
                     onSwiper={setThumbsSwiper}
                     loop
+                    dir="ltr"
                     spaceBetween={10}
                     slidesPerView={4}
                     freeMode
@@ -147,7 +159,7 @@ export default function page() {
                   />
                 </div>
               </div>
-              <div >
+              <div>
                 <div className="title_header border-b-[1px] border-[#eee] pb-6">
                   <h1 className="text-2xl font-semibold leading-normal mb-3 text-[#333] -tracking-[0.6px]">
                     {productDetails?.title}
@@ -239,19 +251,27 @@ export default function page() {
                         id="quantity"
                         type="text"
                         readOnly
-                        value={1}
+                        value={counter}
                         step={1}
                         min={1}
                         className="text-textMain border-[1px] border-border rounded w-[140px] h-[44px] !py-0 !px-3"
                       />
                       <div className="absolute right-3 top-1/2 -translate-y-1/2 flex justify-center items-center gap-2">
                         <Button
+                          onClick={() => {
+                            if (counter > 1) {
+                              setCounter(counter - 1);
+                            }
+                          }}
                           type="button"
                           className="!bg-[#eee] rounded-full text-[#777] !font-normal text-lg w-6 h-6 border-none"
                         >
                           -
                         </Button>
                         <Button
+                          onClick={() => {
+                            setCounter(counter + 1);
+                          }}
                           type="button"
                           className="!bg-[#eee] rounded-full text-[#777] !font-normal text-lg w-6 h-6 border-none"
                         >
@@ -305,7 +325,113 @@ export default function page() {
                   </div>
                 </div>
               </div>
-            </div>
+            </section>
+            <section className="mb-9">
+              <Tabs defaultValue="Description" className="!block">
+                <TabsList variant="line" className="gap-10">
+                  <TabsTrigger
+                    className="text-[#999] py-3 px-0 font-bold text-xl data-[state=active]:text-[#333]"
+                    value="Description"
+                  >
+                    Description
+                  </TabsTrigger>
+                  <TabsTrigger
+                    className="text-[#999] py-3 px-0 font-bold text-xl data-[state=active]:text-[#333]"
+                    value="CustomerReviews"
+                  >
+                    Customer Reviews ({productDetails?.ratingsQuantity})
+                  </TabsTrigger>
+                </TabsList>
+                <TabsContent
+                  value="Description"
+                  className="mt-8 text-[#777] text-sm"
+                >
+                  <h1 className="max-w-xl leading-[26px] mb-14">
+                    {productDetails?.description}
+                  </h1>
+                  <div className="grid gap-5 md:grid-cols-3">
+                    <div>
+                      <h3 className="text-[#333] font-semibold mb-1">
+                        <span className="pr-3">1.</span> Free Shipping & Return
+                      </h3>
+                      <p className="text-[#666] leading-normal ps-6 text-[13px]">
+                        We offer free shipping for products on orders above $50
+                        and free delivery for all orders in US.
+                      </p>
+                    </div>
+
+                    <div>
+                      <h3 className="text-[#333] font-semibold mb-1">
+                        <span className="pr-3">2.</span> Free and Easy Returns
+                      </h3>
+                      <p className="text-[#666] leading-normal ps-6 text-[13px]">
+                        We guarantee our products and you could get back all of
+                        your money anytime you want in 30 days.
+                      </p>
+                    </div>
+
+                    <div>
+                      <h3 className="text-[#333] font-semibold mb-1">
+                        <span className="pr-3">3.</span> Special Financing
+                      </h3>
+                      <p className="text-[#666] leading-normal ps-6 text-[13px]">
+                        Get 20%-50% off items over $50 for a month or over $250
+                        for a year with our special credit card.
+                      </p>
+                    </div>
+                  </div>
+                </TabsContent>
+                <TabsContent value="CustomerReviews" className="mt-8">
+                  <h1>🚧 Reviews feature is coming soon.</h1>
+                </TabsContent>
+              </Tabs>
+            </section>
+            <section className="mb-5">
+              <div className="flex items-center justify-between border-b border-[#eee] mb-4">
+                <h2 className="py-4 text-xl font-bold text-[#333]">
+                  Related Products
+                </h2>
+
+                <Link
+                  href={`/shop?category=${productDetails?.category.slug}`}
+                  className="flex items-center gap-2 text-[#333] hover:text-primary transition-all duration-300 text-sm font-semibold"
+                >
+                  More Products
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    className="lucide lucide-arrow-right-icon lucide-arrow-right"
+                  >
+                    <path d="M5 12h14" />
+                    <path d="m12 5 7 7-7 7" />
+                  </svg>
+                </Link>
+              </div>
+
+              {relatedProducts ? (
+                <>
+                  <div className="grid grid-cols-2 xl:grid-cols-3 2xl:grid-cols-5 gap-8 ">
+                    {relatedProducts
+                      .filter((item) => item._id !== productDetails?._id)
+                      .slice(0, 5)
+                      .map((item) => (
+                        <div key={item._id}>
+                          <ProductCard {...item} />
+                        </div>
+                      ))}
+                  </div>
+                </>
+              ) : (
+                <LoaderProducts />
+              )}
+            </section>
           </div>
         </div>
       </section>
