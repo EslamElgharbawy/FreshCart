@@ -12,6 +12,7 @@ import { FreeMode, Navigation, Thumbs } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 import type { Swiper as SwiperType } from "swiper/types";
 import Lightbox from "yet-another-react-lightbox";
+import Zoom from "yet-another-react-lightbox/plugins/zoom";
 import "yet-another-react-lightbox/styles.css";
 
 import "swiper/css";
@@ -34,19 +35,23 @@ import { Heart, Scale } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import LoaderProducts from "@/components/LoaderProducts/LoaderProducts";
 import ProductCard from "@/components/ProductCard/ProductCard";
+import RatingStars from "@/components/RatingStars/RatingStars";
+import { getReviewsForProduct } from "@/Features/Reviews.slice";
+import RatingSummary from "@/components/RatingSummary/RatingSummary";
 
 export default function page() {
   const [thumbsSwiper, setThumbsSwiper] = useState<SwiperType | null>(null);
-
   const [open, setOpen] = useState(false);
   const [index, setIndex] = useState(0);
   const [counter, setCounter] = useState(1);
+
   const dispatch = useAppDispatch();
+  const { id } = useParams();
+
   const { productDetails, relatedProducts, loading } = useAppSelector(
     (store) => store.ProductSlice,
   );
-
-  const { id } = useParams();
+  const { reviews } = useAppSelector((store) => store.reviewsSlice);
 
   const socialIcons = [
     {
@@ -78,17 +83,17 @@ export default function page() {
 
   useEffect(() => {
     dispatch(getProductDetails(id as string));
+    dispatch(getReviewsForProduct(id as string));
   }, [dispatch, id]);
 
   useEffect(() => {
-    if (productDetails?.category?._id) {
-      dispatch(getRelatedProducts(productDetails.category._id));
-    }
-  }, [dispatch, productDetails]);
+    if (!productDetails?.category?._id) return;
+    dispatch(getRelatedProducts(productDetails.category._id));
+  }, [dispatch, productDetails?.category?._id]);
   return (
     <>
       <section>
-        <div className="mx-10">
+        <div className="mx-4 2xl:mx-10">
           {productDetails && (
             <BreadCrumb
               currentPage={productDetails.title}
@@ -98,8 +103,8 @@ export default function page() {
           )}
 
           <div>
-            <section className="grid grid-cols-1 xl:grid-cols-2 pt-4 mb-10">
-              <div className="img_gallery w-[90%]">
+            <section className="grid grid-cols-1 xl:grid-cols-2 pt-4 mb-8 xl:mb-10">
+              <div className="img_gallery sm:max-2xl:mb-10 2xl:w-[90%] ">
                 <div>
                   <Swiper
                     loop
@@ -156,6 +161,19 @@ export default function page() {
                     slides={productDetails?.images.map((image) => ({
                       src: image,
                     }))}
+                    styles={{
+                      container: {
+                        backgroundColor: "rgba(0,0,0,0.75)",
+                      },
+                    }}
+                    controller={{
+                      closeOnBackdropClick: true,
+                    }}
+                    plugins={[Zoom]}
+                    zoom={{
+                      maxZoomPixelRatio: 3,
+                      scrollToZoom: true,
+                    }}
                   />
                 </div>
               </div>
@@ -180,12 +198,9 @@ export default function page() {
                     </div>
                     <div className="text-[#666] text-sm leading-6">
                       Categories :{" "}
-                      <Link
-                        href={``}
-                        className="text-[#999] hover:text-primary transition-all duration-300"
-                      >
+                      <span className="text-[#999]">
                         {productDetails?.category.name}
-                      </Link>
+                      </span>
                     </div>
                   </div>
                 </div>
@@ -239,8 +254,8 @@ export default function page() {
                 </div>
 
                 <form>
-                  <div className="flex items-center gap-3 mb-5">
-                    <div className="flex justify-center items-center text-sm gap-3 relative">
+                  <div className="flex sm:max-xl:flex-col 2xl:items-center gap-3 mb-5">
+                    <div className="flex 2xl:justify-center items-center text-sm gap-3 w-fit relative">
                       <label
                         htmlFor="quantity"
                         className="capitalize leading-8 whitespace-nowrap"
@@ -327,8 +342,8 @@ export default function page() {
               </div>
             </section>
             <section className="mb-9">
-              <Tabs defaultValue="Description" className="!block">
-                <TabsList variant="line" className="gap-10">
+              <Tabs defaultValue="CustomerReviews" className="!block">
+                <TabsList variant="line" className="flex-col xl:flex-row gap-6 2xl:gap-10 sm:max-xl:pb-8 sm:max-xl:border-b-[1px] sm:max-xl:border-[#ebebeb] sm:max-xl:w-full">
                   <TabsTrigger
                     className="text-[#999] py-3 px-0 font-bold text-xl data-[state=active]:text-[#333]"
                     value="Description"
@@ -355,8 +370,8 @@ export default function page() {
                         <span className="pr-3">1.</span> Free Shipping & Return
                       </h3>
                       <p className="text-[#666] leading-normal ps-6 text-[13px]">
-                        We offer free shipping for products on orders above $50
-                        and free delivery for all orders in US.
+                        We offer free shipping for products on orders above 50$
+                        and offer free delivery for all orders in US.
                       </p>
                     </div>
 
@@ -375,14 +390,37 @@ export default function page() {
                         <span className="pr-3">3.</span> Special Financing
                       </h3>
                       <p className="text-[#666] leading-normal ps-6 text-[13px]">
-                        Get 20%-50% off items over $50 for a month or over $250
+                        Get 20%-50% off items over 50$ for a month or over 250$
                         for a year with our special credit card.
                       </p>
                     </div>
                   </div>
                 </TabsContent>
                 <TabsContent value="CustomerReviews" className="mt-8">
-                  <h1>🚧 Reviews feature is coming soon.</h1>
+                  <div className="grid grid-cols-1 xl:grid-cols-12 gap-5">
+                    <div className="2xl:col-span-3">
+                      <div className="flex items-center gap-5 mb-3">
+                        <span className="text-primary text-6xl font-bold -tracking-wider">
+                          {productDetails?.ratingsAverage.toFixed(1)}
+                        </span>
+                        <div>
+                          <h3 className="mb-2">Average Rating</h3>
+                          <div className="flex items-center gap-3 text-[#aaa] text-xs">
+                            <span className="mb-[2px]">
+                              <RatingStars
+                                rating={productDetails?.ratingsAverage ?? 0}
+                              />
+                            </span>
+                            ({productDetails?.ratingsQuantity} Reviwes)
+                          </div>
+                        </div>
+                      </div>
+                      <div>
+                        <RatingSummary reviews={reviews} />
+                      </div>
+                    </div>
+                    <div className="2xl:col-span-9"></div>
+                  </div>
                 </TabsContent>
               </Tabs>
             </section>
@@ -394,20 +432,18 @@ export default function page() {
 
                 <Link
                   href={`/shop?category=${productDetails?.category.slug}`}
-                  className="flex items-center gap-2 text-[#333] hover:text-primary transition-all duration-300 text-sm font-semibold"
+                  className="flex items-center gap-2 text-[#333] 2xl:hover:text-primary transition-all duration-300 text-sm font-semibold"
                 >
                   More Products
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    width="24"
-                    height="24"
                     viewBox="0 0 24 24"
                     fill="none"
                     stroke="currentColor"
                     strokeWidth="2"
                     strokeLinecap="round"
                     strokeLinejoin="round"
-                    className="lucide lucide-arrow-right-icon lucide-arrow-right"
+                    className="lucide lucide-arrow-right-icon lucide-arrow-right w-5 h-5 xl:w-6 xl:h-6"
                   >
                     <path d="M5 12h14" />
                     <path d="m12 5 7 7-7 7" />
@@ -415,7 +451,7 @@ export default function page() {
                 </Link>
               </div>
 
-              {relatedProducts ? (
+              {relatedProducts.length > 0 ? (
                 <>
                   <div className="grid grid-cols-2 xl:grid-cols-3 2xl:grid-cols-5 gap-8 ">
                     {relatedProducts

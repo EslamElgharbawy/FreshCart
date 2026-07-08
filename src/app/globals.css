@@ -53,6 +53,9 @@
   .Swiper_hero .swiper-pagination-bullets.swiper-pagination-horizontal {
     bottom: 7px !important;
   }
+  .mySwiper2 .swiper-wrapper {
+  height: auto !important;
+}
 }
 
 .Swiper_hero .swiper-button-prev {
