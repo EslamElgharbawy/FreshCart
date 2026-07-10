@@ -1,6 +1,7 @@
 export interface ReviewState {
   reviews: Review[];
   loading: boolean;
+  addReviewLoading:boolean
   error: string | null;
 }
 export interface ReviewUser {
@@ -28,4 +29,10 @@ export interface ReviewsResponse {
   results: number;
   metadata: ReviewsMetadata;
   data: Review[];
+}
+
+export interface AddReviewPayload {
+  productId: string;
+  review: string;
+  rating: number;
 }

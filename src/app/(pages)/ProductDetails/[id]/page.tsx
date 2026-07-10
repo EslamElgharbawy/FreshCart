@@ -30,6 +30,7 @@ import {
   faWhatsapp,
   faLinkedinIn,
 } from "@fortawesome/free-brands-svg-icons";
+
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Heart, Scale } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -38,6 +39,7 @@ import ProductCard from "@/components/ProductCard/ProductCard";
 import RatingStars from "@/components/RatingStars/RatingStars";
 import { getReviewsForProduct } from "@/Features/Reviews.slice";
 import RatingSummary from "@/components/RatingSummary/RatingSummary";
+import ReviewForm from "@/components/ReviewForm/ReviewForm";
 
 export default function page() {
   const [thumbsSwiper, setThumbsSwiper] = useState<SwiperType | null>(null);
@@ -103,7 +105,7 @@ export default function page() {
           )}
 
           <div>
-            <section className="grid grid-cols-1 xl:grid-cols-2 pt-4 mb-8 xl:mb-10">
+            <section className="grid grid-cols-1 xl:grid-cols-2 pt-4 mb-8 xl:mb-10 xl:max-2xl:gap-4">
               <div className="img_gallery sm:max-2xl:mb-10 2xl:w-[90%] ">
                 <div>
                   <Swiper
@@ -343,7 +345,10 @@ export default function page() {
             </section>
             <section className="mb-9">
               <Tabs defaultValue="CustomerReviews" className="!block">
-                <TabsList variant="line" className="flex-col xl:flex-row gap-6 2xl:gap-10 sm:max-xl:pb-8 sm:max-xl:border-b-[1px] sm:max-xl:border-[#ebebeb] sm:max-xl:w-full">
+                <TabsList
+                  variant="line"
+                  className="flex-col xl:flex-row gap-6 2xl:gap-10 sm:max-xl:pb-8 sm:max-xl:border-b-[1px] sm:max-xl:border-[#ebebeb] sm:max-xl:w-full"
+                >
                   <TabsTrigger
                     className="text-[#999] py-3 px-0 font-bold text-xl data-[state=active]:text-[#333]"
                     value="Description"
@@ -397,21 +402,23 @@ export default function page() {
                   </div>
                 </TabsContent>
                 <TabsContent value="CustomerReviews" className="mt-8">
-                  <div className="grid grid-cols-1 xl:grid-cols-12 gap-5">
-                    <div className="2xl:col-span-3">
-                      <div className="flex items-center gap-5 mb-3">
+                  <div className="grid grid-cols-1 xl:grid-cols-12 gap-5 xl:max-2xl:gap-8 2xl:gap-32">
+                    <div className="xl:col-span-4">
+                      <div className="flex items-center gap-5 xl:max-2xl:gap-4 mb-3">
                         <span className="text-primary text-6xl font-bold -tracking-wider">
                           {productDetails?.ratingsAverage.toFixed(1)}
                         </span>
                         <div>
-                          <h3 className="mb-2">Average Rating</h3>
-                          <div className="flex items-center gap-3 text-[#aaa] text-xs">
+                          <h3 className="mb-2 xl:max-2xl:mb-1">
+                            Average Rating
+                          </h3>
+                          <div className="flex items-center gap-3 xl:max-2xl:gap-2 text-[#aaa] text-xs whitespace-nowrap">
                             <span className="mb-[2px]">
                               <RatingStars
                                 rating={productDetails?.ratingsAverage ?? 0}
                               />
                             </span>
-                            ({productDetails?.ratingsQuantity} Reviwes)
+                            ({productDetails?.ratingsQuantity} Reviews)
                           </div>
                         </div>
                       </div>
@@ -419,7 +426,48 @@ export default function page() {
                         <RatingSummary reviews={reviews} />
                       </div>
                     </div>
-                    <div className="2xl:col-span-9"></div>
+                    <div className="xl:col-span-8">
+                      {/* {token ? (
+                        <>
+                         <ReviewForm />
+                        </>
+                      ) : (
+                        <div className="rounded-md border border-[#ebebeb] p-6 text-center">
+                          <h3 className="mb-2 text-xl font-semibold">
+                            Want to leave a review?
+                          </h3>
+
+                          <p className="mb-5 text-[#777]">
+                            Please sign in to share your experience with this
+                            product.
+                          </p>
+
+                          <Link
+                            href="/login"
+                            className="inline-flex h-11 items-center justify-center bg-primary px-6 text-white transition hover:opacity-90"
+                          >
+                            Sign In
+                          </Link>
+                        </div>
+                      )} */}
+                      <div className="rounded-md border border-[#ebebeb] p-6 text-center">
+                          <h3 className="mb-2 text-xl font-semibold">
+                            Want to leave a review?
+                          </h3>
+
+                          <p className="mb-5 text-[#777]">
+                            Please sign in to share your experience with this
+                            product.
+                          </p>
+
+                          <Link
+                            href="/login"
+                            className="inline-flex h-11 items-center justify-center bg-primary px-6 text-white transition hover:opacity-90"
+                          >
+                            Sign In
+                          </Link>
+                        </div>
+                    </div>
                   </div>
                 </TabsContent>
               </Tabs>
