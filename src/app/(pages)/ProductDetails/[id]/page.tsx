@@ -40,6 +40,7 @@ import RatingStars from "@/components/RatingStars/RatingStars";
 import { getReviewsForProduct } from "@/Features/Reviews.slice";
 import RatingSummary from "@/components/RatingSummary/RatingSummary";
 import ReviewForm from "@/components/ReviewForm/ReviewForm";
+import { actions } from "@/Features/AuthDialog.slice";
 
 export default function page() {
   const [thumbsSwiper, setThumbsSwiper] = useState<SwiperType | null>(null);
@@ -451,22 +452,24 @@ export default function page() {
                         </div>
                       )} */}
                       <div className="rounded-md border border-[#ebebeb] p-6 text-center">
-                          <h3 className="mb-2 text-xl font-semibold">
-                            Want to leave a review?
-                          </h3>
+                        <h3 className="mb-2 text-xl font-semibold">
+                          Want to leave a review?
+                        </h3>
 
-                          <p className="mb-5 text-[#777]">
-                            Please sign in to share your experience with this
-                            product.
-                          </p>
+                        <p className="mb-5 text-[#777]">
+                          Please sign in to share your experience with this
+                          product.
+                        </p>
 
-                          <Link
-                            href="/login"
-                            className="inline-flex h-11 items-center justify-center bg-primary px-6 text-white transition hover:opacity-90"
-                          >
-                            Sign In
-                          </Link>
-                        </div>
+                        <button
+                          onClick={() =>
+                            dispatch(actions.openAuthDialog("SignIn"))
+                          }
+                          className="inline-flex h-11 items-center justify-center bg-primary px-6 text-white transition hover:opacity-90"
+                        >
+                          Sign In
+                        </button>
+                      </div>
                     </div>
                   </div>
                 </TabsContent>

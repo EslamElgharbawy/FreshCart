@@ -31,10 +31,11 @@ import { changeLanguage } from "i18next";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { lang } from "@/Types/Lang";
-import { useAppSelector } from "@/hooks/store.hooks";
+import { useAppDispatch, useAppSelector } from "@/hooks/store.hooks";
 import { MobileMenu } from "../MobileMenu/MobileMenu";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { usePathname } from "next/navigation";
+import { actions } from "@/Features/AuthDialog.slice";
 
 export default function Navbar() {
   const inputRef = useRef<HTMLInputElement | null>(null);
@@ -46,7 +47,7 @@ export default function Navbar() {
   const [languageOpen, setLanguageOpen] = useState(false);
   const [active, setactive] = useState("home");
   const { t } = useTranslation();
-
+  const dispatch = useAppDispatch();
   const pathname = usePathname();
 
   const isHome = pathname === "/";
@@ -249,20 +250,20 @@ export default function Navbar() {
                   </div>
                 </div>
                 <div className="auth flex justify-center items-center gap-1 text-[#666666] text-[11px]">
-                  <a
-                    href="/Login"
+                  <button
+                    onClick={() => dispatch(actions.openAuthDialog("SignIn"))}
                     className="flex justify-center items-center gap-1 hover:text-[#fe4407] transition-all duration-300"
                   >
                     <User width={20} height={20} />
                     {t("navbar.login")}
-                  </a>
+                  </button>
                   <span>/</span>
-                  <a
-                    href="/SignUp"
+                  <button
+                    onClick={() => dispatch(actions.openAuthDialog("SignUp"))}
                     className="hover:text-[#fe4407] transition-all duration-300"
                   >
                     {t("navbar.signup")}
-                  </a>
+                  </button>
                 </div>
               </div>
             </div>
@@ -654,12 +655,12 @@ export default function Navbar() {
               <div className="right-side flex justify-between items-center w-full">
                 <MobileMenu />
                 <div className="flex justify-center items-center gap-5 ms-auto">
-                  <a
-                    href="#"
+                  <button
+                    onClick={() => dispatch(actions.openAuthDialog("SignIn"))}
                     className="hover:text-[#fe4407] transition-all duration-300"
                   >
                     <User className="w-[26px] h-[26px] lg:w-[28px] lg:h-[28px] xl:w-[34px] xl:h-[34px]" />
-                  </a>
+                  </button>
                   <a
                     href="#"
                     className="relative hover:text-primary transition-all duration-300 "

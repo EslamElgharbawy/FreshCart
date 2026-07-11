@@ -14,6 +14,9 @@
     @apply bg-white text-black;
   }
 }
+header {
+  padding-right: var(--removed-body-scroll-bar-size);
+}
 
 .swiper {
   width: 100%;
