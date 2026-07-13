@@ -41,6 +41,7 @@ import { getReviewsForProduct } from "@/Features/Reviews.slice";
 import RatingSummary from "@/components/RatingSummary/RatingSummary";
 import ReviewForm from "@/components/ReviewForm/ReviewForm";
 import { actions } from "@/Features/AuthDialog.slice";
+import ReviewCard from "@/components/ReviewCard/ReviewCard";
 
 export default function page() {
   const [thumbsSwiper, setThumbsSwiper] = useState<SwiperType | null>(null);
@@ -344,7 +345,7 @@ export default function page() {
                 </div>
               </div>
             </section>
-            <section className="mb-9">
+            <section className="mb-12">
               <Tabs defaultValue="CustomerReviews" className="!block">
                 <TabsList
                   variant="line"
@@ -403,7 +404,7 @@ export default function page() {
                   </div>
                 </TabsContent>
                 <TabsContent value="CustomerReviews" className="mt-8">
-                  <div className="grid grid-cols-1 xl:grid-cols-12 gap-5 xl:max-2xl:gap-8 2xl:gap-32">
+                  <div className="grid grid-cols-1 xl:grid-cols-12 gap-5 xl:max-2xl:gap-12 2xl:gap-32">
                     <div className="xl:col-span-4">
                       <div className="flex items-center gap-5 xl:max-2xl:gap-4 mb-3">
                         <span className="text-primary text-6xl font-bold -tracking-wider">
@@ -451,24 +452,11 @@ export default function page() {
                           </Link>
                         </div>
                       )} */}
-                      <div className="rounded-md border border-[#ebebeb] p-6 text-center">
-                        <h3 className="mb-2 text-xl font-semibold">
-                          Want to leave a review?
-                        </h3>
 
-                        <p className="mb-5 text-[#777]">
-                          Please sign in to share your experience with this
-                          product.
-                        </p>
-
-                        <button
-                          onClick={() =>
-                            dispatch(actions.openAuthDialog("SignIn"))
-                          }
-                          className="inline-flex h-11 items-center justify-center bg-primary px-6 text-white transition hover:opacity-90"
-                        >
-                          Sign In
-                        </button>
+                      <div>
+                        {reviews.map((review) => (
+                          <ReviewCard key={review._id} review={review} />
+                        ))}
                       </div>
                     </div>
                   </div>

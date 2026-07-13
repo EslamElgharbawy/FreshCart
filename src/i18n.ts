@@ -174,6 +174,10 @@ const resources = {
         wishlist: "Wishlist",
         compare: "Compare",
       },
+
+      common: {
+        at: "at",
+      },
       footer: {
         supportText: "Got Question? Call us 24/7",
         description: "Register now to get updates on promotions & coupons.",
@@ -388,6 +392,9 @@ const resources = {
         wishlist: "المفضلة",
         compare: "المقارنة",
       },
+      common: {
+      at: "في",
+    },
       footer: {
         supportText: "هل لديك سؤال؟ اتصل بنا 24/7",
         description: "سجل الآن للحصول على تحديثات حول العروض والقسائم.",

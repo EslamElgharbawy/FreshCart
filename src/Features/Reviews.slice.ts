@@ -15,6 +15,8 @@ export const getReviewsForProduct = createAsyncThunk<Review[], string>(
     const { data } = await axios.get(
       `https://ecommerce.routemisr.com/api/v1/products/${productId}/reviews`,
     );
+    console.log(data.data);
+    
     return data.data;
   },
 );
