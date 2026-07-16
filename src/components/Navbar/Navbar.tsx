@@ -46,7 +46,7 @@ export default function Navbar() {
   const [currencyOpen, setCurrencyOpen] = useState(false);
   const [languageOpen, setLanguageOpen] = useState(false);
   const [active, setactive] = useState("home");
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const dispatch = useAppDispatch();
   const pathname = usePathname();
 
@@ -227,8 +227,8 @@ export default function Navbar() {
                           </li>
                           <li
                             onClick={() => {
-                              setLanguage("EGY");
                               changeLanguage("ar");
+                              setLanguage("EGY");
                             }}
                             className="flexg flex justify-center items-center gap-2 rounded text-[11px] text-[#666666] hover:text-[#fe4407] transition-all duration-300 cursor-pointer"
                           >

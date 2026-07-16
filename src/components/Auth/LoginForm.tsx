@@ -1,4 +1,3 @@
-import React from "react";
 import { Field, FieldGroup } from "../ui/field";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
@@ -28,18 +27,18 @@ export default function LoginForm() {
           name="password"
         />
       </Field>
-      <Field className="flex-row items-center justify-between my-3 !gap-20">
+      <Field className="flex-row items-center justify-between my-3 !gap-5 xl:!gap-20">
         <div className="flex items-center gap-2 !w-fit">
           <Checkbox id="remember" className="rounded-none size-[18px] data-[state=checked]:bg-black data-[state=checked]:border-black data-[state=checked]:text-white"/>
           <Label
             htmlFor="remember"
-            className="font-normal text-sm text-textMain cursor-pointer"
+            className="font-normal text-xs text-textMain cursor-pointer"
           >
             Remember me
           </Label>
         </div>
 
-        <button type="button" className="text-sm text-red-500 hover:underline !w-fit shrink-0">
+        <button type="button" className="text-xs text-red-500 hover:underline !w-fit shrink-0">
           Forgot Password?
         </button>
       </Field>

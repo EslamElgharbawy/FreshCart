@@ -11,7 +11,6 @@ import img3 from "../assets/images/banner6.png";
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import i18n from "@/i18n";
 import PromoBanner from "@/components/PromoBanner/PromoBanner";
 import HeadphonesCard from "@/components/HeadphonesCard/HeadphonesCard";
 import FashionPromoCard from "@/components/FashionPromoCard/FashionPromoCard";
@@ -35,7 +34,7 @@ export default function Home() {
   const [selectedClothesSubCategory, setSelectedClothesSubCategory] =
     useState("");
   const [filterLoading, setFilterLoading] = useState(false);
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   const features_data = [
     {

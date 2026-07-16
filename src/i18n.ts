@@ -174,9 +174,39 @@ const resources = {
         wishlist: "Wishlist",
         compare: "Compare",
       },
-
       common: {
+        reviews: "Reviews",
         at: "at",
+      },
+      productDetails: {
+        category: "Category",
+        inStock: "In stock",
+        quantity: "Quantity",
+        addToCart: "Add to Cart",
+      },
+      shippingInfo: {
+        freeShipping: {
+          title: "Free Shipping & Return",
+          description:
+            "We offer free shipping for products on orders above $50 and free delivery for all orders in the US.",
+        },
+        easyReturns: {
+          title: "Free and Easy Returns",
+          description:
+            "We guarantee our products, and you can get a full refund within 30 days.",
+        },
+        specialFinancing: {
+          title: "Special Financing",
+          description:
+            "Get 20%-50% off items over $50 for a month or over $250 for a year with our special credit card.",
+        },
+      },
+      reviewsSection: {
+        averageRating: "Average Rating",
+        wantReview: "Want to leave a review?",
+        signInMessage:
+          "Please sign in to share your experience with this product.",
+        signIn: "Sign In",
       },
       footer: {
         supportText: "Got Question? Call us 24/7",
@@ -393,8 +423,39 @@ const resources = {
         compare: "المقارنة",
       },
       common: {
-      at: "في",
-    },
+        reviews: "تقييمات",
+        at: "في",
+      },
+      productDetails: {
+        category: "الفئة",
+        inStock: "متوفر بالمخزون",
+        quantity: "الكمية",
+        addToCart: "أضف إلى السلة",
+      },
+
+      shippingInfo: {
+        freeShipping: {
+          title: "شحن وإرجاع مجاني",
+          description:
+            "نوفر شحنًا مجانيًا للطلبات التي تزيد قيمتها عن 50 دولارًا، مع توصيل مجاني لجميع الطلبات داخل الولايات المتحدة.",
+        },
+        easyReturns: {
+          title: "إرجاع مجاني وسهل",
+          description:
+            "نضمن جودة منتجاتنا، ويمكنك استرداد أموالك بالكامل خلال 30 يومًا.",
+        },
+        specialFinancing: {
+          title: "تمويل خاص",
+          description:
+            "احصل على خصم من 20% إلى 50% على المشتريات التي تزيد عن 50 دولارًا لمدة شهر، أو التي تزيد عن 250 دولارًا لمدة عام باستخدام بطاقتنا الائتمانية الخاصة.",
+        },
+      },
+      reviewsSection: {
+        averageRating: "متوسط التقييم",
+        wantReview: "هل ترغب في كتابة تقييم؟",
+        signInMessage: "يرجى تسجيل الدخول لمشاركة تجربتك مع هذا المنتج.",
+        signIn: "تسجيل الدخول",
+      },
       footer: {
         supportText: "هل لديك سؤال؟ اتصل بنا 24/7",
         description: "سجل الآن للحصول على تحديثات حول العروض والقسائم.",
@@ -436,7 +497,6 @@ const resources = {
     },
   },
 };
-
 i18n.use(initReactI18next).init({
   resources,
   lng: "en", // default

@@ -50,12 +50,14 @@ import ReviewCardSkeleton from "@/components/Skeletons/ReviewCardSkeleton";
 import RatingSummarySkeleton from "@/components/Skeletons/RatingSummarySkeleton";
 import ProductCardSkeleton from "@/components/Skeletons/ProductCardSkeleton";
 import { FaStar } from "react-icons/fa";
+import { useTranslation } from "react-i18next";
 
 export default function page() {
   const [thumbsSwiper, setThumbsSwiper] = useState<SwiperType | null>(null);
   const [open, setOpen] = useState(false);
   const [index, setIndex] = useState(0);
   const [counter, setCounter] = useState(1);
+  const { t, i18n } = useTranslation();
 
   const dispatch = useAppDispatch();
   const { id } = useParams();
@@ -109,6 +111,7 @@ export default function page() {
     if (!productDetails?.category?._id) return;
     dispatch(getRelatedProducts(productDetails.category._id));
   }, [dispatch, productDetails?.category?._id]);
+
   return (
     <>
       <section>
@@ -224,7 +227,7 @@ export default function page() {
                         )}
                       </div>
                       <div className="text-[#666] text-sm leading-6">
-                        Categories :{" "}
+                        {t("productDetails.category")} :{" "}
                         <span className="text-[#999]">
                           {productDetails?.category.name}
                         </span>
@@ -238,10 +241,15 @@ export default function page() {
                     </h1>
                   </div>
                   <div className="flex items-center capitalize text-xs text-[#999] mb-4 gap-2">
-                    <RatingStars rating={productDetails?.ratingsAverage ?? 0} size={16}  color="text-[#ffb639]"/>
+                    <RatingStars
+                      rating={productDetails?.ratingsAverage ?? 0}
+                      size={16}
+                      color="text-[#ffb639]"
+                    />
 
                     <p className="mt-[2px]">
-                      {productDetails?.ratingsQuantity} Reviews
+                      {productDetails?.ratingsQuantity}{" "}
+                      {t("common.reviews")}
                     </p>
                   </div>
                   <div className="mb-4">
@@ -265,7 +273,7 @@ export default function page() {
                       <path d="M20 6 9 17l-5-5" />
                     </svg>
                     <p className="text-sm text-[#777]">
-                      {productDetails?.quantity} in stock
+                      {productDetails?.quantity} {t("productDetails.inStock")}
                     </p>
                   </div>
 
@@ -276,7 +284,7 @@ export default function page() {
                           htmlFor="quantity"
                           className="capitalize leading-8 whitespace-nowrap"
                         >
-                          quantity :
+                          {t("productDetails.quantity")} :
                         </label>
                         <Input
                           id="quantity"
@@ -287,7 +295,9 @@ export default function page() {
                           min={1}
                           className="text-textMain border-[1px] border-border rounded w-[140px] h-[44px] !py-0 !px-3"
                         />
-                        <div className="absolute right-3 top-1/2 -translate-y-1/2 flex justify-center items-center gap-2">
+                        <div
+                          className={`absolute ${i18n.language === "en" ? "right-3 " : " left-3 "} top-1/2 -translate-y-1/2 flex justify-center items-center gap-2`}
+                        >
                           <Button
                             onClick={() => {
                               if (counter > 1) {
@@ -329,7 +339,7 @@ export default function page() {
                             d="M15.75 10.5V6a3.75 3.75 0 1 0-7.5 0v4.5m11.356-1.993 1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 0 1-1.12-1.243l1.264-12A1.125 1.125 0 0 1 5.513 7.5h12.974c.576 0 1.059.435 1.119 1.007ZM8.625 10.5a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm7.5 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z"
                           />
                         </svg>
-                        Add to Cart
+                        {t("productDetails.addToCart")}
                       </Button>
                     </div>
                   </form>
@@ -398,31 +408,31 @@ export default function page() {
                   <div className="grid gap-5 md:grid-cols-3">
                     <div>
                       <h3 className="text-[#333] font-semibold mb-1">
-                        <span className="pr-3">1.</span> Free Shipping & Return
+                        <span className="pr-3">1.</span>{" "}
+                        {t("shippingInfo.freeShipping.title")}
                       </h3>
                       <p className="text-[#666] leading-normal ps-6 text-[13px]">
-                        We offer free shipping for products on orders above 50$
-                        and offer free delivery for all orders in US.
+                        {t("shippingInfo.freeShipping.description")}
                       </p>
                     </div>
 
                     <div>
                       <h3 className="text-[#333] font-semibold mb-1">
-                        <span className="pr-3">2.</span> Free and Easy Returns
+                        <span className="pr-3">2.</span>{" "}
+                        {t("shippingInfo.easyReturns.title")}
                       </h3>
                       <p className="text-[#666] leading-normal ps-6 text-[13px]">
-                        We guarantee our products and you could get back all of
-                        your money anytime you want in 30 days.
+                        {t("shippingInfo.easyReturns.description")}
                       </p>
                     </div>
 
                     <div>
                       <h3 className="text-[#333] font-semibold mb-1">
-                        <span className="pr-3">3.</span> Special Financing
+                        <span className="pr-3">3.</span>{" "}
+                        {t("shippingInfo.specialFinancing.title")}
                       </h3>
                       <p className="text-[#666] leading-normal ps-6 text-[13px]">
-                        Get 20%-50% off items over 50$ for a month or over 250$
-                        for a year with our special credit card.
+                        {t("shippingInfo.specialFinancing.description")}
                       </p>
                     </div>
                   </div>
@@ -440,17 +450,18 @@ export default function page() {
                             </span>
                             <div>
                               <h3 className="mb-2 xl:max-2xl:mb-1">
-                                Average Rating
+                                {t("reviewsSection.averageRating")}
                               </h3>
                               <div className="flex items-center gap-3 xl:max-2xl:gap-2 text-[#aaa] text-xs whitespace-nowrap">
                                 <span className="mb-[2px]">
                                   <RatingStars
                                     rating={productDetails?.ratingsAverage ?? 0}
-                                    size={14} 
+                                    size={14}
                                     color="text-textMain"
                                   />
                                 </span>
-                                ({productDetails?.ratingsQuantity} Reviews)
+                                ({productDetails?.ratingsQuantity}{" "}
+                                {t("common.reviews")})
                               </div>
                             </div>
                           </div>
@@ -463,12 +474,11 @@ export default function page() {
 
                       <div className="rounded-md border border-[#ebebeb] p-6 text-center">
                         <h3 className="mb-2 text-xl font-semibold">
-                          Want to leave a review?
+                          {t("reviewsSection.wantReview")}
                         </h3>
 
                         <p className="mb-5 text-[#777]">
-                          Please sign in to share your experience with this
-                          product.
+                          {t("reviewsSection.signInMessage")}
                         </p>
 
                         <button
@@ -477,7 +487,7 @@ export default function page() {
                           }
                           className="inline-flex h-11 items-center justify-center bg-primary px-6 text-white transition hover:opacity-90"
                         >
-                          Sign In
+                          {t("reviewsSection.signIn")}
                         </button>
                       </div>
                     </div>
