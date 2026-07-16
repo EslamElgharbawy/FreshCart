@@ -4,6 +4,7 @@ import { useAppDispatch } from "@/hooks/store.hooks";
 import { Review } from "@/Types/reviews";
 import { useMemo } from "react";
 import { FaStar } from "react-icons/fa";
+import RatingStars from "../RatingStars/RatingStars";
 
 type RatingSummaryProps = {
   reviews: Review[];
@@ -30,13 +31,7 @@ export default function RatingSummary({ reviews }: RatingSummaryProps) {
         {ratingStats.map((item) => (
           <div key={item.star} className="flex items-center gap-3 mb-4">
             <div className="flex mr-2">
-              {[1, 2, 3, 4, 5].map((star) =>
-                star <= item.star ? (
-                  <FaStar key={star} className="text-textMain" />
-                ) : (
-                  <FaStar key={star} className="text-[#00000033]" />
-                ),
-              )}
+              <RatingStars rating={item.star} size={14} color="text-textMain"/>
             </div>
 
             <div className="flex-1 h-2 bg-gray-200 rounded-full overflow-hidden">
