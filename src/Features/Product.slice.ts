@@ -34,7 +34,6 @@ export const getRelatedProducts = createAsyncThunk<Product[], string>(
     const { data } = await axios.get(
       `https://ecommerce.routemisr.com/api/v1/products?category[in]=${categoryId}`,
     );
-    console.log(data.data);
     return data.data;
   },
 );

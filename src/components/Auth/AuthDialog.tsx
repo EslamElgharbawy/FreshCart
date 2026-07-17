@@ -62,9 +62,7 @@ export default function AuthDialog() {
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.15 }}
               >
-                <form>
                   <LoginForm />
-                </form>
               </motion.div>
             )}
 
@@ -76,9 +74,7 @@ export default function AuthDialog() {
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.15 }}
               >
-                <form>
                   <RegisterForm />
-                </form>
               </motion.div>
             )}
           </AnimatePresence>

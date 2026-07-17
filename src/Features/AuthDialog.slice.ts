@@ -16,6 +16,9 @@ export const AuthDialogSlice = createSlice({
     closeAuthDialog: (state) => {
       state.open = false;
     },
+    setAuthMode: (state, action: PayloadAction<AuthMode>) => {
+      state.mode = action.payload;
+    },
   },
 });
 export const actions = AuthDialogSlice.actions;
