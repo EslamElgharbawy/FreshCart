@@ -34,7 +34,6 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Heart, Scale } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import LoaderProducts from "@/components/LoaderProducts/LoaderProducts";
 import ProductCard from "@/components/ProductCard/ProductCard";
 import RatingStars from "@/components/RatingStars/RatingStars";
 import { getReviewsForProduct } from "@/Features/Reviews.slice";
@@ -42,7 +41,6 @@ import RatingSummary from "@/components/RatingSummary/RatingSummary";
 import ReviewForm from "@/components/ReviewForm/ReviewForm";
 import { actions } from "@/Features/AuthDialog.slice";
 import ReviewCard from "@/components/ReviewCard/ReviewCard";
-import ProductDetailsSkeleton from "@/components/Skeletons/ProductDetailsSkeleton";
 import ProductGallerySkeleton from "@/components/Skeletons/ProductGallerySkeleton";
 import BreadcrumbSkeleton from "@/components/Skeletons/BreadcrumbSkeleton";
 import ProductInfoSkeleton from "@/components/Skeletons/ProductInfoSkeleton";
@@ -99,9 +97,6 @@ export default function page() {
     },
   ];
 
-  // if (loading) {
-  //   return <ProductDetailsSkeleton />
-  // }
   useEffect(() => {
     dispatch(getProductDetails(id as string));
     dispatch(getReviewsForProduct(id as string));
@@ -248,8 +243,7 @@ export default function page() {
                     />
 
                     <p className="mt-[2px]">
-                      {productDetails?.ratingsQuantity}{" "}
-                      {t("common.reviews")}
+                      {productDetails?.ratingsQuantity} {t("common.reviews")}
                     </p>
                   </div>
                   <div className="mb-4">
@@ -471,51 +465,8 @@ export default function page() {
                           </div>
                         </>
                       )}
-
-                      <div className="rounded-md border border-[#ebebeb] p-6 text-center">
-                        <h3 className="mb-2 text-xl font-semibold">
-                          {t("reviewsSection.wantReview")}
-                        </h3>
-
-                        <p className="mb-5 text-[#777]">
-                          {t("reviewsSection.signInMessage")}
-                        </p>
-
-                        <button
-                          onClick={() =>
-                            dispatch(actions.openAuthDialog("SignIn"))
-                          }
-                          className="inline-flex h-11 items-center justify-center bg-primary px-6 text-white transition hover:opacity-90"
-                        >
-                          {t("reviewsSection.signIn")}
-                        </button>
-                      </div>
                     </div>
                     <div className="xl:col-span-8">
-                      {/* {token ? (
-                        <>
-                         <ReviewForm />
-                        </>
-                      ) : (
-                        <div className="rounded-md border border-[#ebebeb] p-6 text-center">
-                          <h3 className="mb-2 text-xl font-semibold">
-                            Want to leave a review?
-                          </h3>
-
-                          <p className="mb-5 text-[#777]">
-                            Please sign in to share your experience with this
-                            product.
-                          </p>
-
-                          <Link
-                            href="/login"
-                            className="inline-flex h-11 items-center justify-center bg-primary px-6 text-white transition hover:opacity-90"
-                          >
-                            Sign In
-                          </Link>
-                        </div>
-                      )} */}
-
                       <div>
                         {reviewsLoading ? (
                           <>
