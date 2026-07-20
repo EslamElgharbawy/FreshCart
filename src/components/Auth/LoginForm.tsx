@@ -5,7 +5,7 @@ import { Label } from "../ui/label";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "../ui/checkbox";
 import { useFormik } from "formik";
-import { Login } from "@/Features/user.slice";
+import { Login, VerifyToken } from "@/Features/user.slice";
 import { useAppDispatch, useAppSelector } from "@/hooks/store.hooks";
 import { actions } from "@/Features/AuthDialog.slice";
 
@@ -19,8 +19,8 @@ export default function LoginForm() {
     },
     onSubmit: async (values) => {
       const result = await dispatch(Login(values));
-      if (result.payload.message === "success") {
-        localStorage.setItem("token", result.payload.token);
+      if (Login.fulfilled.match(result)) {
+        dispatch(VerifyToken(result.payload.token));
         dispatch(actions.closeAuthDialog());
       }
     },
@@ -82,7 +82,7 @@ export default function LoginForm() {
             disabled={loading}
             className="py-3 px-7 h-auto rounded-none uppercase text-white font-semibold"
           >
-             Sign In
+            Sign In
           </Button>
         </Field>
       </FieldGroup>

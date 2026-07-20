@@ -15,10 +15,8 @@ export default function DirectionProvider({
       document.documentElement.lang = lang;
     };
 
-    // أول مرة
     setDirection(i18n.language);
 
-    // لما اللغة تتغير
     i18n.on("languageChanged", setDirection);
 
     return () => {

@@ -10,6 +10,8 @@ import {
   DropdownMenuContent,
   DropdownMenuGroup,
   DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import {
@@ -58,6 +60,9 @@ export default function Navbar() {
   };
 
   const { categories } = useAppSelector((store) => store.categoriesSlice);
+  const { user, isLoggedIn, authChecked } = useAppSelector(
+    (store) => store.user,
+  );
 
   const sections = [
     { name: "home", path: "/" },
@@ -73,6 +78,7 @@ export default function Navbar() {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
   return (
     <>
       {/* //& Desktop  */}
@@ -249,22 +255,60 @@ export default function Navbar() {
                     </HoverCard>
                   </div>
                 </div>
-                <div className="auth flex justify-center items-center gap-1 text-[#666666] text-[11px]">
-                  <button
-                    onClick={() => dispatch(actions.openAuthDialog("SignIn"))}
-                    className="flex justify-center items-center gap-1 hover:text-[#fe4407] transition-all duration-300"
-                  >
-                    <User width={20} height={20} />
-                    {t("navbar.login")}
-                  </button>
-                  <span>/</span>
-                  <button
-                    onClick={() => dispatch(actions.openAuthDialog("SignUp"))}
-                    className="hover:text-[#fe4407] transition-all duration-300"
-                  >
-                    {t("navbar.signup")}
-                  </button>
-                </div>
+
+                
+                {!authChecked ? (
+                  <div className="w-20 h-5 bg-gray-200 animate-pulse rounded" />
+                ) : isLoggedIn ? (
+                  <>
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <div className="auth flex justify-center items-center gap-1 text-[#666666] text-[11px]">
+                          <button className="flex justify-center items-center gap-1 hover:text-[#fe4407] transition-all duration-300">
+                            <User width={20} height={20} />
+                            Hi , {user?.name}
+                          </button>
+                        </div>
+                      </DropdownMenuTrigger>
+
+                      <DropdownMenuContent>
+                        <DropdownMenuGroup>
+                          <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                          <DropdownMenuItem>Profile</DropdownMenuItem>
+                          <DropdownMenuItem>Billing</DropdownMenuItem>
+                          <DropdownMenuItem>Settings</DropdownMenuItem>
+                        </DropdownMenuGroup>
+                        <DropdownMenuSeparator />
+                        <DropdownMenuItem>GitHub</DropdownMenuItem>
+                        <DropdownMenuItem>Support</DropdownMenuItem>
+                        <DropdownMenuItem disabled>API</DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  </>
+                ) : (
+                  <>
+                    <div className="auth flex justify-center items-center gap-1 text-[#666666] text-[11px]">
+                      <button
+                        onClick={() =>
+                          dispatch(actions.openAuthDialog("SignIn"))
+                        }
+                        className="flex justify-center items-center gap-1 hover:text-[#fe4407] transition-all duration-300"
+                      >
+                        <User width={20} height={20} />
+                        {t("navbar.login")}
+                      </button>
+                      <span>/</span>
+                      <button
+                        onClick={() =>
+                          dispatch(actions.openAuthDialog("SignUp"))
+                        }
+                        className="hover:text-[#fe4407] transition-all duration-300"
+                      >
+                        {t("navbar.signup")}
+                      </button>
+                    </div>
+                  </>
+                )}
               </div>
             </div>
           </motion.div>

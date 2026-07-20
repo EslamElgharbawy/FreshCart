@@ -12,11 +12,8 @@ type RatingSummaryProps = {
   reviews: Review[];
 };
 export default function RatingSummary({ reviews }: RatingSummaryProps) {
-  
   const { t } = useTranslation();
   const { token } = useAppSelector((store) => store.user);
-  console.log("Redux Token:", token);
-console.log("LocalStorage Token:", localStorage.getItem("token"));
   const dispatch = useAppDispatch();
   const ratingStats = useMemo(() => {
     const totalReviews = reviews.length;

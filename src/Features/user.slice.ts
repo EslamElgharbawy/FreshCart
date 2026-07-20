@@ -31,9 +31,27 @@ export const Login = createAsyncThunk(
   },
 );
 
+export const VerifyToken = createAsyncThunk(
+  "user/verifyToken",
+  async (token: string) => {
+    const { data } = await axios.get(
+      "https://ecommerce.routemisr.com/api/v1/auth/verifyToken",
+      {
+        headers: {
+          token,
+        },
+      },
+    );
+
+    return data;
+  },
+);
+
 const initialState: Userstate = {
   isLoggedIn: false,
   token: null,
+  user: null,
+  authChecked: false,
   loading: false,
   error: null,
 };
@@ -44,6 +62,9 @@ const userSlice = createSlice({
     login: (state, action) => {
       state.isLoggedIn = true;
       state.token = action.payload;
+    },
+    authChecked: (state) => {
+      state.authChecked = true;
     },
     logout: (state) => {
       state.isLoggedIn = false;
@@ -107,8 +128,33 @@ const userSlice = createSlice({
       state.loading = false;
       state.error = action.error.message ?? "Something went wrong";
     });
+
+    // * VerifyToken
+    builder.addCase(VerifyToken.pending, (state) => {
+      state.loading = true;
+      state.error = null;
+    });
+
+    builder.addCase(VerifyToken.fulfilled, (state, action) => {
+      state.loading = false;
+      state.user = action.payload.decoded;
+      state.isLoggedIn = true;
+      state.authChecked = true;
+      state.token = localStorage.getItem("token");
+    });
+
+    builder.addCase(VerifyToken.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.error.message ?? "Something went wrong";
+      state.isLoggedIn = false;
+      state.token = null;
+      state.authChecked = true;
+      state.user = null;
+
+      localStorage.removeItem("token");
+    });
   },
 });
 
-export const { login, logout } = userSlice.actions;
+export const { login, logout, authChecked } = userSlice.actions;
 export default userSlice.reducer;
