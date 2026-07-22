@@ -433,7 +433,7 @@ export default function page() {
                 </TabsContent>
                 <TabsContent value="CustomerReviews" className="mt-8">
                   <div className="grid grid-cols-1 xl:grid-cols-12 gap-5 xl:max-2xl:gap-12 2xl:gap-28">
-                    <div className="xl:col-span-5 2xl:col-span-4">
+                    <div className="xl:col-span-5 2xl:col-span-4 sm:max-lg:mb-5">
                       {reviewsLoading ? (
                         <RatingSummarySkeleton />
                       ) : (
