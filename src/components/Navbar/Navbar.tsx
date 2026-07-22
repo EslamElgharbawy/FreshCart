@@ -256,7 +256,6 @@ export default function Navbar() {
                   </div>
                 </div>
 
-                
                 {!authChecked ? (
                   <div className="w-20 h-5 bg-gray-200 animate-pulse rounded" />
                 ) : isLoggedIn ? (
@@ -271,17 +270,44 @@ export default function Navbar() {
                         </div>
                       </DropdownMenuTrigger>
 
-                      <DropdownMenuContent>
-                        <DropdownMenuGroup>
-                          <DropdownMenuLabel>My Account</DropdownMenuLabel>
-                          <DropdownMenuItem>Profile</DropdownMenuItem>
-                          <DropdownMenuItem>Billing</DropdownMenuItem>
-                          <DropdownMenuItem>Settings</DropdownMenuItem>
-                        </DropdownMenuGroup>
+                      <DropdownMenuContent
+                        align="end"
+                        className="w-64 bg-white"
+                      >
+                        <div className="border-b p-4">
+                          <p className="text-sm text-gray-500">Signed in as</p>
+                          <p className="font-semibold">{user?.name}</p>
+                        </div>
+
+                        <DropdownMenuItem className="cursor-pointer">
+                          <User className="mr-2 h-4 w-4" />
+                          My Profile
+                        </DropdownMenuItem>
+
+                        <DropdownMenuItem className="cursor-pointer">
+                          {/* <Package className="mr-2 h-4 w-4" /> */}
+                          My Orders
+                        </DropdownMenuItem>
+
+                        <DropdownMenuItem className="cursor-pointer">
+                          {/* <Heart className="mr-2 h-4 w-4" /> */}
+                          Wishlist
+                        </DropdownMenuItem>
+
+                        <DropdownMenuItem className="cursor-pointer">
+                          {/* <Settings className="mr-2 h-4 w-4" /> */}
+                          Settings
+                        </DropdownMenuItem>
+
                         <DropdownMenuSeparator />
-                        <DropdownMenuItem>GitHub</DropdownMenuItem>
-                        <DropdownMenuItem>Support</DropdownMenuItem>
-                        <DropdownMenuItem disabled>API</DropdownMenuItem>
+
+                        <DropdownMenuItem
+                          // onClick={handleLogout}
+                          className="cursor-pointer text-red-500 focus:text-red-500"
+                        >
+                          {/* <LogOut className="mr-2 h-4 w-4" /> */}
+                          Logout
+                        </DropdownMenuItem>
                       </DropdownMenuContent>
                     </DropdownMenu>
                   </>
@@ -699,12 +725,71 @@ export default function Navbar() {
               <div className="right-side flex justify-between items-center w-full">
                 <MobileMenu />
                 <div className="flex justify-center items-center gap-5 ms-auto">
-                  <button
-                    onClick={() => dispatch(actions.openAuthDialog("SignIn"))}
-                    className="hover:text-[#fe4407] transition-all duration-300"
-                  >
-                    <User className="w-[26px] h-[26px] lg:w-[28px] lg:h-[28px] xl:w-[34px] xl:h-[34px]" />
-                  </button>
+                  {isLoggedIn ? (
+                    <>
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <button className="hover:text-[#fe4407] transition-all duration-300">
+                            <User className="w-[26px] h-[26px] lg:w-[28px] lg:h-[28px] xl:w-[34px] xl:h-[34px]" />
+                          </button>
+                        </DropdownMenuTrigger>
+
+                        <DropdownMenuContent
+                          align="end"
+                          className="w-64 p-0 !bg-red-500"
+                        >
+                          <div className="border-b p-4">
+                            <p className="text-sm text-gray-500">
+                              Signed in as
+                            </p>
+                            <p className="font-semibold">{user?.name}</p>
+                          </div>
+
+                          <DropdownMenuItem className="cursor-pointer">
+                            <User className="mr-2 h-4 w-4" />
+                            My Profile
+                          </DropdownMenuItem>
+
+                          <DropdownMenuItem className="cursor-pointer">
+                            {/* <Package className="mr-2 h-4 w-4" /> */}
+                            My Orders
+                          </DropdownMenuItem>
+
+                          <DropdownMenuItem className="cursor-pointer">
+                            {/* <Heart className="mr-2 h-4 w-4" /> */}
+                            Wishlist
+                          </DropdownMenuItem>
+
+                          <DropdownMenuItem className="cursor-pointer">
+                            {/* <Settings className="mr-2 h-4 w-4" /> */}
+                            Settings
+                          </DropdownMenuItem>
+
+                          <DropdownMenuSeparator />
+
+                          <DropdownMenuItem
+                            // onClick={handleLogout}
+                            className="cursor-pointer text-red-500 focus:text-red-500"
+                          >
+                            {/* <LogOut className="mr-2 h-4 w-4" /> */}
+                            Logout
+                          </DropdownMenuItem>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
+                    </>
+                  ) : (
+                    <>
+                      <button
+                        onClick={() =>
+                          dispatch(actions.openAuthDialog("SignIn"))
+                        }
+                        className="hover:text-[#fe4407] transition-all duration-300"
+                      >
+                        <User className="w-[26px] h-[26px] lg:w-[28px] lg:h-[28px] xl:w-[34px] xl:h-[34px]" />
+                      </button>
+                    </>
+                  )}
+
                   <a
                     href="#"
                     className="relative hover:text-primary transition-all duration-300 "

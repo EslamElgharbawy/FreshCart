@@ -2,16 +2,18 @@
 import { actions } from "@/Features/AuthDialog.slice";
 import { useAppDispatch, useAppSelector } from "@/hooks/store.hooks";
 import { Review } from "@/Types/reviews";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { FaStar } from "react-icons/fa";
 import RatingStars from "../RatingStars/RatingStars";
-import ReviewForm from "../ReviewForm/ReviewForm";
+import ReviewForm from "../ReviewDialog/ReviewDialog";
 import { useTranslation } from "react-i18next";
+import ReviewDialog from "../ReviewDialog/ReviewDialog";
 
 type RatingSummaryProps = {
   reviews: Review[];
 };
 export default function RatingSummary({ reviews }: RatingSummaryProps) {
+  const [openReviewDialog, setOpenReviewDialog] = useState(false);
   const { t } = useTranslation();
   const { token } = useAppSelector((store) => store.user);
   const dispatch = useAppDispatch();
@@ -28,6 +30,15 @@ export default function RatingSummary({ reviews }: RatingSummaryProps) {
       };
     });
   }, [reviews]);
+
+  const handleReviewClick = () => {
+    if (!token) {
+      dispatch(actions.openAuthDialog("SignIn"));
+      return;
+    }
+
+    setOpenReviewDialog(true);
+  };
 
   return (
     <>
@@ -51,26 +62,28 @@ export default function RatingSummary({ reviews }: RatingSummaryProps) {
           </div>
         ))}
       </div>
-      {token ? (
-        <ReviewForm />
-      ) : (
-        <div className="rounded-md border border-[#ebebeb] p-6 text-center">
-          <h3 className="mb-2 text-xl font-semibold">
-            {t("reviewsSection.wantReview")}
-          </h3>
+      <div className="rounded-md border border-[#ebebeb] p-6 text-center">
+        <h3 className="mb-2 text-xl font-semibold">
+          {token ? "Review this product" : t("reviewsSection.wantReview")}
+        </h3>
 
-          <p className="mb-5 text-[#777]">
-            {t("reviewsSection.signInMessage")}
-          </p>
+        <p className="mb-5 text-[#777]">
+          {token
+            ? "Share your thoughts with other customers"
+            : t("reviewsSection.signInMessage")}
+        </p>
 
-          <button
-            onClick={() => dispatch(actions.openAuthDialog("SignIn"))}
-            className="inline-flex h-11 items-center justify-center bg-primary px-6 text-white transition hover:opacity-90"
-          >
-            {t("reviewsSection.signIn")}
-          </button>
-        </div>
-      )}
+        <button
+          onClick={handleReviewClick}
+          className="inline-flex h-11 items-center justify-center bg-primary px-6 text-white transition-all duration-300 hover:bg-[#1d2128]"
+        >
+          {token ? "Write a Review" : t("reviewsSection.signIn")}
+        </button>
+      </div>
+      <ReviewDialog
+        open={openReviewDialog}
+        onOpenChange={setOpenReviewDialog}
+      />
     </>
   );
 }

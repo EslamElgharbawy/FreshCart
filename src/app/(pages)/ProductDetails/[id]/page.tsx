@@ -38,7 +38,7 @@ import ProductCard from "@/components/ProductCard/ProductCard";
 import RatingStars from "@/components/RatingStars/RatingStars";
 import { getReviewsForProduct } from "@/Features/Reviews.slice";
 import RatingSummary from "@/components/RatingSummary/RatingSummary";
-import ReviewForm from "@/components/ReviewForm/ReviewForm";
+import ReviewForm from "@/components/ReviewDialog/ReviewDialog";
 import { actions } from "@/Features/AuthDialog.slice";
 import ReviewCard from "@/components/ReviewCard/ReviewCard";
 import ProductGallerySkeleton from "@/components/Skeletons/ProductGallerySkeleton";
@@ -399,7 +399,7 @@ export default function page() {
                     </h1>
                   )}
 
-                  <div className="grid gap-5 md:grid-cols-3">
+                  <div className="grid gap-5 xl:grid-cols-3">
                     <div>
                       <h3 className="text-[#333] font-semibold mb-1">
                         <span className="pr-3">1.</span>{" "}
@@ -433,7 +433,7 @@ export default function page() {
                 </TabsContent>
                 <TabsContent value="CustomerReviews" className="mt-8">
                   <div className="grid grid-cols-1 xl:grid-cols-12 gap-5 xl:max-2xl:gap-12 2xl:gap-28">
-                    <div className="xl:col-span-4">
+                    <div className="xl:col-span-5 2xl:col-span-4">
                       {reviewsLoading ? (
                         <RatingSummarySkeleton />
                       ) : (
@@ -466,7 +466,7 @@ export default function page() {
                         </>
                       )}
                     </div>
-                    <div className="xl:col-span-8">
+                    <div className="xl:col-span-7 2xl:col-span-8">
                       <div>
                         {reviewsLoading ? (
                           <>
