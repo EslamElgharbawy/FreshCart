@@ -10,9 +10,12 @@ import {
 import TextareaAutosize from "react-textarea-autosize";
 import { Button } from "@/components/ui/button";
 
-import { useAppSelector } from "@/hooks/store.hooks";
-import { useState } from "react";
+import { useAppDispatch, useAppSelector } from "@/hooks/store.hooks";
+import { SubmitEvent, useState } from "react";
 import { FaStar } from "react-icons/fa";
+import { addReview, getReviewsForProduct } from "@/Features/Reviews.slice";
+import toast from "react-hot-toast";
+import axios from "axios";
 
 type ReviewDialogProps = {
   open: boolean;
@@ -27,12 +30,45 @@ export default function ReviewDialog({
   const [review, setReview] = useState("");
   const canSubmit = rating > 0 && review.trim().length > 0;
   const { productDetails } = useAppSelector((store) => store.ProductSlice);
+  const dispatch = useAppDispatch();
+
+  const handleSubmit = async (e: SubmitEvent) => {
+    e.preventDefault();
+
+    if (!canSubmit || !productDetails) return;
+
+    try {
+      await dispatch(
+        addReview({
+          productId: productDetails._id,
+          review,
+          rating,
+        }),
+      ).unwrap();
+
+      toast.success("Review submitted successfully.");
+
+      setReview("");
+      setRating(0);
+      setHover(0);
+
+      dispatch(getReviewsForProduct(productDetails._id));
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        console.log("Status:", error.response?.status);
+        console.log("Response:", error.response?.data);
+      }
+
+      console.log(error);
+      toast.error("Failed to submit review.");
+    }
+  };
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent
         onOpenAutoFocus={(e) => e.preventDefault()}
-        className="w-[92%] lg:max-w-[650px] p-4 2xl:p-8 rounded-none"
+        className="w-[92%] lg:max-w-[650px] p-4 2xl:p-8 rounded-none ring-0"
       >
         <DialogHeader>
           <DialogTitle className="sm:max-xl:mt-8 text-2xl text-[#333] font-medium">
@@ -40,7 +76,7 @@ export default function ReviewDialog({
           </DialogTitle>
         </DialogHeader>
 
-        <form className="mt-4">
+        <form onSubmit={handleSubmit} className="mt-4">
           <p className="text-sm text-textMain mb-5">
             Please complete all the fields below to tell us about your
             experience with this product.

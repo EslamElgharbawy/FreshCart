@@ -1,3 +1,4 @@
+import { RootState } from "@/Store/Store";
 import { AddReviewPayload, Review, ReviewState } from "@/Types/reviews";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
@@ -5,7 +6,7 @@ import axios from "axios";
 const initialState: ReviewState = {
   reviews: [],
   loading: false,
-  addReviewLoading:false,
+  addReviewLoading: false,
   error: null,
 };
 
@@ -15,25 +16,39 @@ export const getReviewsForProduct = createAsyncThunk<Review[], string>(
     const { data } = await axios.get(
       `https://ecommerce.routemisr.com/api/v1/products/${productId}/reviews`,
     );
-    console.log(data.data);
-    
     return data.data;
   },
 );
 
-export const addReview = createAsyncThunk<Review, AddReviewPayload>(
+export const addReview = createAsyncThunk<
+  Review,
+  AddReviewPayload,
+  { state: RootState; rejectValue: any }
+>(
   "reviews/addReview",
-  async ({ productId, review, rating }) => {
-    const { data } = await axios.post(
-      `https://ecommerce.routemisr.com/api/v1/products/${productId}/reviews`,
-      {
-        review,
-        rating,
-      },
-    );
+  async ({ productId, review, rating }, thunkAPI) => {
+    try {
+      const token = thunkAPI.getState().user.token;
 
-    return data.data;
-  },
+      const { data } = await axios.post(
+        `https://ecommerce.routemisr.com/api/v1/products/${productId}/reviews`,
+        { review, rating },
+        {
+          headers: { token },
+        }
+      );
+
+      return data.data;
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        console.log(error.response?.status);
+        console.log(error.response?.data);
+        return thunkAPI.rejectWithValue(error.response?.data);
+      }
+
+      throw error;
+    }
+  }
 );
 
 const reviewsSlice = createSlice({
@@ -41,7 +56,7 @@ const reviewsSlice = createSlice({
   reducers: {},
   initialState,
   extraReducers: (builder) => {
-        // *Get Reviews For Product
+    // *Get Reviews For Product
     builder.addCase(getReviewsForProduct.pending, (state) => {
       state.loading = true;
       state.error = null;
@@ -55,7 +70,7 @@ const reviewsSlice = createSlice({
       state.error = action.error.message ?? "Something went wrong";
     });
 
-        // *Add Review
+    // *Add Review
     builder.addCase(addReview.pending, (state) => {
       state.addReviewLoading = true;
       state.error = null;

@@ -15,7 +15,8 @@ type RatingSummaryProps = {
 export default function RatingSummary({ reviews }: RatingSummaryProps) {
   const [openReviewDialog, setOpenReviewDialog] = useState(false);
   const { t } = useTranslation();
-  const { token } = useAppSelector((store) => store.user);
+  const { token, user } = useAppSelector((store) => store.user);
+
   const dispatch = useAppDispatch();
   const ratingStats = useMemo(() => {
     const totalReviews = reviews.length;
@@ -40,6 +41,8 @@ export default function RatingSummary({ reviews }: RatingSummaryProps) {
     setOpenReviewDialog(true);
   };
 
+  const hasReviewed = reviews.some((review) => review.user._id === user?.id);
+
   return (
     <>
       <div className="mb-10">
@@ -62,24 +65,37 @@ export default function RatingSummary({ reviews }: RatingSummaryProps) {
           </div>
         ))}
       </div>
-      <div className="rounded-md border border-[#ebebeb] p-6 text-center">
-        <h3 className="mb-2 text-xl font-semibold">
-          {token ? "Review this product" : t("reviewsSection.wantReview")}
-        </h3>
+      {!hasReviewed ? (
+        <div className="rounded-md border border-[#ebebeb] p-6 text-center">
+          <h3 className="mb-2 text-xl font-semibold">
+            {token ? "Review this product" : t("reviewsSection.wantReview")}
+          </h3>
 
-        <p className="mb-5 text-[#777]">
-          {token
-            ? "Share your thoughts with other customers"
-            : t("reviewsSection.signInMessage")}
-        </p>
+          <p className="mb-5 text-[#777]">
+            {token
+              ? "Share your thoughts with other customers"
+              : t("reviewsSection.signInMessage")}
+          </p>
 
-        <button
-          onClick={handleReviewClick}
-          className="inline-flex h-11 items-center justify-center bg-primary px-6 text-white transition-all duration-300 hover:bg-[#1d2128]"
-        >
-          {token ? "Write a Review" : t("reviewsSection.signIn")}
-        </button>
-      </div>
+          <button
+            onClick={handleReviewClick}
+            className="inline-flex h-11 items-center justify-center bg-primary px-6 text-white transition-all duration-300 hover:bg-[#1d2128]"
+          >
+            {token ? "Write a Review" : t("reviewsSection.signIn")}
+          </button>
+        </div>
+      ) : (
+        <div className="rounded-md border border-[#ebebeb] p-6 text-center">
+          <h3 className="mb-2 text-xl font-semibold">✅ Review Submitted </h3>
+
+          <p className="text-[#777]">
+            You can edit or delete your review using the{" "}
+            <span className="font-medium text-[#333]">⋮</span> menu on your
+            review.
+          </p>
+        </div>
+      )}
+
       <ReviewDialog
         open={openReviewDialog}
         onOpenChange={setOpenReviewDialog}
