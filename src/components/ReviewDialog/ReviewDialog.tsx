@@ -11,19 +11,25 @@ import TextareaAutosize from "react-textarea-autosize";
 import { Button } from "@/components/ui/button";
 
 import { useAppDispatch, useAppSelector } from "@/hooks/store.hooks";
-import { SubmitEvent, useState } from "react";
+import { SubmitEvent, useEffect, useState } from "react";
 import { FaStar } from "react-icons/fa";
-import { addReview, getReviewsForProduct } from "@/Features/Reviews.slice";
+import {
+  addReview,
+  getReviewsForProduct,
+  updateReview,
+} from "@/Features/Reviews.slice";
 import toast from "react-hot-toast";
-import axios from "axios";
+import { Review } from "@/Types/reviews";
 
 type ReviewDialogProps = {
   open: boolean;
   onOpenChange: (open: boolean) => void;
+  initialReview?: Review;
 };
 export default function ReviewDialog({
   open,
   onOpenChange,
+  initialReview,
 }: ReviewDialogProps) {
   const [rating, setRating] = useState(0);
   const [hover, setHover] = useState(0);
@@ -32,21 +38,44 @@ export default function ReviewDialog({
   const { productDetails } = useAppSelector((store) => store.ProductSlice);
   const dispatch = useAppDispatch();
 
+  useEffect(() => {
+    if (initialReview) {
+      setRating(initialReview.rating);
+      setReview(initialReview.review);
+    } else {
+      setRating(0);
+      setReview("");
+    }
+  }, [initialReview, open]);
   const handleSubmit = async (e: SubmitEvent) => {
     e.preventDefault();
 
     if (!canSubmit || !productDetails) return;
 
     try {
-      await dispatch(
-        addReview({
-          productId: productDetails._id,
-          review,
-          rating,
-        }),
-      ).unwrap();
+      if (initialReview) {
+        await dispatch(
+          updateReview({
+            reviewId: initialReview._id,
+            review,
+            rating,
+          }),
+        ).unwrap();
 
-      toast.success("Review submitted successfully.");
+        toast.success("Review updated successfully.");
+      } else {
+        await dispatch(
+          addReview({
+            reviewId: productDetails._id,
+            review,
+            rating,
+          }),
+        ).unwrap();
+
+        toast.success("Review submitted successfully.");
+      }
+
+      onOpenChange(false);
 
       setReview("");
       setRating(0);
@@ -54,13 +83,11 @@ export default function ReviewDialog({
 
       dispatch(getReviewsForProduct(productDetails._id));
     } catch (error) {
-      if (axios.isAxiosError(error)) {
-        console.log("Status:", error.response?.status);
-        console.log("Response:", error.response?.data);
-      }
-
       console.log(error);
-      toast.error("Failed to submit review.");
+
+      toast.error(
+        initialReview ? "Failed to update review." : "Failed to submit review.",
+      );
     }
   };
 
@@ -72,7 +99,9 @@ export default function ReviewDialog({
       >
         <DialogHeader>
           <DialogTitle className="sm:max-xl:mt-8 text-2xl text-[#333] font-medium">
-            Be the first to review "{productDetails?.title}"
+            {initialReview
+              ? "Edit Your Review"
+              : `Be the first to review "${productDetails?.title}"`}
           </DialogTitle>
         </DialogHeader>
 
@@ -134,7 +163,7 @@ export default function ReviewDialog({
               disabled={!canSubmit}
               className="w-full bg-primary capitalize 2xl:hover:bg-[#1d2128] transition-all duration-300 rounded-none text-white py-6 h-[60px]"
             >
-              Submit Review
+               {initialReview ? "Update Review" : "Submit Review"}
             </Button>
           </div>
         </form>

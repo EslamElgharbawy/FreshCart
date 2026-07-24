@@ -11,9 +11,18 @@ import ReviewDialog from "../ReviewDialog/ReviewDialog";
 
 type RatingSummaryProps = {
   reviews: Review[];
+  openReviewDialog: boolean;
+  setOpenReviewDialog: React.Dispatch<React.SetStateAction<boolean>>;
+  selectedReview: Review | null;
+  setSelectedReview: React.Dispatch<React.SetStateAction<Review | null>>;
 };
-export default function RatingSummary({ reviews }: RatingSummaryProps) {
-  const [openReviewDialog, setOpenReviewDialog] = useState(false);
+export default function RatingSummary({
+  reviews,
+  openReviewDialog,
+  setOpenReviewDialog,
+  selectedReview,
+  setSelectedReview,
+}: RatingSummaryProps) {
   const { t } = useTranslation();
   const { token, user } = useAppSelector((store) => store.user);
 
@@ -99,6 +108,7 @@ export default function RatingSummary({ reviews }: RatingSummaryProps) {
       <ReviewDialog
         open={openReviewDialog}
         onOpenChange={setOpenReviewDialog}
+        initialReview={selectedReview ?? undefined}
       />
     </>
   );

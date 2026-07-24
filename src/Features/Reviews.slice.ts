@@ -23,33 +23,55 @@ export const getReviewsForProduct = createAsyncThunk<Review[], string>(
 export const addReview = createAsyncThunk<
   Review,
   AddReviewPayload,
-  { state: RootState; rejectValue: any }
->(
-  "reviews/addReview",
-  async ({ productId, review, rating }, thunkAPI) => {
-    try {
-      const token = thunkAPI.getState().user.token;
+  { state: RootState }
+>("reviews/addReview", async ({ reviewId, review, rating }, thunkAPI) => {
+  const token = thunkAPI.getState().user.token;
 
-      const { data } = await axios.post(
-        `https://ecommerce.routemisr.com/api/v1/products/${productId}/reviews`,
-        { review, rating },
-        {
-          headers: { token },
-        }
-      );
+  const { data } = await axios.post(
+    `https://ecommerce.routemisr.com/api/v1/products/${reviewId}/reviews`,
+    { review, rating },
+    {
+      headers: { token },
+    },
+  );
+  console.log(data);
 
-      return data.data;
-    } catch (error) {
-      if (axios.isAxiosError(error)) {
-        console.log(error.response?.status);
-        console.log(error.response?.data);
-        return thunkAPI.rejectWithValue(error.response?.data);
-      }
+  return data.data;
+});
+export const deleteReview = createAsyncThunk<
+  string,
+  string,
+  { state: RootState }
+>("reviews/deleteReview", async (reviewId, thunkAPI) => {
+  const token = thunkAPI.getState().user.token;
 
-      throw error;
-    }
-  }
-);
+  await axios.delete(
+    `https://ecommerce.routemisr.com/api/v1/reviews/${reviewId}`,
+    {
+      headers: {
+        token,
+      },
+    },
+  );
+
+  return reviewId;
+});
+export const updateReview = createAsyncThunk<
+  Review,
+  AddReviewPayload,
+  { state: RootState }
+>("reviews/updateReview", async ({ reviewId, review, rating }, thunkAPI) => {
+  const token = thunkAPI.getState().user.token;
+
+  const { data } = await axios.put(
+    `https://ecommerce.routemisr.com/api/v1/reviews/${reviewId}`,
+    { review, rating },
+    {
+      headers: { token },
+    },
+  );
+  return data.data;
+});
 
 const reviewsSlice = createSlice({
   name: "reviews",
@@ -79,6 +101,38 @@ const reviewsSlice = createSlice({
       state.addReviewLoading = false;
     });
     builder.addCase(addReview.rejected, (state, action) => {
+      state.addReviewLoading = false;
+      state.error = action.error.message ?? "Something went wrong";
+    });
+
+    // *Update Review
+    builder.addCase(updateReview.pending, (state) => {
+      state.addReviewLoading = true;
+      state.error = null;
+    });
+    builder.addCase(updateReview.fulfilled, (state, action) => {
+      state.addReviewLoading = false;
+      state.reviews = state.reviews.map((review) =>
+        review._id === action.payload._id ? action.payload : review,
+      );
+    });
+    builder.addCase(updateReview.rejected, (state, action) => {
+      state.addReviewLoading = false;
+      state.error = action.error.message ?? "Something went wrong";
+    });
+
+    // *Delete Review
+    builder.addCase(deleteReview.pending, (state) => {
+      state.addReviewLoading = true;
+      state.error = null;
+    });
+    builder.addCase(deleteReview.fulfilled, (state, action) => {
+      state.addReviewLoading = false;
+      state.reviews = state.reviews.filter(
+        (review) => review._id !== action.payload,
+      );
+    });
+    builder.addCase(deleteReview.rejected, (state, action) => {
       state.addReviewLoading = false;
       state.error = action.error.message ?? "Something went wrong";
     });

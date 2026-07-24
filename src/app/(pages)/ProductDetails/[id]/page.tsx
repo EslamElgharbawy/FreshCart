@@ -38,8 +38,6 @@ import ProductCard from "@/components/ProductCard/ProductCard";
 import RatingStars from "@/components/RatingStars/RatingStars";
 import { getReviewsForProduct } from "@/Features/Reviews.slice";
 import RatingSummary from "@/components/RatingSummary/RatingSummary";
-import ReviewForm from "@/components/ReviewDialog/ReviewDialog";
-import { actions } from "@/Features/AuthDialog.slice";
 import ReviewCard from "@/components/ReviewCard/ReviewCard";
 import ProductGallerySkeleton from "@/components/Skeletons/ProductGallerySkeleton";
 import BreadcrumbSkeleton from "@/components/Skeletons/BreadcrumbSkeleton";
@@ -49,11 +47,15 @@ import RatingSummarySkeleton from "@/components/Skeletons/RatingSummarySkeleton"
 import ProductCardSkeleton from "@/components/Skeletons/ProductCardSkeleton";
 import { FaStar } from "react-icons/fa";
 import { useTranslation } from "react-i18next";
+import { Review } from "@/Types/reviews";
+import ReviewDialog from "@/components/ReviewDialog/ReviewDialog";
 
 export default function page() {
   const [thumbsSwiper, setThumbsSwiper] = useState<SwiperType | null>(null);
   const [open, setOpen] = useState(false);
   const [index, setIndex] = useState(0);
+  const [openReviewDialog, setOpenReviewDialog] = useState(false);
+  const [selectedReview, setSelectedReview] = useState<Review | null>(null);
   const [counter, setCounter] = useState(1);
   const { t, i18n } = useTranslation();
 
@@ -461,7 +463,13 @@ export default function page() {
                           </div>
 
                           <div>
-                            <RatingSummary reviews={reviews} />
+                            <RatingSummary
+                              reviews={reviews}
+                              openReviewDialog={openReviewDialog}
+                              setOpenReviewDialog={setOpenReviewDialog}
+                              selectedReview={selectedReview}
+                              setSelectedReview={setSelectedReview}
+                            />
                           </div>
                         </>
                       )}
@@ -477,7 +485,14 @@ export default function page() {
                         ) : (
                           <>
                             {reviews.map((review) => (
-                              <ReviewCard key={review._id} review={review} />
+                              <ReviewCard
+                                key={review._id}
+                                review={review}
+                                onEdit={(review) => {
+                                  setSelectedReview(review);
+                                  setOpenReviewDialog(true);
+                                }}
+                              />
                             ))}
                           </>
                         )}

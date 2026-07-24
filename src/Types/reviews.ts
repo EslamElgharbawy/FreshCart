@@ -32,7 +32,7 @@ export interface ReviewsResponse {
 }
 
 export interface AddReviewPayload {
-  productId: string;
+  reviewId: string;
   review: string;
   rating: number;
 }
