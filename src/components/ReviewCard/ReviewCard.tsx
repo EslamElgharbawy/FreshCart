@@ -1,4 +1,4 @@
-import { Review } from "@/Types/reviews";
+import { Review, ReviewCardProps } from "@/Types/reviews";
 import dayjs from "dayjs";
 import "dayjs/locale/ar";
 import "dayjs/locale/en";
@@ -17,18 +17,16 @@ import RatingStars from "../RatingStars/RatingStars";
 import { useAppDispatch, useAppSelector } from "@/hooks/store.hooks";
 import { deleteReview } from "@/Features/Reviews.slice";
 import toast from "react-hot-toast";
-interface ReviewCardProps {
-  review: Review;
-  onEdit: (review: Review) => void;
-}
 
-export default function ReviewCard({ review, onEdit }: ReviewCardProps) {
+export default function ReviewCard({
+  review,
+  onEdit,
+  onDelete,
+}: ReviewCardProps) {
   dayjs.locale(i18n.language);
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const { user } = useAppSelector((store) => store.user);
-
-  console.log(review._id);
 
   return (
     <>
@@ -78,26 +76,29 @@ export default function ReviewCard({ review, onEdit }: ReviewCardProps) {
                     className="ring-0 min-w-0 w-auto border border-[#e5e7eb] "
                   >
                     <DropdownMenuItem
-                       onClick={() => onEdit(review)}
+                      onClick={() => onEdit(review)}
                       className="!gap-1 cursor-pointer transition-all duration-300 hover:!bg-gray-100"
                     >
                       <Pencil className="mr-2 size-4" />
-                      Edit
+                      {t("reviewsSection.edit")}
                     </DropdownMenuItem>
                     <DropdownMenuItem
                       onClick={async () => {
                         try {
                           await dispatch(deleteReview(review._id)).unwrap();
 
-                          toast.success("Review deleted successfully.");
+                          toast.success(
+                            t("reviewsSection.reviewDeletedSuccess"),
+                          );
+                          onDelete();
                         } catch (error) {
-                          toast.error("Failed to delete review.");
+                          toast.error(t("reviewsSection.reviewDeletedError"));
                         }
                       }}
                       className="!gap-1 cursor-pointer transition-all duration-300 hover:!bg-gray-100"
                     >
                       <Trash2 className="mr-2 size-4" />
-                      Delete
+                      {t("reviewsSection.delete")}
                     </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>

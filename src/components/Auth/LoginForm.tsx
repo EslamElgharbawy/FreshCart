@@ -8,8 +8,10 @@ import { useFormik } from "formik";
 import { Login, VerifyToken } from "@/Features/user.slice";
 import { useAppDispatch, useAppSelector } from "@/hooks/store.hooks";
 import { actions } from "@/Features/AuthDialog.slice";
+import { useTranslation } from "react-i18next";
 
 export default function LoginForm() {
+  const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const { loading } = useAppSelector((store) => store.user);
   const formik = useFormik({
@@ -30,7 +32,7 @@ export default function LoginForm() {
       <FieldGroup className="pt-8">
         <Field className="!gap-3">
           <Label className="font-normal text-textMain" htmlFor="email">
-            Username or email address
+            {t("loginForm.usernameOrEmail")}
           </Label>
           <Input
             type="email"
@@ -43,7 +45,7 @@ export default function LoginForm() {
         </Field>
         <Field className="!gap-3">
           <Label className="font-normal text-textMain" htmlFor="password">
-            Password
+             {t("loginForm.password")}
           </Label>
           <Input
             type="password"
@@ -64,7 +66,7 @@ export default function LoginForm() {
               htmlFor="remember"
               className="font-normal text-xs text-textMain cursor-pointer"
             >
-              Remember me
+              {t("loginForm.rememberMe")}
             </Label>
           </div>
 
@@ -72,7 +74,7 @@ export default function LoginForm() {
             type="button"
             className="text-xs text-red-500 hover:underline !w-fit shrink-0"
           >
-            Forgot Password?
+            {t("loginForm.forgotPassword")}
           </button>
         </Field>
 
@@ -82,7 +84,7 @@ export default function LoginForm() {
             disabled={loading}
             className="py-3 px-7 h-auto rounded-none uppercase text-white font-semibold"
           >
-            Sign In
+             {t("loginForm.signIn")}
           </Button>
         </Field>
       </FieldGroup>

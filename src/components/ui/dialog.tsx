@@ -6,6 +6,7 @@ import { Dialog as DialogPrimitive } from "radix-ui";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { XIcon } from "lucide-react";
+import i18n from "@/i18n";
 
 function Dialog({
   ...props
@@ -39,9 +40,9 @@ function DialogOverlay({
     <DialogPrimitive.Overlay
       data-slot="dialog-overlay"
       className={cn(
-  "fixed inset-0 isolate z-50 bg-black opacity-40 data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 duration-300",
-  className
-)}
+        "fixed inset-0 isolate z-50 bg-black opacity-40 data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 duration-300",
+        className,
+      )}
       {...props}
     />
   );
@@ -71,7 +72,9 @@ function DialogContent({
           <DialogPrimitive.Close data-slot="dialog-close" asChild>
             <Button
               variant="ghost"
-              className="absolute top-2 right-2"
+              className={`absolute top-2 ${
+                i18n.language === "ar" ? "left-2" : "right-2"
+              }`}
               size="icon-lg"
             >
               <XIcon className="!w-5 !h-5" />

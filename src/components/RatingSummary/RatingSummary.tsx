@@ -1,27 +1,17 @@
 "use client";
 import { actions } from "@/Features/AuthDialog.slice";
 import { useAppDispatch, useAppSelector } from "@/hooks/store.hooks";
-import { Review } from "@/Types/reviews";
-import { useMemo, useState } from "react";
-import { FaStar } from "react-icons/fa";
+import { RatingSummaryProps } from "@/Types/reviews";
+import { useMemo } from "react";
 import RatingStars from "../RatingStars/RatingStars";
-import ReviewForm from "../ReviewDialog/ReviewDialog";
 import { useTranslation } from "react-i18next";
 import ReviewDialog from "../ReviewDialog/ReviewDialog";
 
-type RatingSummaryProps = {
-  reviews: Review[];
-  openReviewDialog: boolean;
-  setOpenReviewDialog: React.Dispatch<React.SetStateAction<boolean>>;
-  selectedReview: Review | null;
-  setSelectedReview: React.Dispatch<React.SetStateAction<Review | null>>;
-};
 export default function RatingSummary({
   reviews,
   openReviewDialog,
   setOpenReviewDialog,
   selectedReview,
-  setSelectedReview,
 }: RatingSummaryProps) {
   const { t } = useTranslation();
   const { token, user } = useAppSelector((store) => store.user);
@@ -77,12 +67,14 @@ export default function RatingSummary({
       {!hasReviewed ? (
         <div className="rounded-md border border-[#ebebeb] p-6 text-center">
           <h3 className="mb-2 text-xl font-semibold">
-            {token ? "Review this product" : t("reviewsSection.wantReview")}
+            {token
+              ? t("reviewsSection.reviewThisProduct")
+              : t("reviewsSection.wantReview")}
           </h3>
 
           <p className="mb-5 text-[#777]">
             {token
-              ? "Share your thoughts with other customers"
+              ? t("reviewsSection.shareThoughts")
               : t("reviewsSection.signInMessage")}
           </p>
 
@@ -90,17 +82,19 @@ export default function RatingSummary({
             onClick={handleReviewClick}
             className="inline-flex h-11 items-center justify-center bg-primary px-6 text-white transition-all duration-300 hover:bg-[#1d2128]"
           >
-            {token ? "Write a Review" : t("reviewsSection.signIn")}
+            {token
+              ? t("reviewsSection.writeReview")
+              : t("reviewsSection.signIn")}
           </button>
         </div>
       ) : (
         <div className="rounded-md border border-[#ebebeb] p-6 text-center">
-          <h3 className="mb-2 text-xl font-semibold">✅ Review Submitted </h3>
+          <h3 className="mb-2 text-xl font-semibold">
+            ✅ {t("reviewsSection.reviewSubmitted")}{" "}
+          </h3>
 
           <p className="text-[#777]">
-            You can edit or delete your review using the{" "}
-            <span className="font-medium text-[#333]">⋮</span> menu on your
-            review.
+            {t("reviewsSection.reviewSubmittedMessage")}
           </p>
         </div>
       )}

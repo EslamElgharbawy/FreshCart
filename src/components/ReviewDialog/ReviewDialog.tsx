@@ -19,13 +19,9 @@ import {
   updateReview,
 } from "@/Features/Reviews.slice";
 import toast from "react-hot-toast";
-import { Review } from "@/Types/reviews";
+import { ReviewDialogProps } from "@/Types/reviews";
+import { useTranslation } from "react-i18next";
 
-type ReviewDialogProps = {
-  open: boolean;
-  onOpenChange: (open: boolean) => void;
-  initialReview?: Review;
-};
 export default function ReviewDialog({
   open,
   onOpenChange,
@@ -35,9 +31,11 @@ export default function ReviewDialog({
   const [hover, setHover] = useState(0);
   const [review, setReview] = useState("");
   const canSubmit = rating > 0 && review.trim().length > 0;
+  const canEdit =
+    rating != initialReview?.rating || review.trim() !== initialReview?.review;
   const { productDetails } = useAppSelector((store) => store.ProductSlice);
   const dispatch = useAppDispatch();
-
+  const { t } = useTranslation();
   useEffect(() => {
     if (initialReview) {
       setRating(initialReview.rating);
@@ -62,7 +60,7 @@ export default function ReviewDialog({
           }),
         ).unwrap();
 
-        toast.success("Review updated successfully.");
+        toast.success(t("reviewsSection.reviewUpdatedSuccess"));
       } else {
         await dispatch(
           addReview({
@@ -72,7 +70,7 @@ export default function ReviewDialog({
           }),
         ).unwrap();
 
-        toast.success("Review submitted successfully.");
+        toast.success(t("reviewsSection.reviewSubmittedSuccess"));
       }
 
       onOpenChange(false);
@@ -86,7 +84,9 @@ export default function ReviewDialog({
       console.log(error);
 
       toast.error(
-        initialReview ? "Failed to update review." : "Failed to submit review.",
+        initialReview
+          ? t("reviewsSection.reviewUpdatedError")
+          : t("reviewsSection.reviewSubmittedError"),
       );
     }
   };
@@ -100,21 +100,23 @@ export default function ReviewDialog({
         <DialogHeader>
           <DialogTitle className="sm:max-xl:mt-8 text-2xl text-[#333] font-medium">
             {initialReview
-              ? "Edit Your Review"
-              : `Be the first to review "${productDetails?.title}"`}
+              ? t("reviewsSection.editTitle")
+              : t("reviewsSection.addTitle", {
+                  title: productDetails?.title,
+                })}
           </DialogTitle>
         </DialogHeader>
 
         <form onSubmit={handleSubmit} className="mt-4">
           <p className="text-sm text-textMain mb-5">
-            Please complete all the fields below to tell us about your
-            experience with this product.
+            {t("reviewsSection.reviewDescription")}
           </p>
 
           <div className="space-y-5">
             <div className="mb-5">
               <label className="block text-sm font-medium text-[#333] mb-3">
-                Your Rating <span className="text-red-500">*</span>
+                {t("reviewsSection.yourRating")}{" "}
+                <span className="text-red-500">*</span>
               </label>
 
               <div className="flex items-center gap-1">
@@ -138,7 +140,8 @@ export default function ReviewDialog({
               htmlFor="review"
               className="block text-sm font-medium text-[#333]"
             >
-              Your Review <span className="text-red-500">*</span>
+              {t("reviewsSection.yourReview")}{" "}
+              <span className="text-red-500">*</span>
             </label>
 
             <TextareaAutosize
@@ -146,7 +149,7 @@ export default function ReviewDialog({
               value={review}
               onChange={(e) => setReview(e.target.value)}
               minRows={6}
-              placeholder="Write Your Review Here..."
+              placeholder={t("reviewsSection.reviewPlaceholder")}
               className="!mt-3 w-full rounded-none border-2 border-[#dadfe3]
              px-5 py-3 text-sm text-[#1d2128]
              placeholder:text-[#777]
@@ -160,10 +163,12 @@ export default function ReviewDialog({
 
             <Button
               type="submit"
-              disabled={!canSubmit}
+              disabled={initialReview ? !canEdit : !canSubmit}
               className="w-full bg-primary capitalize 2xl:hover:bg-[#1d2128] transition-all duration-300 rounded-none text-white py-6 h-[60px]"
             >
-               {initialReview ? "Update Review" : "Submit Review"}
+              {initialReview
+                ? t("reviewsSection.updateReview")
+                : t("reviewsSection.submitReview")}
             </Button>
           </div>
         </form>

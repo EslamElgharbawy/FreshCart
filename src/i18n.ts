@@ -27,6 +27,28 @@ const resources = {
         pages: "Pages",
         categories: "Categories",
       },
+      authDialog: {
+        title: "Authentication",
+        description: "Sign in or create a new account.",
+        signIn: "Sign In",
+        signUp: "Sign Up",
+      },
+      loginForm: {
+        usernameOrEmail: "Username or email address",
+        password: "Password",
+        rememberMe: "Remember me",
+        forgotPassword: "Forgot Password?",
+        signIn: "Sign In",
+      },
+      registerForm: {
+        username: "Username",
+        email: "Email",
+        password: "Password",
+        rePassword: "Confirm Password",
+        phone: "Phone",
+        signUp: "Sign Up",
+        creatingAccount: "Creating your account...",
+      },
       hero: {
         running: "Running",
         nikeShoes: "Nike Shoes",
@@ -183,6 +205,10 @@ const resources = {
         inStock: "In stock",
         quantity: "Quantity",
         addToCart: "Add to Cart",
+        description: "Description",
+        customerReviews: "Customer Reviews",
+        relatedProducts: "Related Products",
+        moreProducts: "More Products",
       },
       shippingInfo: {
         freeShipping: {
@@ -207,6 +233,36 @@ const resources = {
         signInMessage:
           "Please sign in to share your experience with this product.",
         signIn: "Sign In",
+        reviewThisProduct: "Review this product",
+        shareThoughts: "Share your thoughts with other customers",
+        writeReview: "Write a Review",
+
+        reviewSubmitted: "Review Submitted",
+        reviewSubmittedMessage:
+          "You can edit or delete your review using the ⋮ menu on your review.",
+
+        editTitle: "Edit Your Review",
+        addTitle: 'Be the first to review "{{title}}"',
+
+        reviewDescription:
+          "Please complete all the fields below to tell us about your experience with this product.",
+
+        yourRating: "Your Rating",
+        yourReview: "Your Review",
+        reviewPlaceholder: "Write Your Review Here...",
+
+        submitReview: "Submit Review",
+        updateReview: "Update Review",
+
+        reviewSubmittedSuccess: "Review submitted successfully.",
+        reviewUpdatedSuccess: "Review updated successfully.",
+
+        reviewSubmittedError: "Failed to submit review.",
+        reviewUpdatedError: "Failed to update review.",
+        edit: "Edit",
+        delete: "Delete",
+        reviewDeletedSuccess: "Review deleted successfully.",
+        reviewDeletedError: "Failed to delete review.",
       },
       footer: {
         supportText: "Got Question? Call us 24/7",
@@ -271,6 +327,28 @@ const resources = {
         search: "بحث...",
         pages: "الصفحات",
         categories: "الأقسام",
+      },
+      authDialog: {
+        title: "تسجيل الدخول",
+        description: "سجل الدخول أو أنشئ حسابًا جديدًا.",
+        signIn: "تسجيل الدخول",
+        signUp: "إنشاء حساب",
+      },
+      loginForm: {
+        usernameOrEmail: "اسم المستخدم أو البريد الإلكتروني",
+        password: "كلمة المرور",
+        rememberMe: "تذكرني",
+        forgotPassword: "نسيت كلمة المرور؟",
+        signIn: "تسجيل الدخول",
+      },
+      registerForm: {
+        username: "اسم المستخدم",
+        email: "البريد الإلكتروني",
+        password: "كلمة المرور",
+        rePassword: "تأكيد كلمة المرور",
+        phone: "رقم الهاتف",
+        signUp: "إنشاء حساب",
+        creatingAccount: "جارٍ إنشاء الحساب...",
       },
       hero: {
         running: "الجري",
@@ -431,6 +509,10 @@ const resources = {
         inStock: "متوفر بالمخزون",
         quantity: "الكمية",
         addToCart: "أضف إلى السلة",
+        description: "الوصف",
+        customerReviews: "تقييمات العملاء",
+        relatedProducts: "منتجات ذات صلة",
+        moreProducts: "المزيد من المنتجات",
       },
 
       shippingInfo: {
@@ -455,7 +537,39 @@ const resources = {
         wantReview: "هل ترغب في كتابة تقييم؟",
         signInMessage: "يرجى تسجيل الدخول لمشاركة تجربتك مع هذا المنتج.",
         signIn: "تسجيل الدخول",
+        reviewThisProduct: "قيّم هذا المنتج",
+        shareThoughts: "شارك تجربتك مع العملاء الآخرين",
+        writeReview: "اكتب تقييمًا",
+
+        reviewSubmitted: "تم إرسال التقييم",
+        reviewSubmittedMessage:
+          "يمكنك تعديل أو حذف تقييمك من خلال قائمة ⋮ الموجودة بجانب تقييمك.",
+
+        editTitle: "تعديل التقييم",
+        addTitle: 'كن أول من يقيّم "{{title}}"',
+
+        reviewDescription:
+          "يرجى إكمال جميع الحقول أدناه لإخبارنا بتجربتك مع هذا المنتج.",
+
+        yourRating: "تقييمك",
+        yourReview: "رأيك",
+        reviewPlaceholder: "اكتب تقييمك هنا...",
+
+        submitReview: "إرسال التقييم",
+        updateReview: "تحديث التقييم",
+
+        reviewSubmittedSuccess: "تم إرسال التقييم بنجاح.",
+        reviewUpdatedSuccess: "تم تحديث التقييم بنجاح.",
+
+        reviewSubmittedError: "فشل في إرسال التقييم.",
+        reviewUpdatedError: "فشل في تحديث التقييم.",
+        edit: "تعديل",
+        delete: "حذف",
+
+        reviewDeletedSuccess: "تم حذف التقييم بنجاح.",
+        reviewDeletedError: "فشل في حذف التقييم.",
       },
+
       footer: {
         supportText: "هل لديك سؤال؟ اتصل بنا 24/7",
         description: "سجل الآن للحصول على تحديثات حول العروض والقسائم.",

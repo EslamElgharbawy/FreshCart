@@ -34,8 +34,6 @@ export const addReview = createAsyncThunk<
       headers: { token },
     },
   );
-  console.log(data);
-
   return data.data;
 });
 export const deleteReview = createAsyncThunk<

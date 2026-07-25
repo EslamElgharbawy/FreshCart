@@ -12,8 +12,10 @@ import { AuthMode } from "@/Types/auth";
 import LoginForm from "./LoginForm";
 import RegisterForm from "./RegisterForm";
 import { AnimatePresence, motion } from "framer-motion";
+import { useTranslation } from "react-i18next";
 
 export default function AuthDialog() {
+  const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const { open, mode } = useAppSelector((store) => store.AuthDialog);
   return (
@@ -29,7 +31,7 @@ export default function AuthDialog() {
         <DialogHeader className="sr-only">
           <DialogTitle>Authentication</DialogTitle>
           <DialogDescription>
-            Sign in or create a new account.
+            {t("authDialog.description")}
           </DialogDescription>
         </DialogHeader>
         <Tabs
@@ -44,13 +46,13 @@ export default function AuthDialog() {
               value="SignIn"
               className="text-[#333] py-3 uppercase font-bold text-base "
             >
-              Sign In
+              {t("authDialog.signIn")}
             </TabsTrigger>
             <TabsTrigger
               value="SignUp"
               className="text-[#333] py-3 uppercase font-bold text-base"
             >
-              Sign Up
+              {t("authDialog.signUp")}
             </TabsTrigger>
           </TabsList>
           <AnimatePresence mode="wait">

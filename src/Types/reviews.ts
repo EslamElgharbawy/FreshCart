@@ -1,7 +1,7 @@
 export interface ReviewState {
   reviews: Review[];
   loading: boolean;
-  addReviewLoading:boolean
+  addReviewLoading: boolean;
   error: string | null;
 }
 export interface ReviewUser {
@@ -36,3 +36,22 @@ export interface AddReviewPayload {
   review: string;
   rating: number;
 }
+
+export interface RatingSummaryProps {
+  reviews: Review[];
+  openReviewDialog: boolean;
+  setOpenReviewDialog: React.Dispatch<React.SetStateAction<boolean>>;
+  selectedReview: Review | null;
+};
+
+export interface ReviewDialogProps {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  initialReview?: Review;
+}
+export interface ReviewCardProps {
+  review: Review;
+  onEdit: (review: Review) => void;
+   onDelete: () => void;
+}
+

@@ -7,8 +7,10 @@ import { useFormik } from "formik";
 import { Register } from "@/Features/user.slice";
 import { useAppDispatch, useAppSelector } from "@/hooks/store.hooks";
 import { actions } from "@/Features/AuthDialog.slice";
+import { useTranslation } from "react-i18next";
 
 export default function () {
+  const { t } = useTranslation();
   const { loading } = useAppSelector((store) => store.user);
   const dispatch = useAppDispatch();
   const formik = useFormik({
@@ -32,7 +34,7 @@ export default function () {
       <FieldGroup className="pt-8">
         <Field className="!gap-3">
           <Label className="font-normal text-textMain" htmlFor="name">
-            Username
+            {t("registerForm.username")}
           </Label>
           <Input
             type="text"
@@ -45,7 +47,7 @@ export default function () {
         </Field>
         <Field className="!gap-3">
           <Label className="font-normal text-textMain" htmlFor="email">
-            Email
+            {t("registerForm.email")}
           </Label>
           <Input
             type="email"
@@ -58,7 +60,7 @@ export default function () {
         </Field>
         <Field className="!gap-3">
           <Label className="font-normal text-textMain" htmlFor="password">
-            Password
+            {t("registerForm.password")}
           </Label>
           <Input
             type="password"
@@ -71,7 +73,7 @@ export default function () {
         </Field>
         <Field className="!gap-3">
           <Label className="font-normal text-textMain" htmlFor="rePassword">
-            RePassword
+            {t("registerForm.rePassword")}
           </Label>
           <Input
             type="password"
@@ -84,7 +86,7 @@ export default function () {
         </Field>
         <Field className="!gap-3">
           <Label className="font-normal text-textMain" htmlFor="phone">
-            Phone
+            {t("registerForm.phone")}
           </Label>
           <Input
             type="tel"
@@ -102,7 +104,9 @@ export default function () {
             disabled={loading}
             className="py-3 px-7 h-auto rounded-none uppercase text-white font-semibold"
           >
-            {loading ? "Creating your account..." : "Sign Up"}
+            {loading
+              ? t("registerForm.creatingAccount")
+              : t("registerForm.signUp")}
           </Button>
         </Field>
       </FieldGroup>

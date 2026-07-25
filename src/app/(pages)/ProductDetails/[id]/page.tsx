@@ -45,23 +45,20 @@ import ProductInfoSkeleton from "@/components/Skeletons/ProductInfoSkeleton";
 import ReviewCardSkeleton from "@/components/Skeletons/ReviewCardSkeleton";
 import RatingSummarySkeleton from "@/components/Skeletons/RatingSummarySkeleton";
 import ProductCardSkeleton from "@/components/Skeletons/ProductCardSkeleton";
-import { FaStar } from "react-icons/fa";
 import { useTranslation } from "react-i18next";
 import { Review } from "@/Types/reviews";
-import ReviewDialog from "@/components/ReviewDialog/ReviewDialog";
 
 export default function page() {
   const [thumbsSwiper, setThumbsSwiper] = useState<SwiperType | null>(null);
-  const [open, setOpen] = useState(false);
-  const [index, setIndex] = useState(0);
   const [openReviewDialog, setOpenReviewDialog] = useState(false);
   const [selectedReview, setSelectedReview] = useState<Review | null>(null);
+  const [open, setOpen] = useState(false);
+  const [index, setIndex] = useState(0);
   const [counter, setCounter] = useState(1);
-  const { t, i18n } = useTranslation();
-
   const dispatch = useAppDispatch();
   const { id } = useParams();
-
+  const { t, i18n } = useTranslation();
+  const dir = i18n.dir();
   const {
     productDetails,
     relatedProducts,
@@ -367,7 +364,7 @@ export default function page() {
               )}
             </section>
             <section className="mb-12">
-              <Tabs defaultValue="Description" className="!block">
+              <Tabs defaultValue="Description" className="!block" dir={dir}>
                 <TabsList
                   variant="line"
                   className="flex-col xl:flex-row gap-6 2xl:gap-10 sm:max-xl:pb-8 sm:max-xl:border-b-[1px] sm:max-xl:border-[#ebebeb] sm:max-xl:w-full"
@@ -376,13 +373,14 @@ export default function page() {
                     className="text-[#999] py-3 px-0 font-bold text-xl data-[state=active]:text-[#333]"
                     value="Description"
                   >
-                    Description
+                    {t("productDetails.description")}
                   </TabsTrigger>
                   <TabsTrigger
                     className="text-[#999] py-3 px-0 font-bold text-xl data-[state=active]:text-[#333]"
                     value="CustomerReviews"
                   >
-                    Customer Reviews ({productDetails?.ratingsQuantity})
+                    {t("productDetails.customerReviews")} (
+                    {productDetails?.ratingsQuantity})
                   </TabsTrigger>
                 </TabsList>
                 <TabsContent
@@ -468,7 +466,6 @@ export default function page() {
                               openReviewDialog={openReviewDialog}
                               setOpenReviewDialog={setOpenReviewDialog}
                               selectedReview={selectedReview}
-                              setSelectedReview={setSelectedReview}
                             />
                           </div>
                         </>
@@ -492,6 +489,7 @@ export default function page() {
                                   setSelectedReview(review);
                                   setOpenReviewDialog(true);
                                 }}
+                                onDelete={() => setSelectedReview(null)}
                               />
                             ))}
                           </>
@@ -504,15 +502,15 @@ export default function page() {
             </section>
             <section className="mb-5">
               <div className="flex items-center justify-between border-b border-[#eee] mb-4">
-                <h2 className="py-4 text-xl font-bold text-[#333]">
-                  Related Products
+                <h2 className="py-4 sm:max-xl:text-lg xl:text-2xl font-bold text-[#333]">
+                  {t("productDetails.relatedProducts")}
                 </h2>
 
                 <Link
                   href={`/shop?category=${productDetails?.category.slug}`}
-                  className="flex items-center gap-2 text-[#333] 2xl:hover:text-primary transition-all duration-300 text-sm font-semibold"
+                  className="flex items-center gap-2 text-[#333] 2xl:hover:text-primary transition-all duration-300 sm:max-lg:text-xs text-sm font-semibold"
                 >
-                  More Products
+                  {t("productDetails.moreProducts")}
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     viewBox="0 0 24 24"
@@ -521,7 +519,9 @@ export default function page() {
                     strokeWidth="2"
                     strokeLinecap="round"
                     strokeLinejoin="round"
-                    className="lucide lucide-arrow-right-icon lucide-arrow-right w-5 h-5 xl:w-6 xl:h-6"
+                    className={`w-5 h-5 xl:w-6 xl:h-6 transition-transform ${
+                      dir === "rtl" ? "rotate-180" : ""
+                    }`}
                   >
                     <path d="M5 12h14" />
                     <path d="m12 5 7 7-7 7" />
