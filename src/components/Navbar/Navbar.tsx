@@ -38,6 +38,7 @@ import { MobileMenu } from "../MobileMenu/MobileMenu";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { usePathname } from "next/navigation";
 import { actions } from "@/Features/AuthDialog.slice";
+import { getCategories } from "@/Features/Categoreis.slice";
 
 export default function Navbar() {
   const inputRef = useRef<HTMLInputElement | null>(null);
@@ -60,6 +61,7 @@ export default function Navbar() {
   };
 
   const { categories } = useAppSelector((store) => store.categoriesSlice);
+
   const { user, isLoggedIn, authChecked } = useAppSelector(
     (store) => store.user,
   );
@@ -72,12 +74,14 @@ export default function Navbar() {
   ];
 
   useEffect(() => {
+    dispatch(getCategories());
+
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 20);
     };
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+  }, [dispatch]);
 
   return (
     <>

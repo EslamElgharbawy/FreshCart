@@ -43,6 +43,7 @@ const sections = [
 
 export function MobileMenu() {
   const [active, setactive] = useState("home");
+  const [isSheetOpen, setIsSheetOpen] = useState(false);
   const { t } = useTranslation();
   const { categories } = useAppSelector((store) => store.categoriesSlice);
 
@@ -60,8 +61,8 @@ export function MobileMenu() {
   };
 
   return (
-    <Sheet>
-      <SheetTrigger asChild className="cursor-pointer">
+    <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
+      <SheetTrigger asChild className="cursor-pointer" onClick={()=>{setIsSheetOpen(true)}}>
         <Menu className="w-7 h-7 xl:w-8 xl:h-8" />
       </SheetTrigger>
       <SheetContent
@@ -112,10 +113,15 @@ export function MobileMenu() {
                 {sections.map((item) => (
                   <li
                     key={item.name}
-                    onClick={() => setactive(item.name)}
+                    onClick={() => {
+                      setactive(item.name);
+                    }}
                     className={`tap-item px-2 py-4 transition-all duration-300 text-border border-b-[1px] border-b-[#333] last:border-b-0 ${active === item.name ? "text-primary" : ""}`}
                   >
-                    <Link href={item.path}>{t(`navbar.${item.name}`)}</Link>
+                    <Link href={item.path} onClick={() => setIsSheetOpen(false)}>
+                      {" "}
+                      {t(`navbar.${item.name}`)}
+                    </Link>
                   </li>
                 ))}
               </ul>

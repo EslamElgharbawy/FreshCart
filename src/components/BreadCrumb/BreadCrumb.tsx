@@ -17,7 +17,7 @@ export default function BreadCrumb({
   return (
     <>
       <section className="py-3 2xl:py-4">
-        <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-xs sm:text-sm">
+        <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-xs sm:text-[13px]">
           <Link
             href="/"
             className="text-[#333] opacity-70 hover:opacity-100 transition-all duration-300"
