@@ -8,6 +8,7 @@ import { Register } from "@/Features/user.slice";
 import { useAppDispatch, useAppSelector } from "@/hooks/store.hooks";
 import { actions } from "@/Features/AuthDialog.slice";
 import { useTranslation } from "react-i18next";
+import toast from "react-hot-toast";
 
 export default function () {
   const { t } = useTranslation();
@@ -26,7 +27,9 @@ export default function () {
 
       if (Register.fulfilled.match(result)) {
         dispatch(actions.setAuthMode("SignIn"));
+      } else {
       }
+      toast.error((result.payload as { message: string }).message);
     },
   });
   return (

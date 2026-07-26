@@ -5,32 +5,62 @@ import toast from "react-hot-toast";
 
 export const Register = createAsyncThunk(
   "user/register",
-  async (values: {
-    name: string;
-    email: string;
-    password: string;
-    rePassword: string;
-    phone: string;
-  }) => {
-    const { data } = await axios.post(
-      "https://ecommerce.routemisr.com/api/v1/auth/signup",
-      values,
-    );
-    return data;
-  },
+  async (
+    values: {
+      name: string;
+      email: string;
+      password: string;
+      rePassword: string;
+      phone: string;
+    },
+    { rejectWithValue }
+  ) => {
+    try {
+      const { data } = await axios.post(
+        "https://ecommerce.routemisr.com/api/v1/auth/signup",
+        values
+      );
+
+      return data;
+    } catch (error: any) {
+      return rejectWithValue(error.response.data);
+    }
+  }
 );
 export const Login = createAsyncThunk(
   "user/login",
-  async (values: { email: string; password: string }) => {
-    const { data } = await axios.post(
-      "https://ecommerce.routemisr.com/api/v1/auth/signin",
-      values,
-    );
+  async (
+    values: { email: string; password: string },
+    { rejectWithValue }
+  ) => {
+    try {
+      const { data } = await axios.post(
+        "https://ecommerce.routemisr.com/api/v1/auth/signin",
+        values
+      );
 
-    return data;
-  },
+      return data;
+    } catch (error: any) {
+      return rejectWithValue(error.response.data);
+    }
+  }
 );
 
+export const forgotPassword = createAsyncThunk(
+  "user/forgotPassword",
+  async (values: { email: string }, { rejectWithValue }) => {
+    try {
+      const { data } = await axios.post(
+        "https://ecommerce.routemisr.com/api/v1/auth/forgotPasswords",
+        values,
+      );
+
+      return data;
+    } catch (error: any) {
+      return rejectWithValue(error.response.data);
+    }
+  },
+);
 export const VerifyToken = createAsyncThunk(
   "user/verifyToken",
   async (token: string) => {
@@ -125,6 +155,21 @@ const userSlice = createSlice({
         duration: 1200,
       });
 
+      state.loading = false;
+      state.error = action.error.message ?? "Something went wrong";
+    });
+
+    // * ForgotPassword
+    builder.addCase(forgotPassword.pending, (state) => {
+      state.loading = true;
+      state.error = null;
+    });
+
+    builder.addCase(forgotPassword.fulfilled, (state) => {
+      state.loading = false;
+    });
+
+    builder.addCase(forgotPassword.rejected, (state, action) => {
       state.loading = false;
       state.error = action.error.message ?? "Something went wrong";
     });

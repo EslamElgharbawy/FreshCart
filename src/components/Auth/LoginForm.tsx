@@ -9,6 +9,7 @@ import { Login, VerifyToken } from "@/Features/user.slice";
 import { useAppDispatch, useAppSelector } from "@/hooks/store.hooks";
 import { actions } from "@/Features/AuthDialog.slice";
 import { useTranslation } from "react-i18next";
+import toast from "react-hot-toast";
 
 export default function LoginForm() {
   const { t } = useTranslation();
@@ -24,6 +25,8 @@ export default function LoginForm() {
       if (Login.fulfilled.match(result)) {
         dispatch(VerifyToken(result.payload.token));
         dispatch(actions.closeAuthDialog());
+      }else{
+        toast.error((result.payload as { message: string }).message);
       }
     },
   });
@@ -45,7 +48,7 @@ export default function LoginForm() {
         </Field>
         <Field className="!gap-3">
           <Label className="font-normal text-textMain" htmlFor="password">
-             {t("loginForm.password")}
+            {t("loginForm.password")}
           </Label>
           <Input
             type="password"
@@ -64,7 +67,7 @@ export default function LoginForm() {
             />
             <Label
               htmlFor="remember"
-              className="font-normal text-xs text-textMain cursor-pointer"
+              className="font-normal text-xs 2xl:text-sm text-textMain cursor-pointer"
             >
               {t("loginForm.rememberMe")}
             </Label>
@@ -72,7 +75,8 @@ export default function LoginForm() {
 
           <button
             type="button"
-            className="text-xs text-red-500 hover:underline !w-fit shrink-0"
+            onClick={() => dispatch(actions.setAuthMode("ForgotPassword"))}
+            className="text-xs 2xl:text-sm text-red-500 hover:underline !w-fit shrink-0"
           >
             {t("loginForm.forgotPassword")}
           </button>
@@ -84,7 +88,7 @@ export default function LoginForm() {
             disabled={loading}
             className="py-3 px-7 h-auto rounded-none uppercase text-white font-semibold"
           >
-             {t("loginForm.signIn")}
+            {t("loginForm.signIn")}
           </Button>
         </Field>
       </FieldGroup>
