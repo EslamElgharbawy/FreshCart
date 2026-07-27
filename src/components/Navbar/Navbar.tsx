@@ -65,7 +65,11 @@ export default function Navbar() {
   const { user, isLoggedIn, authChecked } = useAppSelector(
     (store) => store.user,
   );
-
+console.log({
+  user,
+  isLoggedIn,
+  authChecked,
+});
   const sections = [
     { name: "home", path: "/" },
     { name: "shop", path: "/Shop" },

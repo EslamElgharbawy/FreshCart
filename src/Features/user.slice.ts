@@ -13,37 +13,34 @@ export const Register = createAsyncThunk(
       rePassword: string;
       phone: string;
     },
-    { rejectWithValue }
+    { rejectWithValue },
   ) => {
     try {
       const { data } = await axios.post(
         "https://ecommerce.routemisr.com/api/v1/auth/signup",
-        values
+        values,
       );
 
       return data;
     } catch (error: any) {
       return rejectWithValue(error.response.data);
     }
-  }
+  },
 );
 export const Login = createAsyncThunk(
   "user/login",
-  async (
-    values: { email: string; password: string },
-    { rejectWithValue }
-  ) => {
+  async (values: { email: string; password: string }, { rejectWithValue }) => {
     try {
       const { data } = await axios.post(
         "https://ecommerce.routemisr.com/api/v1/auth/signin",
-        values
+        values,
       );
 
       return data;
     } catch (error: any) {
       return rejectWithValue(error.response.data);
     }
-  }
+  },
 );
 
 export const forgotPassword = createAsyncThunk(
@@ -52,6 +49,39 @@ export const forgotPassword = createAsyncThunk(
     try {
       const { data } = await axios.post(
         "https://ecommerce.routemisr.com/api/v1/auth/forgotPasswords",
+        values,
+      );
+
+      return data;
+    } catch (error: any) {
+      return rejectWithValue(error.response.data);
+    }
+  },
+);
+export const VerifyResetCode = createAsyncThunk(
+  "user/verifyResetCode",
+  async (values: { resetCode: string }, { rejectWithValue }) => {
+    try {
+      const { data } = await axios.post(
+        "https://ecommerce.routemisr.com/api/v1/auth/verifyResetCode",
+        values,
+      );
+
+      return data;
+    } catch (error: any) {
+      return rejectWithValue(error.response.data);
+    }
+  },
+);
+export const resetPassword = createAsyncThunk(
+  "user/resetPassword",
+  async (
+    values: { email: string; newPassword: string },
+    { rejectWithValue },
+  ) => {
+    try {
+      const { data } = await axios.put(
+        "https://ecommerce.routemisr.com/api/v1/auth/resetPassword",
         values,
       );
 
@@ -174,6 +204,35 @@ const userSlice = createSlice({
       state.error = action.error.message ?? "Something went wrong";
     });
 
+    // * VerifyResetCode
+    builder.addCase(VerifyResetCode.pending, (state) => {
+      state.loading = true;
+      state.error = null;
+    });
+
+    builder.addCase(VerifyResetCode.fulfilled, (state) => {
+      state.loading = false;
+    });
+
+    builder.addCase(VerifyResetCode.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.error.message ?? "Something went wrong";
+    });
+
+    // * ResetPassword
+    builder.addCase(resetPassword.pending, (state) => {
+      state.loading = true;
+      state.error = null;
+    });
+
+    builder.addCase(resetPassword.fulfilled, (state) => {
+      state.loading = false;
+    });
+
+    builder.addCase(resetPassword.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.error.message ?? "Something went wrong";
+    });
     // * VerifyToken
     builder.addCase(VerifyToken.pending, (state) => {
       state.loading = true;
@@ -181,6 +240,8 @@ const userSlice = createSlice({
     });
 
     builder.addCase(VerifyToken.fulfilled, (state, action) => {
+        console.log(action.payload);
+
       state.loading = false;
       state.user = action.payload.decoded;
       state.isLoggedIn = true;

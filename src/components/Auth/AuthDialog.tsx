@@ -15,6 +15,7 @@ import ForgotPassword from "./ForgotPassword";
 import { AnimatePresence, motion } from "framer-motion";
 import { useTranslation } from "react-i18next";
 import VerifyCode from "./VerifyCode";
+import ResetPassword from "./ResetPassword";
 
 export default function AuthDialog() {
   const { t } = useTranslation();
@@ -100,6 +101,18 @@ export default function AuthDialog() {
                 transition={{ duration: 0.15 }}
               >
                 <VerifyCode />
+              </motion.div>
+            )}
+
+            {mode === "ResetPassword" && (
+              <motion.div
+                key="ResetPassword"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.15 }}
+              >
+                <ResetPassword />
               </motion.div>
             )}
           </AnimatePresence>
