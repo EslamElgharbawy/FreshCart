@@ -60,7 +60,7 @@ export default function LoginForm() {
           <Input
             type="email"
             id="email"
-            className="rounded-none py-2 px-5 h-auto"
+            className="rounded-none py-2 px-5 h-auto text-sm"
             name="email"
             value={formik.values.email}
             onChange={formik.handleChange}
@@ -79,7 +79,7 @@ export default function LoginForm() {
           <Input
             type="password"
             id="password"
-            className="rounded-none py-2 px-5 h-auto"
+            className="rounded-none py-2 px-5 h-auto text-sm"
             name="password"
             value={formik.values.password}
             onChange={formik.handleChange}

@@ -29,7 +29,11 @@ export default function ResetPassword() {
     },
     validationSchema,
     onSubmit: async (values) => {
+      toast.loading(t("loginForm.pleaseWait"), {
+        id: "resetPassword",
+      });
       const result = await dispatch(resetPassword(values));
+      toast.dismiss("resetPassword");
       if (resetPassword.fulfilled.match(result)) {
         toast.success("Password reset successfully");
         dispatch(actions.setAuthMode("SignIn"));
@@ -57,7 +61,7 @@ export default function ResetPassword() {
           <Input
             type="email"
             id="email"
-            className="rounded-none py-2 px-5 h-auto"
+            className="rounded-none py-2 px-5 h-auto text-sm"
             name="email"
             value={formik.values.email}
             onChange={formik.handleChange}
@@ -74,7 +78,7 @@ export default function ResetPassword() {
           <Input
             type="password"
             id="newPassword"
-            className="rounded-none py-2 px-5 h-auto"
+            className="rounded-none py-2 px-5 h-auto text-sm"
             name="newPassword"
             value={formik.values.newPassword}
             onChange={formik.handleChange}

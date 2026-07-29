@@ -35,7 +35,7 @@ export default function ForgotPassword() {
   });
 
   return (
-    <form onSubmit={formik.handleSubmit} className="w-full space-y-6">
+    <form onSubmit={formik.handleSubmit} className="w-full space-y-5">
       <div className="text-center">
         <h2 className="text-[#333] py-3 uppercase font-bold text-xl">
           {t("forgotPassword.title")}
@@ -58,7 +58,7 @@ export default function ForgotPassword() {
           value={formik.values.email}
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
-          className="rounded-none py-2 px-5 h-auto"
+          className="rounded-none py-2 px-5 h-auto text-sm"
         />
         {formik.touched.email && formik.errors.email && (
           <p className="text-sm text-red-500">{formik.errors.email}</p>

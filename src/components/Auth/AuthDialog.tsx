@@ -30,7 +30,10 @@ export default function AuthDialog() {
         }
       }}
     >
-      <DialogContent className="!max-w-[500px] sm:max-xl:!max-w-[330px] py-8 px-5 xl:px-12 ring-0 rounded-none">
+      <DialogContent
+        className="!max-w-[500px] sm:max-xl:!max-w-[330px] max-h-[85vh]
+    overflow-y-auto pt-8 pb-5 px-5 xl:px-12 ring-0 rounded-none"
+      >
         <DialogHeader className="sr-only">
           <DialogTitle>Authentication</DialogTitle>
           <DialogDescription>{t("authDialog.description")}</DialogDescription>
@@ -103,7 +106,6 @@ export default function AuthDialog() {
                 <VerifyCode />
               </motion.div>
             )}
-
             {mode === "ResetPassword" && (
               <motion.div
                 key="ResetPassword"

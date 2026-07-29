@@ -51,7 +51,6 @@ export default function () {
       });
 
       const result = await dispatch(Register(values));
-
       toast.dismiss("register");
 
       if (Register.fulfilled.match(result)) {
@@ -78,14 +77,14 @@ export default function () {
           <Input
             type="text"
             id="name"
-            className="rounded-none py-2 px-5 h-auto text-[#999]"
+            className="rounded-none py-2 px-5 h-auto text-sm"
             name="name"
             value={formik.values.name}
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
           />
           {formik.touched.name && formik.errors.name && (
-            <p className="mt-1 text-sm text-red-500">{formik.errors.name}</p>
+            <p className=" text-sm text-red-500">{formik.errors.name}</p>
           )}
         </Field>
         <Field className="!gap-3">
@@ -95,14 +94,14 @@ export default function () {
           <Input
             type="email"
             id="email"
-            className="rounded-none py-2 px-5 h-auto text-[#999]"
+            className="rounded-none py-2 px-5 h-auto text-sm"
             name="email"
             value={formik.values.email}
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
           />
           {formik.touched.email && formik.errors.email && (
-            <p className="mt-1 text-sm text-red-500">{formik.errors.email}</p>
+            <p className=" text-sm text-red-500">{formik.errors.email}</p>
           )}
         </Field>
         <Field className="!gap-3">
@@ -115,14 +114,14 @@ export default function () {
           <Input
             type="password"
             id="password"
-            className="rounded-none py-2 px-5 h-auto text-[#999]"
+            className="rounded-none py-2 px-5 h-auto text-sm"
             name="password"
             value={formik.values.password}
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
           />
           {formik.touched.password && formik.errors.password && (
-            <p className="mt-1 text-sm text-red-500">
+            <p className=" text-sm text-red-500">
               {formik.errors.password}
             </p>
           )}
@@ -137,14 +136,14 @@ export default function () {
           <Input
             type="password"
             id="rePassword"
-            className="rounded-none py-2 px-5 h-auto text-[#999]"
+            className="rounded-none py-2 px-5 h-auto text-sm"
             name="rePassword"
             value={formik.values.rePassword}
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
           />
           {formik.touched.rePassword && formik.errors.rePassword && (
-            <p className="mt-1 text-sm text-red-500">
+            <p className=" text-sm text-red-500">
               {formik.errors.rePassword}
             </p>
           )}
@@ -156,14 +155,14 @@ export default function () {
           <Input
             type="tel"
             id="phone"
-            className="rounded-none py-2 px-5 h-auto text-[#999]"
+            className="rounded-none py-2 px-5 h-auto text-sm"
             name="phone"
             value={formik.values.phone}
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
           />
           {formik.touched.phone && formik.errors.phone && (
-            <p className="mt-1 text-sm text-red-500">{formik.errors.phone}</p>
+            <p className=" text-sm text-red-500">{formik.errors.phone}</p>
           )}
         </Field>
 
