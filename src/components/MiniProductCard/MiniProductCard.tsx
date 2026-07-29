@@ -4,6 +4,7 @@ import Image from "next/image";
 import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import MiniProductCardSkeleton from "../Skeletons/MiniProductCardSkeleton";
+import Link from "next/link";
 
 export default function MiniProductCard() {
   const { t } = useTranslation();
@@ -28,22 +29,22 @@ export default function MiniProductCard() {
                   className="flex justify-center items-center gap-3 lg:gap-0 xl:gap-3 2xl:gap-5 px-2"
                 >
                   <div className="basis-2/5 xl:mb-3">
-                    <a href="#">
+                    <Link href={`/ProductDetails/${product._id}`}>
                       <Image
                         width={100}
                         height={100}
                         src={product.imageCover}
                         alt="Product Image"
                       />
-                    </a>
+                    </Link>
                   </div>
                   <div className="flex flex-col gap-2 flex-1">
-                    <a
-                      href="#"
+                    <Link
+                      href={`/ProductDetails/${product._id}`}
                       className="text-sm text-[#333] font-medium leading-[18.2px] hover:text-primary transition-colors duration-300"
                     >
                       {product.title}
-                    </a>
+                    </Link>
                     <div className="flex items-center gap-5">
                       <div className="rating flex justify-center items-center gap-1 text-xs text-[#333] ">
                         <svg
