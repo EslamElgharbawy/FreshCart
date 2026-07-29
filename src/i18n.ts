@@ -17,6 +17,7 @@ const resources = {
         offers: "Special Offers",
         login: "Sign In",
         signup: "Register",
+        greeting: "Hi",
       },
       topbar: {
         findStore: "Find FreshCart Store",
@@ -33,12 +34,15 @@ const resources = {
         signIn: "Sign In",
         signUp: "Sign Up",
       },
+
       loginForm: {
         usernameOrEmail: "Username or email address",
         password: "Password",
         rememberMe: "Remember me",
         forgotPassword: "Forgot Password?",
         signIn: "Sign In",
+        pleaseWait: "Please wait...",
+        welcomeBack: "Welcome back",
       },
       registerForm: {
         username: "Username",
@@ -48,6 +52,44 @@ const resources = {
         phone: "Phone",
         signUp: "Sign Up",
         creatingAccount: "Creating your account...",
+        accountCreated: "Your account is ready. Please sign in.",
+      },
+      resetPassword: {
+        resetPassword: "Reset Password",
+        createNewPassword: "Create a new password for your account.",
+        emailAddress: "Email Address",
+        newPassword: "New Password",
+        back: "Back",
+
+        verifyCode: "Verify Code",
+        verifyDescription:
+          "Enter the 6-digit verification code sent to your email.",
+        verifyButton: "Verify Code",
+      },
+      forgotPassword: {
+        title: "Forgot Password",
+        description:
+          "Enter your email address and we'll send you a verification code to reset your password.",
+        email: "Email Address",
+        sendCode: "Send Code",
+        back: "Back",
+      },
+      validation: {
+        nameRequired: "Name is required",
+        nameMin: "Name must be at least 3 characters",
+
+        emailRequired: "Email is required",
+        invalidEmail: "Invalid email address",
+
+        passwordRequired: "Password is required",
+        invalidPassword:
+          "Password must be at least 8 characters and include uppercase, lowercase, and a number",
+        passwordMin: "Password must be at least 6 characters",
+        confirmPasswordRequired: "Confirm password is required",
+        passwordsMustMatch: "Passwords must match",
+
+        phoneRequired: "Phone number is required",
+        invalidPhone: "Invalid Egyptian phone number",
       },
       hero: {
         running: "Running",
@@ -318,6 +360,7 @@ const resources = {
         offers: "عروض خاصة",
         login: "تسجيل الدخول",
         signup: "إنشاء حساب",
+        greeting: "مرحبًا",
       },
       topbar: {
         findStore: "اعثر على متجر فريش كارت",
@@ -334,12 +377,15 @@ const resources = {
         signIn: "تسجيل الدخول",
         signUp: "إنشاء حساب",
       },
+
       loginForm: {
         usernameOrEmail: "اسم المستخدم أو البريد الإلكتروني",
         password: "كلمة المرور",
         rememberMe: "تذكرني",
         forgotPassword: "نسيت كلمة المرور؟",
         signIn: "تسجيل الدخول",
+        pleaseWait: "يرجى الانتظار...",
+        welcomeBack: "مرحبًا بعودتك",
       },
       registerForm: {
         username: "اسم المستخدم",
@@ -349,6 +395,44 @@ const resources = {
         phone: "رقم الهاتف",
         signUp: "إنشاء حساب",
         creatingAccount: "جارٍ إنشاء الحساب...",
+        accountCreated: "تم إنشاء حسابك بنجاح. يرجى تسجيل الدخول.",
+      },
+      forgotPassword: {
+        title: "نسيت كلمة المرور",
+        description:
+          "أدخل بريدك الإلكتروني وسنرسل إليك رمز تحقق لإعادة تعيين كلمة المرور.",
+        email: "البريد الإلكتروني",
+        sendCode: "إرسال الرمز",
+        back: "رجوع",
+      },
+      resetPassword: {
+        resetPassword: "إعادة تعيين كلمة المرور",
+        createNewPassword: "أنشئ كلمة مرور جديدة لحسابك.",
+        emailAddress: "البريد الإلكتروني",
+        newPassword: "كلمة المرور الجديدة",
+        back: "رجوع",
+
+        verifyCode: "التحقق من الرمز",
+        verifyDescription:
+          "أدخل رمز التحقق المكون من 6 أرقام الذي تم إرساله إلى بريدك الإلكتروني.",
+        verifyButton: "تحقق من الرمز",
+      },
+      validation: {
+        nameRequired: "الاسم مطلوب",
+        nameMin: "يجب ألا يقل الاسم عن 3 أحرف",
+
+        emailRequired: "البريد الإلكتروني مطلوب",
+        invalidEmail: "البريد الإلكتروني غير صحيح",
+
+        passwordRequired: "كلمة المرور مطلوبة",
+        invalidPassword:
+          "يجب أن تتكون كلمة المرور من 8 أحرف على الأقل، وتحتوي على حرف كبير وحرف صغير ورقم",
+        passwordMin: "يجب ألا تقل كلمة المرور عن 6 أحرف",
+        confirmPasswordRequired: "تأكيد كلمة المرور مطلوب",
+        passwordsMustMatch: "كلمتا المرور غير متطابقتين",
+
+        phoneRequired: "رقم الهاتف مطلوب",
+        invalidPhone: "رقم الهاتف المصري غير صحيح",
       },
       hero: {
         running: "الجري",

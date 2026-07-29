@@ -7,13 +7,22 @@ import { Label } from "../ui/label";
 import { useFormik } from "formik";
 import { forgotPassword } from "@/Features/user.slice";
 import toast from "react-hot-toast";
+import { useTranslation } from "react-i18next";
+import * as Yup from "yup";
 
 export default function ForgotPassword() {
+  const { t } = useTranslation();
   const dispatch = useAppDispatch();
+  const validationSchema = Yup.object({
+    email: Yup.string()
+      .email(t("validation.invalidEmail"))
+    .required(t("validation.emailRequired")),
+  });
   const formik = useFormik({
     initialValues: {
       email: "",
     },
+    validationSchema,
     onSubmit: async (values) => {
       const result = await dispatch(forgotPassword(values));
       if (forgotPassword.fulfilled.match(result)) {
@@ -24,22 +33,22 @@ export default function ForgotPassword() {
       }
     },
   });
+
   return (
     <form onSubmit={formik.handleSubmit} className="w-full space-y-6">
       <div className="text-center">
         <h2 className="text-[#333] py-3 uppercase font-bold text-xl">
-          Forgot Password
+          {t("forgotPassword.title")}
         </h2>
 
         <p className="text-sm text-textMain">
-          Enter your email address and we'll send you a verification code to
-          reset your password.
+          {t("forgotPassword.description")}
         </p>
       </div>
 
       <div className="space-y-3 !mt-10">
         <Label htmlFor="email" className="font-normal text-textMain">
-          Email Address
+          {t("forgotPassword.email")}
         </Label>
 
         <Input
@@ -51,13 +60,16 @@ export default function ForgotPassword() {
           onBlur={formik.handleBlur}
           className="rounded-none py-2 px-5 h-auto"
         />
+        {formik.touched.email && formik.errors.email && (
+          <p className="text-sm text-red-500">{formik.errors.email}</p>
+        )}
       </div>
 
       <Button
         type="submit"
         className="w-full py-3 px-7 h-auto rounded-none uppercase text-white font-semibold"
       >
-        Send Code
+        {t("forgotPassword.sendCode")}
       </Button>
 
       <button
@@ -66,7 +78,7 @@ export default function ForgotPassword() {
         className="flex items-center gap-2 text-sm text-gray-500 hover:text-primary transition-colors"
       >
         <ArrowLeft className="w-4 h-4" />
-        Back
+        {t("forgotPassword.back")}
       </button>
     </form>
   );

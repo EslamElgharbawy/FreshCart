@@ -10,23 +10,43 @@ import { useAppDispatch, useAppSelector } from "@/hooks/store.hooks";
 import { actions } from "@/Features/AuthDialog.slice";
 import { useTranslation } from "react-i18next";
 import toast from "react-hot-toast";
+import * as Yup from "yup";
 
 export default function LoginForm() {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const { loading } = useAppSelector((store) => store.user);
+  const validationSchema = Yup.object({
+    email: Yup.string()
+      .email(t("validation.invalidEmail"))
+      .required(t("validation.emailRequired")),
+
+    password: Yup.string()
+      .required(t("validation.passwordRequired"))
+      .min(6, t("validation.passwordMin")),
+  });
   const formik = useFormik({
     initialValues: {
       email: "",
       password: "",
     },
+    validationSchema,
     onSubmit: async (values) => {
+      toast.loading(t("loginForm.pleaseWait"), {
+        id: "login",
+      });
       const result = await dispatch(Login(values));
+      toast.dismiss("login");
       if (Login.fulfilled.match(result)) {
         dispatch(VerifyToken(result.payload.token));
         dispatch(actions.closeAuthDialog());
-      }else{
-        toast.error((result.payload as { message: string }).message);
+        toast.success(t("loginForm.welcomeBack"), {
+          duration: 1500,
+        });
+      } else {
+        toast.error((result.payload as { message: string }).message, {
+          duration: 1200,
+        });
       }
     },
   });
@@ -34,7 +54,7 @@ export default function LoginForm() {
     <form onSubmit={formik.handleSubmit}>
       <FieldGroup className="pt-8">
         <Field className="!gap-3">
-          <Label className="font-normal text-textMain" htmlFor="email">
+          <Label className="font-normal text-textMain !w-fit" htmlFor="email">
             {t("loginForm.usernameOrEmail")}
           </Label>
           <Input
@@ -45,9 +65,15 @@ export default function LoginForm() {
             value={formik.values.email}
             onChange={formik.handleChange}
           />
+          {formik.touched.email && formik.errors.email && (
+            <p className="text-sm text-red-500">{formik.errors.email}</p>
+          )}
         </Field>
         <Field className="!gap-3">
-          <Label className="font-normal text-textMain" htmlFor="password">
+          <Label
+            className="font-normal text-textMain !w-fit"
+            htmlFor="password"
+          >
             {t("loginForm.password")}
           </Label>
           <Input
@@ -58,6 +84,9 @@ export default function LoginForm() {
             value={formik.values.password}
             onChange={formik.handleChange}
           />
+          {formik.touched.password && formik.errors.password && (
+            <p className="text-sm text-red-500">{formik.errors.password}</p>
+          )}
         </Field>
         <Field className="flex-row items-center justify-between my-3 !gap-5 xl:!gap-20">
           <div className="flex items-center gap-2 !w-fit">

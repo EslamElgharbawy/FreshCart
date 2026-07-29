@@ -135,44 +135,24 @@ const userSlice = createSlice({
   extraReducers: (builder) => {
     // *Register
     builder.addCase(Register.pending, (state) => {
-      toast.loading("Creating account...", {
-        id: "register",
-      });
       state.loading = true;
       state.error = null;
     });
     builder.addCase(Register.fulfilled, (state) => {
-      toast.success("Your account is ready. Please sign in.", {
-        id: "register",
-        duration: 1500,
-      });
       state.loading = false;
     });
     builder.addCase(Register.rejected, (state, action) => {
-      toast.error("Something went wrong", {
-        id: "register",
-        duration: 1500,
-      });
       state.loading = false;
       state.error = action.error.message ?? "Something went wrong";
     });
 
     // * Login
     builder.addCase(Login.pending, (state) => {
-      toast.loading("Please wait...", {
-        id: "login",
-      });
-
       state.loading = true;
       state.error = null;
     });
 
     builder.addCase(Login.fulfilled, (state, action) => {
-      toast.success("Welcome back", {
-        id: "login",
-        duration: 1500,
-      });
-
       state.loading = false;
       state.token = action.payload.token;
       localStorage.setItem("token", action.payload.token);
@@ -180,11 +160,6 @@ const userSlice = createSlice({
     });
 
     builder.addCase(Login.rejected, (state, action) => {
-      toast.error("Invalid email or password.", {
-        id: "login",
-        duration: 1200,
-      });
-
       state.loading = false;
       state.error = action.error.message ?? "Something went wrong";
     });
@@ -240,8 +215,6 @@ const userSlice = createSlice({
     });
 
     builder.addCase(VerifyToken.fulfilled, (state, action) => {
-        console.log(action.payload);
-
       state.loading = false;
       state.user = action.payload.decoded;
       state.isLoggedIn = true;

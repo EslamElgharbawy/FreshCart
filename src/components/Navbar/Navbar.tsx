@@ -65,18 +65,13 @@ export default function Navbar() {
   const { user, isLoggedIn, authChecked } = useAppSelector(
     (store) => store.user,
   );
-console.log({
-  user,
-  isLoggedIn,
-  authChecked,
-});
   const sections = [
     { name: "home", path: "/" },
     { name: "shop", path: "/Shop" },
     { name: "vendors", path: "/Vendors" },
     { name: "deals", path: "/Deals" },
   ];
-
+  const firstName = user?.name?.split(" ")[0];
   useEffect(() => {
     dispatch(getCategories());
 
@@ -273,7 +268,9 @@ console.log({
                         <div className="auth flex justify-center items-center gap-1 text-[#666666] text-[11px]">
                           <button className="flex justify-center items-center gap-1 hover:text-[#fe4407] transition-all duration-300">
                             <User width={20} height={20} />
-                            Hi , {user?.name}
+                            {i18n.language === "ar"
+                              ? `${t("navbar.greeting")}، ${firstName}`
+                              : `${t("navbar.greeting")}, ${firstName}`}
                           </button>
                         </div>
                       </DropdownMenuTrigger>

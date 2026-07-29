@@ -11,14 +11,22 @@ import { useAppDispatch } from "@/hooks/store.hooks";
 import { useFormik } from "formik";
 import { ArrowLeft } from "lucide-react";
 import toast from "react-hot-toast";
-
+import { useTranslation } from "react-i18next";
+import * as Yup from "yup";
 export default function VerifyCode() {
+  const { t } = useTranslation();
   const dispatch = useAppDispatch();
 
+  const validationSchema = Yup.object({
+    resetCode: Yup.string()
+      .required("Verification code is required")
+      .matches(/^\d{6}$/, "Verification code must be 6 digits"),
+  });
   const formik = useFormik({
     initialValues: {
       resetCode: "",
     },
+    validationSchema,
 
     onSubmit: async (values) => {
       const result = await dispatch(VerifyResetCode(values));
@@ -35,10 +43,12 @@ export default function VerifyCode() {
   return (
     <form onSubmit={formik.handleSubmit} className="w-full space-y-6">
       <div className="text-center">
-        <h2 className="text-[#333] py-3 uppercase font-bold text-xl">Verify Code</h2>
+        <h2 className="text-[#333] py-3 uppercase font-bold text-xl">
+          {t("resetPassword.verifyCode")}
+        </h2>
 
         <p className="text-sm text-gray-500">
-          Enter the 6-digit verification code sent to your email.
+          {t("resetPassword.verifyDescription")}
         </p>
       </div>
 
@@ -47,6 +57,7 @@ export default function VerifyCode() {
           maxLength={6}
           value={formik.values.resetCode}
           onChange={(value) => formik.setFieldValue("resetCode", value)}
+          onBlur={() => formik.setFieldTouched("resetCode", true)}
           className="!w-full"
         >
           <InputOTPGroup>
@@ -58,12 +69,16 @@ export default function VerifyCode() {
             <InputOTPSlot index={5} />
           </InputOTPGroup>
         </InputOTP>
+         {formik.touched.resetCode && formik.errors.resetCode && (
+        <p className="text-sm text-red-500 mt-4">{formik.errors.resetCode}</p>
+      )}
       </div>
+     
       <Button
         type="submit"
         className="w-full py-3 px-7 h-auto rounded-none uppercase text-white font-semibold"
       >
-        Verify Code
+        {t("resetPassword.verifyButton")}
       </Button>
       <button
         type="button"
@@ -71,7 +86,7 @@ export default function VerifyCode() {
         className="flex items-center gap-2 text-sm text-gray-500 hover:text-primary transition-colors"
       >
         <ArrowLeft className="w-4 h-4" />
-        Back
+        {t("resetPassword.back")}
       </button>
     </form>
   );
