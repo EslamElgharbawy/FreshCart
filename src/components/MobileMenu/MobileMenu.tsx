@@ -2,13 +2,14 @@
 import { Input } from "@/components/ui/input";
 import {
   Sheet,
+  SheetClose,
   SheetContent,
   SheetDescription,
   SheetHeader,
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { Menu } from "lucide-react";
+import { Menu, XIcon } from "lucide-react";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import Link from "next/link";
 import { useState } from "react";
@@ -33,6 +34,7 @@ import {
   InputGroupInput,
 } from "@/components/ui/input-group";
 import i18n from "@/i18n";
+import { Button } from "../ui/button";
 
 const sections = [
   { name: "home", path: "/" },
@@ -62,7 +64,13 @@ export function MobileMenu() {
 
   return (
     <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
-      <SheetTrigger asChild className="cursor-pointer" onClick={()=>{setIsSheetOpen(true)}}>
+      <SheetTrigger
+        asChild
+        className="cursor-pointer"
+        onClick={() => {
+          setIsSheetOpen(true);
+        }}
+      >
         <Menu className="w-7 h-7 xl:w-8 xl:h-8" />
       </SheetTrigger>
       <SheetContent
@@ -74,7 +82,20 @@ export function MobileMenu() {
             transition-all 
             !duration-500 
             ease-in-out`}
+        overlayClassName="bg-black/80"
       >
+        <SheetClose asChild>
+          <Button
+            variant="ghost"
+            className={`absolute top-3 xl:!w-[40px] xl:!h-[40px]
+                group-data-[state=closed]:opacity-0 
+                group-data-[state=closed]:pointer-events-none
+                transition-opacity duration-300  
+                ${i18n.language === "ar" ? "right-[340px] md:top-5 md:right-[380px] lg:right-[420px] xl:right-[750px]" : "left-[330px] md:top-5 md:left-[380px] lg:left-[420px] xl:left-[750px]"}`}
+          >
+            <XIcon className="size-8 lg:size-9 xl:size-10 text-white stroke-[1.5px]" />
+          </Button>
+        </SheetClose>
         <SheetHeader>
           <SheetTitle className="sr-only">Mobile Menu</SheetTitle>
           <InputGroup className="max-w-xs !h-10 !rounded-sm border-[1px] border-[#333] ">
@@ -118,7 +139,10 @@ export function MobileMenu() {
                     }}
                     className={`tap-item px-2 py-4 transition-all duration-300 text-border border-b-[1px] border-b-[#333] last:border-b-0 ${active === item.name ? "text-primary" : ""}`}
                   >
-                    <Link href={item.path} onClick={() => setIsSheetOpen(false)}>
+                    <Link
+                      href={item.path}
+                      onClick={() => setIsSheetOpen(false)}
+                    >
                       {" "}
                       {t(`navbar.${item.name}`)}
                     </Link>
