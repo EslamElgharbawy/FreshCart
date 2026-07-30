@@ -72,7 +72,7 @@ export default function Footer1() {
                       />
                     </a>
                   </div>
-                  <div className="w-full lg:max-2xl:text-sm">
+                  <div className="w-full lg:text-sm">
                     <p>{t("footer.supportText")}</p>
                   </div>
                   <div className="w-full ">
@@ -83,7 +83,7 @@ export default function Footer1() {
                       1-800-580-7777
                     </a>
                   </div>
-                  <div className="w-full leading-7 mb-3 lg:max-2xl:text-sm">
+                  <div className="w-full leading-7 mb-3 lg:text-sm">
                     <p>{t("footer.description")}</p>
                   </div>
                   <div className="w-full flex items-center gap-3">
@@ -143,7 +143,7 @@ export default function Footer1() {
                       key={section.title}
                       className="2xl:col-span-2 flex flex-col p-3"
                     >
-                      <div className="mb-5 uppercase font-bold text-[14px] lg:max-2xl:text-base text-secondary">
+                      <div className="mb-5 uppercase font-bold text-[14px] lg:text-base text-secondary">
                         {t(`footer.${section.title}`)}
                       </div>
 
@@ -151,7 +151,7 @@ export default function Footer1() {
                         {section.links.map((link) => (
                           <li
                             key={link}
-                            className="hover:text-primary transition-colors duration-300 cursor-pointer lg:max-2xl:text-sm"
+                            className="hover:text-primary transition-colors duration-300 cursor-pointer lg:text-sm"
                           >
                             {t(`footer.${link}`)}
                           </li>
@@ -172,7 +172,7 @@ export default function Footer1() {
                           <h2 className="text-sm md:text-base lg:text-lg 2xl:text-base font-semibold transform uppercase text-secondary">
                             {t("footer.subscribe")}
                           </h2>
-                          <p className="text-[#999999] lg:max-2xl:text-sm ">
+                          <p className="text-[#999999] lg:text-sm ">
                             {t("footer.subscribeDescription")}
                           </p>
                         </div>

@@ -39,6 +39,16 @@ import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { usePathname } from "next/navigation";
 import { actions } from "@/Features/AuthDialog.slice";
 import { getCategories } from "@/Features/Categoreis.slice";
+import {
+  Sheet,
+  SheetClose,
+  SheetContent,
+  SheetDescription,
+  SheetFooter,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
 
 export default function Navbar() {
   const inputRef = useRef<HTMLInputElement | null>(null);
@@ -390,41 +400,102 @@ export default function Navbar() {
                       </span>
                     </div>
                     <div className="w-[1px] h-10 bg-[#EEEEEE1A] mx-5"></div>
-                    <a
-                      href="#"
-                      className="flex justify-center items-center gap-4 group  duration-300"
-                    >
-                      <span>
-                        <p className="text-border text-[11px] font-medium group-hover:text-primary transition-all">
-                          {t("navbar.cart")}
-                        </p>
-                        <span className="font-bold text-end block group-hover:text-primary transition-all">
-                          <span id="Currency">{currencySymbol[currency]}</span>
-                          0.00
-                        </span>
-                      </span>
-                      <span className="relative mb-1 group-hover:text-primary transition-all">
-                        <span
-                          className={`absolute -top-1  ${language === "EGY" ? "-left-1" : "-right-1"} w-[18px] h-[18px] bg-accent text-[#272b37] text-[11px] rounded-full flex justify-center items-center`}
+                    <Sheet>
+                      <SheetTrigger asChild className="bg-transparent border-none">
+                        <Button
+                          variant="outline"
+                          className="flex justify-center items-center gap-4 group duration-300"
                         >
-                          0
-                        </span>
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          strokeWidth={2}
-                          stroke="currentColor"
-                          className="size-8"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            d="M15.75 10.5V6a3.75 3.75 0 1 0-7.5 0v4.5m11.356-1.993 1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 0 1-1.12-1.243l1.264-12A1.125 1.125 0 0 1 5.513 7.5h12.974c.576 0 1.059.435 1.119 1.007ZM8.625 10.5a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm7.5 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z"
-                          />
-                        </svg>
-                      </span>
-                    </a>
+                          <span>
+                            <p className="text-border text-[11px] font-medium group-hover:text-primary transition-all">
+                              {t("navbar.cart")}
+                            </p>
+                            <span className="font-bold text-end block group-hover:text-primary transition-all text-base leading-5">
+                              <span id="Currency">
+                                {currencySymbol[currency]}
+                              </span>
+                              0.00
+                            </span>
+                          </span>
+                          <span className="relative mb-1 group-hover:text-primary transition-all">
+                            <span
+                              className={`absolute -top-1  ${language === "EGY" ? "-left-1" : "-right-1"} w-[18px] h-[18px] bg-accent text-[#272b37] text-[11px] rounded-full flex justify-center items-center`}
+                            >
+                              0
+                            </span>
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              strokeWidth={2}
+                              stroke="currentColor"
+                              className="size-8"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                d="M15.75 10.5V6a3.75 3.75 0 1 0-7.5 0v4.5m11.356-1.993 1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 0 1-1.12-1.243l1.264-12A1.125 1.125 0 0 1 5.513 7.5h12.974c.576 0 1.059.435 1.119 1.007ZM8.625 10.5a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm7.5 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z"
+                              />
+                            </svg>
+                          </span>
+                        </Button>
+                      </SheetTrigger>
+                      <SheetContent className="bg-white">
+                        <SheetHeader>
+                          <SheetTitle>Edit profile</SheetTitle>
+                          <SheetDescription>
+                            Make changes to your profile here. Click save when
+                            you&apos;re done.
+                          </SheetDescription>
+                        </SheetHeader>
+                        <SheetFooter>
+                          <Button type="submit">Save changes</Button>
+                          <SheetClose asChild>
+                            <Button variant="outline">Close</Button>
+                          </SheetClose>
+                        </SheetFooter>
+                      </SheetContent>
+                    </Sheet>
+                    {/* <Sheet>
+                      <SheetTrigger asChild>
+                        <button className="flex justify-center items-center gap-4 group  duration-300">
+                          <span>
+                            <p className="text-border text-[11px] font-medium group-hover:text-primary transition-all">
+                              {t("navbar.cart")}
+                            </p>
+                            <span className="font-bold text-end block group-hover:text-primary transition-all">
+                              <span id="Currency">
+                                {currencySymbol[currency]}
+                              </span>
+                              0.00
+                            </span>
+                          </span>
+                          <span className="relative mb-1 group-hover:text-primary transition-all">
+                            <span
+                              className={`absolute -top-1  ${language === "EGY" ? "-left-1" : "-right-1"} w-[18px] h-[18px] bg-accent text-[#272b37] text-[11px] rounded-full flex justify-center items-center`}
+                            >
+                              0
+                            </span>
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              strokeWidth={2}
+                              stroke="currentColor"
+                              className="size-8"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                d="M15.75 10.5V6a3.75 3.75 0 1 0-7.5 0v4.5m11.356-1.993 1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 0 1-1.12-1.243l1.264-12A1.125 1.125 0 0 1 5.513 7.5h12.974c.576 0 1.059.435 1.119 1.007ZM8.625 10.5a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm7.5 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z"
+                              />
+                            </svg>
+                          </span>
+                        </button>
+                      </SheetTrigger>
+
+                      <SheetContent side="right">هنا الكارت</SheetContent>
+                    </Sheet> */}
                   </div>
                 </div>
                 <div className="search&offers flex items-center h-[54.2px]">

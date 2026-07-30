@@ -35,7 +35,7 @@ export default function ReviewCard({
           {review.user.name.charAt(0).toUpperCase()}
         </div>
 
-        <div className="flex-1">
+        <div className="flex-1 ">
           <div className="flex justify-between relative">
             <div className="flex justify-center flex-col 2xl:flex-row 2xl:items-center sm:max-2xl:mb-2 mb-1 gap-1 lg:gap-3">
               <h4 className="text-lg font-bold text-[#333]">
@@ -114,7 +114,7 @@ export default function ReviewCard({
             />
           </div>
 
-          <p className="text-textMain leading-8 text-sm">{review.review}</p>
+          <p className="text-textMain leading-8 text-sm  break-all">{review.review}</p>
         </div>
       </div>
     </>

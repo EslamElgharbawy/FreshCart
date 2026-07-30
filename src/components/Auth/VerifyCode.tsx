@@ -19,8 +19,8 @@ export default function VerifyCode() {
 
   const validationSchema = Yup.object({
     resetCode: Yup.string()
-      .required("Verification code is required")
-      .matches(/^\d{6}$/, "Verification code must be 6 digits"),
+      .required(t("validation.verificationCodeRequired"))
+      .matches(/^\d{6}$/, t("validation.verificationCodeMustBe6Digits")),
   });
   const formik = useFormik({
     initialValues: {
@@ -69,11 +69,11 @@ export default function VerifyCode() {
             <InputOTPSlot index={5} />
           </InputOTPGroup>
         </InputOTP>
-         {formik.touched.resetCode && formik.errors.resetCode && (
-        <p className="text-sm text-red-500 mt-4">{formik.errors.resetCode}</p>
-      )}
+        {formik.touched.resetCode && formik.errors.resetCode && (
+          <p className="text-sm text-red-500 mt-4">{formik.errors.resetCode}</p>
+        )}
       </div>
-     
+
       <Button
         type="submit"
         className="w-full py-3 px-7 h-auto rounded-none uppercase text-white font-semibold"

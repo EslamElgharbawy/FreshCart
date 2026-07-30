@@ -65,6 +65,7 @@ const resources = {
         verifyDescription:
           "Enter the 6-digit verification code sent to your email.",
         verifyButton: "Verify Code",
+        passwordResetSuccess: "Password reset successfully",
       },
       forgotPassword: {
         title: "Forgot Password",
@@ -90,6 +91,9 @@ const resources = {
 
         phoneRequired: "Phone number is required",
         invalidPhone: "Invalid Egyptian phone number",
+
+        verificationCodeRequired: "Verification code is required",
+        verificationCodeMustBe6Digits: "Verification code must be 6 digits",
       },
       hero: {
         running: "Running",
@@ -416,6 +420,7 @@ const resources = {
         verifyDescription:
           "أدخل رمز التحقق المكون من 6 أرقام الذي تم إرساله إلى بريدك الإلكتروني.",
         verifyButton: "تحقق من الرمز",
+        passwordResetSuccess: "تم إعادة تعيين كلمة المرور بنجاح",
       },
       validation: {
         nameRequired: "الاسم مطلوب",
@@ -433,6 +438,8 @@ const resources = {
 
         phoneRequired: "رقم الهاتف مطلوب",
         invalidPhone: "رقم الهاتف المصري غير صحيح",
+        verificationCodeRequired: "رمز التحقق مطلوب",
+        verificationCodeMustBe6Digits: "يجب أن يتكون رمز التحقق من 6 أرقام",
       },
       hero: {
         running: "الجري",

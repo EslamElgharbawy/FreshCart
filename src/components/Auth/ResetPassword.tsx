@@ -19,8 +19,8 @@ export default function ResetPassword() {
       .email(t("validation.invalidEmail"))
       .required(t("validation.emailRequired")),
     newPassword: Yup.string()
-      .required("Password is required")
-      .min(6, "Password must be at least 6 characters"),
+      .required(t("validation.passwordRequired"))
+      .min(6, t("validation.passwordMin")),
   });
   const formik = useFormik({
     initialValues: {
@@ -35,7 +35,7 @@ export default function ResetPassword() {
       const result = await dispatch(resetPassword(values));
       toast.dismiss("resetPassword");
       if (resetPassword.fulfilled.match(result)) {
-        toast.success("Password reset successfully");
+        toast.success(t("resetPassword.passwordResetSuccess"));
         dispatch(actions.setAuthMode("SignIn"));
       } else {
         toast.error((result.payload as { message: string }).message);
@@ -84,7 +84,7 @@ export default function ResetPassword() {
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
           />
-           {formik.errors.newPassword && formik.touched.newPassword && (
+          {formik.errors.newPassword && formik.touched.newPassword && (
             <p className="text-sm text-red-500">{formik.errors.newPassword}</p>
           )}
         </Field>
