@@ -1,0 +1,32 @@
+import { Product } from "./products";
+
+export interface CartState {
+  cart: AddToCartResponse | null;
+  loading: boolean;
+  error: string | null;
+}
+
+export interface CartProduct {
+  count: number;
+  _id: string;
+  product: Product;
+  price: number;
+}
+
+export interface CartData {
+  _id: string;
+  cartOwner: string;
+  products: CartProduct[];
+  createdAt: string;
+  updatedAt: string;
+  __v: number;
+  totalCartPrice: number;
+}
+
+export interface AddToCartResponse {
+  status: string;
+  message: string;
+  numOfCartItems: number;
+  cartId: string;
+  data: CartData;
+}

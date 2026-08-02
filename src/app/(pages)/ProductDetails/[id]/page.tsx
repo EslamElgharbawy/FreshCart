@@ -47,6 +47,9 @@ import RatingSummarySkeleton from "@/components/Skeletons/RatingSummarySkeleton"
 import ProductCardSkeleton from "@/components/Skeletons/ProductCardSkeleton";
 import { useTranslation } from "react-i18next";
 import { Review } from "@/Types/reviews";
+import toast from "react-hot-toast";
+import { actions } from "@/Features/AuthDialog.slice";
+import { AddProductToCart } from "@/Features/Cart.slice";
 
 export default function page() {
   const [thumbsSwiper, setThumbsSwiper] = useState<SwiperType | null>(null);
@@ -67,7 +70,7 @@ export default function page() {
   const { reviews, loading: reviewsLoading } = useAppSelector(
     (store) => store.reviewsSlice,
   );
-
+  const { token } = useAppSelector((store) => store.user);
   const socialIcons = [
     {
       id: 1,
@@ -95,6 +98,25 @@ export default function page() {
       className: "hover:bg-[#0073b2] hover:border-[#0073b2]",
     },
   ];
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (!token) {
+      dispatch(actions.openAuthDialog("SignIn"));
+      return;
+    }
+    if (!productDetails?._id) return;
+
+    try {
+      const response = await dispatch(
+        AddProductToCart(productDetails._id),
+      ).unwrap();
+
+      toast.success(response.message);
+    } catch (error: any) {
+      toast.error(error.message || "Something went wrong");
+    }
+  };
 
   useEffect(() => {
     dispatch(getProductDetails(id as string));
@@ -270,7 +292,7 @@ export default function page() {
                     </p>
                   </div>
 
-                  <form>
+                  <form onSubmit={handleSubmit}>
                     <div className="flex sm:max-xl:flex-col 2xl:items-center gap-3 mb-5">
                       <div className="flex 2xl:justify-center items-center text-sm gap-3 w-fit relative">
                         <label
