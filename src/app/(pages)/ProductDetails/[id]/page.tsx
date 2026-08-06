@@ -108,13 +108,11 @@ export default function page() {
     if (!productDetails?._id) return;
 
     try {
-      const response = await dispatch(
-        AddProductToCart(productDetails._id),
-      ).unwrap();
+      await dispatch(AddProductToCart(productDetails._id)).unwrap();
 
-      toast.success(response.message);
+      toast.success(t("cart.productAdded"));
     } catch (error: any) {
-      toast.error(error.message || "Something went wrong");
+      toast.error(error.message || t("common.somethingWentWrong"));
     }
   };
 

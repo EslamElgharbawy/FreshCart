@@ -1,7 +1,7 @@
 import { Product } from "./products";
 
 export interface CartState {
-  cart: AddToCartResponse | null;
+  cart: CartData | null;
   loading: boolean;
   error: string | null;
 }

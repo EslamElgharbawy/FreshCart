@@ -8,7 +8,6 @@ export default function AuthInitializer() {
 
   useEffect(() => {
     const token = localStorage.getItem("token");
-
     if (token) {
       dispatch(VerifyToken(token));
     } else {

@@ -48,6 +48,8 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
+import CartSheetItem from "../CartSheetItem/CartSheetItem";
+import { GetLoggedUserCart } from "@/Features/Cart.slice";
 
 export default function Navbar() {
   const inputRef = useRef<HTMLInputElement | null>(null);
@@ -71,9 +73,11 @@ export default function Navbar() {
 
   const { categories } = useAppSelector((store) => store.categoriesSlice);
 
-  const { user, isLoggedIn, authChecked } = useAppSelector(
+  const { token, user, isLoggedIn, authChecked } = useAppSelector(
     (store) => store.user,
   );
+  console.log(user);
+  const { cart } = useAppSelector((store) => store.CartSlice);
   const sections = [
     { name: "home", path: "/" },
     { name: "shop", path: "/Shop" },
@@ -90,7 +94,11 @@ export default function Navbar() {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, [dispatch]);
-
+  useEffect(() => {
+    if (isLoggedIn) {
+      dispatch(GetLoggedUserCart());
+    }
+  }, [dispatch, isLoggedIn]);
   return (
     <>
       {/* //& Desktop  */}
@@ -446,9 +454,9 @@ export default function Navbar() {
                         className="bg-white !max-w-[480px]"
                         overlayClassName="bg-black/20"
                       >
-                        <SheetHeader className="flex justify-center">
+                        <SheetHeader className="flex justify-center !px-5 !pt-5 !pb-7">
                           <SheetTitle className="text-lg font-medium w-fit">
-                            Shopping Cart <span>()</span>
+                            Shopping Cart <span>({cart?.products.length})</span>
                           </SheetTitle>
                           <SheetClose asChild>
                             <Button
@@ -463,12 +471,18 @@ export default function Navbar() {
                             </Button>
                           </SheetClose>
                         </SheetHeader>
+                        <div className="overflow-y-scroll">
+                          {cart?.products.map((item) => {
+                            return <CartSheetItem key={item._id} item={item} />;
+                          })}
+                        </div>
                         <SheetFooter className="text-sm gap-0">
                           <div className="flex justify-between items-center mb-3">
                             <p>
-                              Subtotal (<span></span> item)
+                              Subtotal (<span>{cart?.products.length}</span>{" "}
+                              item)
                             </p>
-                            <p>${}</p>
+                            <p>${new Intl.NumberFormat("en-US").format(cart?.totalCartPrice || 0)}</p>
                           </div>
                           <Button
                             type="submit"

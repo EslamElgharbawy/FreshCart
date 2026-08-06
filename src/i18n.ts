@@ -245,6 +245,7 @@ const resources = {
       common: {
         reviews: "Reviews",
         at: "at",
+        somethingWentWrong: " Something went wrong",
       },
       productDetails: {
         category: "Category",
@@ -309,6 +310,9 @@ const resources = {
         delete: "Delete",
         reviewDeletedSuccess: "Review deleted successfully.",
         reviewDeletedError: "Failed to delete review.",
+      },
+      cart: {
+        productAdded: "Product added to cart successfully",
       },
       footer: {
         supportText: "Got Question? Call us 24/7",
@@ -594,6 +598,7 @@ const resources = {
       common: {
         reviews: "تقييمات",
         at: "في",
+        somethingWentWrong: " حدث خطأ ما",
       },
       productDetails: {
         category: "الفئة",
@@ -660,7 +665,9 @@ const resources = {
         reviewDeletedSuccess: "تم حذف التقييم بنجاح.",
         reviewDeletedError: "فشل في حذف التقييم.",
       },
-
+      cart: {
+        productAdded: "تمت إضافة المنتج إلى سلة التسوق بنجاح",
+      },
       footer: {
         supportText: "هل لديك سؤال؟ اتصل بنا 24/7",
         description: "سجل الآن للحصول على تحديثات حول العروض والقسائم.",
