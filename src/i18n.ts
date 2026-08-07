@@ -313,6 +313,8 @@ const resources = {
       },
       cart: {
         productAdded: "Product added to cart successfully",
+        itemRemovedFromCart: "Item removed from cart successfully",
+        failedToRemoveProduct: "Failed to remove product from cart",
       },
       footer: {
         supportText: "Got Question? Call us 24/7",
@@ -667,6 +669,8 @@ const resources = {
       },
       cart: {
         productAdded: "تمت إضافة المنتج إلى سلة التسوق بنجاح",
+        itemRemovedFromCart: "تم حذف المنتج من سلة التسوق بنجاح",
+        failedToRemoveProduct: "فشل في حذف المنتج من سلة التسوق",
       },
       footer: {
         supportText: "هل لديك سؤال؟ اتصل بنا 24/7",

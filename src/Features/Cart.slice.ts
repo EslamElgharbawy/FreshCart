@@ -34,10 +34,10 @@ export const GetLoggedUserCart = createAsyncThunk<
   void,
   { state: RootState }
 >("cart/GetLoggedUserCart", async (_, { getState }) => {
-   console.log("GetLoggedUserCart Called");
+  console.log("GetLoggedUserCart Called");
 
-    const token = getState().user.token;
-    console.log("Token:", token);
+  const token = getState().user.token;
+  console.log("Token:", token);
   const { data } = await axios.get(
     "https://ecommerce.routemisr.com/api/v2/cart",
     {
@@ -48,6 +48,33 @@ export const GetLoggedUserCart = createAsyncThunk<
   );
   return data.data;
 });
+
+export const RemoveProductFromCart = createAsyncThunk<
+  AddToCartResponse,
+  string,
+  { state: RootState; rejectValue: string }
+>(
+  "cart/RemoveProductFromCart",
+  async (productId, { getState, rejectWithValue }) => {
+    const token = getState().user.token;
+    try {
+      const { data } = await axios.delete(
+        `https://ecommerce.routemisr.com/api/v2/cart/${productId}`,
+        {
+          headers: {
+            token,
+          },
+        },
+      );
+
+      return data;
+    } catch (error: any) {
+      return rejectWithValue(
+        error.response?.data?.message || "Something went wrong",
+      );
+    }
+  },
+);
 const CartSlice = createSlice({
   name: "cart",
   initialState,
@@ -73,11 +100,26 @@ const CartSlice = createSlice({
       state.error = null;
     });
     builder.addCase(GetLoggedUserCart.fulfilled, (state, action) => {
-       console.log("Cart Loaded", action.payload);
+      console.log("Cart Loaded", action.payload);
       state.loading = false;
       state.cart = action.payload;
     });
     builder.addCase(GetLoggedUserCart.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.error.message || "Something went wrong";
+    });
+
+    // * Remove Product from Cart
+    builder.addCase(RemoveProductFromCart.pending, (state) => {
+      state.loading = true;
+      state.error = null;
+    });
+    builder.addCase(RemoveProductFromCart.fulfilled, (state, action) => {
+      console.log("Product Removed", action.payload);
+      state.loading = false;
+      state.cart = action.payload.data;
+    });
+    builder.addCase(RemoveProductFromCart.rejected, (state, action) => {
       state.loading = false;
       state.error = action.error.message || "Something went wrong";
     });

@@ -60,6 +60,7 @@ export default function Navbar() {
   const [currencyOpen, setCurrencyOpen] = useState(false);
   const [languageOpen, setLanguageOpen] = useState(false);
   const [active, setactive] = useState("home");
+  const [openSheet, setOpenSheet] = useState(false);
   const { t, i18n } = useTranslation();
   const dispatch = useAppDispatch();
   const pathname = usePathname();
@@ -407,7 +408,7 @@ export default function Navbar() {
                       </span>
                     </div>
                     <div className="w-[1px] h-10 bg-[#EEEEEE1A] mx-5"></div>
-                    <Sheet>
+                    <Sheet open={openSheet} onOpenChange={setOpenSheet}>
                       <SheetTrigger
                         asChild
                         className="bg-transparent border-none"
@@ -451,8 +452,12 @@ export default function Navbar() {
                         </Button>
                       </SheetTrigger>
                       <SheetContent
-                        className="bg-white !max-w-[480px]"
-                        overlayClassName="bg-black/20"
+                        side={i18n.language === "ar" ? "left" : "right"}
+                        className={`bg-white !max-w-[480px] data-[state=open]:animate-in data-[state=closed]:animate-out ${i18n.language === "ar" ? " data-[state=open]:slide-in-from-left data-[state=closed]:slide-out-to-left" : " data-[state=open]:slide-in-from-right data-[state=closed]:slide-out-to-right"}  
+                       !duration-300 
+                       ease-in-out 
+                       transition-all 
+                        `}
                       >
                         <SheetHeader className="flex justify-center !px-5 !pt-5 !pb-7">
                           <SheetTitle className="text-lg font-medium w-fit">
@@ -465,15 +470,25 @@ export default function Navbar() {
                 group-data-[state=closed]:opacity-0 
                 group-data-[state=closed]:pointer-events-none
                 transition-opacity duration-300  
-                ${i18n.language === "ar" ? "" : "right-4"}`}
+                ${i18n.language === "ar" ? "left-4" : "right-4"}`}
                             >
                               <XIcon className="size-7 text-black " />
                             </Button>
                           </SheetClose>
                         </SheetHeader>
-                        <div className="overflow-y-scroll">
+                        <div className="overflow-y-auto">
                           {cart?.products.map((item) => {
-                            return <CartSheetItem key={item._id} item={item} />;
+                            return (
+                              <div
+                                key={item._id}
+                                className="border-b-[1px] border-[#ecf0f4] last:border-0 mb-5"
+                              >
+                                <CartSheetItem
+                                  item={item}
+                                  onNavigate={() => setOpenSheet(false)}
+                                />
+                              </div>
+                            );
                           })}
                         </div>
                         <SheetFooter className="text-sm gap-0">
@@ -482,7 +497,12 @@ export default function Navbar() {
                               Subtotal (<span>{cart?.products.length}</span>{" "}
                               item)
                             </p>
-                            <p>${new Intl.NumberFormat("en-US").format(cart?.totalCartPrice || 0)}</p>
+                            <p>
+                              $
+                              {new Intl.NumberFormat("en-US").format(
+                                cart?.totalCartPrice || 0,
+                              )}
+                            </p>
                           </div>
                           <Button
                             type="submit"

@@ -2,38 +2,58 @@ import Image from "next/image";
 import { Button } from "../ui/button";
 import { Trash2 } from "lucide-react";
 import { CartProduct } from "@/Types/cart";
+import Link from "next/link";
+import { RemoveProductFromCart } from "@/Features/Cart.slice";
+import { useAppDispatch } from "@/hooks/store.hooks";
+import toast from "react-hot-toast";
+import { useTranslation } from "react-i18next";
 interface CartSheetItemProps {
   item: CartProduct;
+  onNavigate: () => void;
 }
-export default function CartSheetItem({ item }: CartSheetItemProps) {
+export default function CartSheetItem({
+  item,
+  onNavigate,
+}: CartSheetItemProps) {
+  const dispatsh = useAppDispatch();
+  const { t } = useTranslation();
   return (
     <>
-      <div className=" px-8">
-        <div className="flex justify-between gap-4 border-b-[1px] mb-5 pb-5">
+      <div className="px-8">
+        <div className="flex justify-between gap-4  pb-5">
           {/* Left */}
           <div className="flex gap-4">
-            <Image
-              src={item.product.imageCover}
-              alt={item.product.title}
-              width={90}
-              height={90}
-              className="object-cover max-w-[90px]"
-            />
+            <Link
+              onClick={onNavigate}
+              href={`/ProductDetails/${item.product._id}`}
+            >
+              <Image
+                src={item.product.imageCover}
+                alt={item.product.title}
+                width={90}
+                height={90}
+                className="object-cover max-w-[90px]"
+              />
+            </Link>
 
-            <div className="flex flex-col pl-6">
-              <h3 className="max-w-[220px] text-base font-medium leading-6">
+            <div className="flex flex-col pl-6 mt-2">
+              <Link
+                onClick={onNavigate}
+                href={`/ProductDetails/${item.product._id}`}
+                className="max-w-[220px] text-sm font-medium hover:text-primary transition-all duration-300"
+              >
                 {item.product.title}
-              </h3>
+              </Link>
 
-              <p className="mt-2 text-sm text-muted-foreground">
+              <p className="mt-2 text-xs text-muted-foreground text-[#7c818b]">
                 Vendor:{" "}
-                <span className="text-foreground">
+                <span className="text-[#1d2128]">
                   {item.product.brand.name}
                 </span>
               </p>
 
-              <span className="mt-3 text-lg font-semibold">
-                ${item.price.toFixed(2)}
+              <span className="mt-3 text-sm font-semibold">
+                ${new Intl.NumberFormat("en-US").format(item.price)}
               </span>
 
               {/* Quantity */}
@@ -41,7 +61,7 @@ export default function CartSheetItem({ item }: CartSheetItemProps) {
                 <Button
                   variant="outline"
                   size="icon"
-                  className="h-9 w-9 rounded-none"
+                  className="h-6 w-6 rounded-none text-lg bg-transparent text-[#7c818b] border-2 border-[#dadfe3] hover:border-[#1d2128] hover:text-[#1d2128] transition-all duration-300"
                 >
                   -
                 </Button>
@@ -51,7 +71,7 @@ export default function CartSheetItem({ item }: CartSheetItemProps) {
                 <Button
                   variant="outline"
                   size="icon"
-                  className="h-9 w-9 rounded-none"
+                  className="h-6 w-6 rounded-none text-lg bg-transparent text-[#7c818b] border-2 border-[#dadfe3] hover:border-[#1d2128] hover:text-[#1d2128] transition-all duration-300"
                 >
                   +
                 </Button>
@@ -63,8 +83,18 @@ export default function CartSheetItem({ item }: CartSheetItemProps) {
           <div className="flex flex-col justify-end ">
             <Button
               variant="ghost"
+              onClick={async () => {
+                const result = await dispatsh(
+                  RemoveProductFromCart(item.product._id),
+                );
+                if (RemoveProductFromCart.fulfilled.match(result)) {
+                  toast.success(t("cart.itemRemovedFromCart"));
+                } else if (RemoveProductFromCart.rejected.match(result)) {
+                  toast.error(result.payload ?? t("cart.failedToRemoveProduct"));
+                }
+              }}
               size="icon"
-              className="self-center text-muted-foreground hover:text-destructive"
+              className="self-center text-[#7c818b] hover:text-destructive"
             >
               <Trash2 className="size-5" />
             </Button>
