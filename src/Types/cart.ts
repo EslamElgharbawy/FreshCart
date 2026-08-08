@@ -30,3 +30,8 @@ export interface AddToCartResponse {
   cartId: string;
   data: CartData;
 }
+
+export interface UpdateCartQuantityPayload {
+  productId: string;
+  count: number;
+}

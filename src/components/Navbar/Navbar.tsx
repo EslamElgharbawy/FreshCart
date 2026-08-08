@@ -39,6 +39,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { usePathname } from "next/navigation";
 import { actions } from "@/Features/AuthDialog.slice";
 import { getCategories } from "@/Features/Categoreis.slice";
+import EmptyCart from "../../assets/images/empty-bag.svg";
 import {
   Sheet,
   SheetClose,
@@ -432,7 +433,7 @@ export default function Navbar() {
                             <span
                               className={`absolute -top-1  ${language === "EGY" ? "-left-1" : "-right-1"} w-[18px] h-[18px] bg-accent text-[#272b37] text-[11px] rounded-full flex justify-center items-center`}
                             >
-                              0
+                              {cart?.products.length}
                             </span>
                             <svg
                               xmlns="http://www.w3.org/2000/svg"
@@ -453,15 +454,21 @@ export default function Navbar() {
                       </SheetTrigger>
                       <SheetContent
                         side={i18n.language === "ar" ? "left" : "right"}
-                        className={`bg-white !max-w-[480px] data-[state=open]:animate-in data-[state=closed]:animate-out ${i18n.language === "ar" ? " data-[state=open]:slide-in-from-left data-[state=closed]:slide-out-to-left" : " data-[state=open]:slide-in-from-right data-[state=closed]:slide-out-to-right"}  
+                        className={`bg-white !max-w-[480px] data-[state=open]:animate-in data-[state=closed]:animate-out sm:max-lg:data-[side=right]:!w-[85%] ${i18n.language === "ar" ? " data-[state=open]:slide-in-from-left data-[state=closed]:slide-out-to-left" : " data-[state=open]:slide-in-from-right data-[state=closed]:slide-out-to-right"}  
                        !duration-300 
                        ease-in-out 
                        transition-all 
                         `}
+                        overlayClassName="bg-black/20"
                       >
-                        <SheetHeader className="flex justify-center !px-5 !pt-5 !pb-7">
+                        <SheetHeader className="flex justify-center !px-5 !pt-5 !pb-7 z-20">
                           <SheetTitle className="text-lg font-medium w-fit">
-                            Shopping Cart <span>({cart?.products.length})</span>
+                            {t("cart.shoppingCart")}{" "}
+                            <span>
+                              {cart?.products.length === 0
+                                ? ""
+                                : `(${cart?.products.length})`}
+                            </span>
                           </SheetTitle>
                           <SheetClose asChild>
                             <Button
@@ -469,54 +476,72 @@ export default function Navbar() {
                               className={`absolute top-3 xl:!w-[40px] xl:!h-[40px]
                 group-data-[state=closed]:opacity-0 
                 group-data-[state=closed]:pointer-events-none
-                transition-opacity duration-300  
+                transition-opacity duration-300  sm:max-xl:mt-1
                 ${i18n.language === "ar" ? "left-4" : "right-4"}`}
                             >
                               <XIcon className="size-7 text-black " />
                             </Button>
                           </SheetClose>
                         </SheetHeader>
-                        <div className="overflow-y-auto">
-                          {cart?.products.map((item) => {
-                            return (
-                              <div
-                                key={item._id}
-                                className="border-b-[1px] border-[#ecf0f4] last:border-0 mb-5"
-                              >
-                                <CartSheetItem
-                                  item={item}
-                                  onNavigate={() => setOpenSheet(false)}
-                                />
+                        {cart?.products.length === 0 ? (
+                          <>
+                            <div className="flex flex-col justify-center items-center flex-1 text-[#7c818b] relative -top-[70]">
+                              <Image
+                                src={EmptyCart}
+                                alt="Empty Cart"
+                                width={100}
+                                height={100}
+                                className="w-[40%] opacity-25 mb-16"
+                              />
+                              {t("cart.emptyCart")}
+                            </div>
+                          </>
+                        ) : (
+                          <>
+                            <div className="overflow-y-auto">
+                              {cart?.products.map((item) => {
+                                return (
+                                  <div
+                                    key={item._id}
+                                    className="border-b-[1px] border-[#ecf0f4] last:border-0 mb-5"
+                                  >
+                                    <CartSheetItem
+                                      item={item}
+                                      onNavigate={() => setOpenSheet(false)}
+                                    />
+                                  </div>
+                                );
+                              })}
+                            </div>
+                            <SheetFooter className="text-sm gap-0">
+                              <div className="flex justify-between items-center mb-3">
+                                <p>
+                                  {t("cart.subtotal")} (
+                                  <span>{cart?.products.length}</span>{" "}
+                                  {t("cart.items")})
+                                </p>
+                                <p>
+                                  {currencySymbol[currency]}
+                                  {new Intl.NumberFormat("en-US").format(
+                                    cart?.totalCartPrice || 0,
+                                  )}
+                                </p>
                               </div>
-                            );
-                          })}
-                        </div>
-                        <SheetFooter className="text-sm gap-0">
-                          <div className="flex justify-between items-center mb-3">
-                            <p>
-                              Subtotal (<span>{cart?.products.length}</span>{" "}
-                              item)
-                            </p>
-                            <p>
-                              $
-                              {new Intl.NumberFormat("en-US").format(
-                                cart?.totalCartPrice || 0,
-                              )}
-                            </p>
-                          </div>
-                          <Button
-                            type="submit"
-                            className="text-sm !leading-[60px] text-white font-medium px-7 h-auto rounded-sm w-full"
-                          >
-                            Checkout
-                          </Button>
-                          <Button
-                            variant="outline"
-                            className="capitalize mx-auto mt-4 bg-transparent border-0 border-b border-b-current rounded-none px-0 h-auto w-fit justify-center"
-                          >
-                            View cart
-                          </Button>
-                        </SheetFooter>
+                              <Button
+                                type="submit"
+                                className="text-sm !leading-[60px] text-white font-medium px-7 h-auto rounded-sm w-full"
+                              >
+                                {t("cart.checkout")}
+                              </Button>
+                              <Button
+                                variant="outline"
+                                className="capitalize mx-auto mt-4 bg-transparent border-0 border-b border-b-current rounded-none px-0 h-auto w-fit justify-center"
+                              >
+                                {t("cart.viewCart")}
+                              </Button>
+                            </SheetFooter>
+                          </>
+                        )}
                       </SheetContent>
                     </Sheet>
                   </div>
@@ -882,7 +907,7 @@ export default function Navbar() {
                         onClick={() =>
                           dispatch(actions.openAuthDialog("SignIn"))
                         }
-                        className="hover:text-[#fe4407] transition-all duration-300"
+                        className="2xl:hover:text-[#fe4407] transition-all duration-300"
                       >
                         <User className="w-[26px] h-[26px] lg:w-[28px] lg:h-[28px] xl:w-[34px] xl:h-[34px]" />
                       </button>
@@ -891,7 +916,7 @@ export default function Navbar() {
 
                   <a
                     href="#"
-                    className="relative hover:text-primary transition-all duration-300 "
+                    className="relative 2xl:hover:text-primary transition-all duration-300 "
                   >
                     <span
                       className={`absolute -top-1  ${language === "EGY" ? "-left-2" : "-right-2"} w-[16px] h-[16px] xl:w-[18px] xl:h-[18px] bg-accent text-[#272b37] text-[10px] rounded-full flex justify-center items-center`}
@@ -901,14 +926,14 @@ export default function Navbar() {
                     <Heart className="w-[24px] h-[24px] lg:w-[26px] lg:h-[26px] xl:w-[32px] xl:h-[32px]" />
                   </a>
 
-                  <a
-                    href="#"
-                    className="relative mb-1 hover:text-primary transition-all duration-300"
+                  <button
+                    onClick={() => setOpenSheet(true)}
+                    className="relative mb-1 2xl:hover:text-primary transition-all duration-300"
                   >
                     <span
                       className={`absolute -top-1  ${language === "EGY" ? "-left-1" : "-right-1"} w-[16px] h-[16px] xl:w-[18px] xl:h-[18px] bg-accent text-[#272b37] text-[10px] rounded-full flex justify-center items-center`}
                     >
-                      0
+                      {cart?.products.length}
                     </span>
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -924,7 +949,7 @@ export default function Navbar() {
                         d="M15.75 10.5V6a3.75 3.75 0 1 0-7.5 0v4.5m11.356-1.993 1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 0 1-1.12-1.243l1.264-12A1.125 1.125 0 0 1 5.513 7.5h12.974c.576 0 1.059.435 1.119 1.007ZM8.625 10.5a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm7.5 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z"
                       />
                     </svg>
-                  </a>
+                  </button>
                 </div>
               </div>
             </div>

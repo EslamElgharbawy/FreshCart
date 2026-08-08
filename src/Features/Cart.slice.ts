@@ -1,5 +1,10 @@
 import { RootState } from "@/Store/Store";
-import { AddToCartResponse, CartData, CartState } from "@/Types/cart";
+import {
+  AddToCartResponse,
+  CartData,
+  CartState,
+  UpdateCartQuantityPayload,
+} from "@/Types/cart";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 
@@ -75,6 +80,35 @@ export const RemoveProductFromCart = createAsyncThunk<
     }
   },
 );
+export const UpdateCartProductQuantity = createAsyncThunk<
+  AddToCartResponse,
+  UpdateCartQuantityPayload,
+  { state: RootState; rejectValue: string }
+>(
+  "cart/UpdateCartProductQuantity",
+  async ({ productId, count }, { getState, rejectWithValue }) => {
+    const token = getState().user.token;
+    try {
+      const { data } = await axios.put(
+        `https://ecommerce.routemisr.com/api/v2/cart/${productId}`,
+        {
+          count,
+        },
+        {
+          headers: {
+            token,
+          },
+        },
+      );
+
+      return data;
+    } catch (error: any) {
+      return rejectWithValue(
+        error.response?.data?.message || "Something went wrong",
+      );
+    }
+  },
+);
 const CartSlice = createSlice({
   name: "cart",
   initialState,
@@ -120,6 +154,20 @@ const CartSlice = createSlice({
       state.cart = action.payload.data;
     });
     builder.addCase(RemoveProductFromCart.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.error.message || "Something went wrong";
+    });
+
+    // * UpdateCartProductQuantity
+    builder.addCase(UpdateCartProductQuantity.pending, (state) => {
+      state.loading = true;
+      state.error = null;
+    });
+    builder.addCase(UpdateCartProductQuantity.fulfilled, (state, action) => {
+      state.loading = false;
+      state.cart = action.payload.data;
+    });
+    builder.addCase(UpdateCartProductQuantity.rejected, (state, action) => {
       state.loading = false;
       state.error = action.error.message || "Something went wrong";
     });

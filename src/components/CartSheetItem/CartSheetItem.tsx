@@ -3,10 +3,14 @@ import { Button } from "../ui/button";
 import { Trash2 } from "lucide-react";
 import { CartProduct } from "@/Types/cart";
 import Link from "next/link";
-import { RemoveProductFromCart } from "@/Features/Cart.slice";
+import {
+  RemoveProductFromCart,
+  UpdateCartProductQuantity,
+} from "@/Features/Cart.slice";
 import { useAppDispatch } from "@/hooks/store.hooks";
 import toast from "react-hot-toast";
 import { useTranslation } from "react-i18next";
+import i18n from "@/i18n";
 interface CartSheetItemProps {
   item: CartProduct;
   onNavigate: () => void;
@@ -15,14 +19,14 @@ export default function CartSheetItem({
   item,
   onNavigate,
 }: CartSheetItemProps) {
-  const dispatsh = useAppDispatch();
+  const dispatch = useAppDispatch();
   const { t } = useTranslation();
   return (
     <>
-      <div className="px-8">
-        <div className="flex justify-between gap-4  pb-5">
+      <div className="px-5 xl:px-8">
+        <div className="flex justify-between gap-4 pb-5">
           {/* Left */}
-          <div className="flex gap-4">
+          <div className="flex xl:gap-4">
             <Link
               onClick={onNavigate}
               href={`/ProductDetails/${item.product._id}`}
@@ -36,7 +40,7 @@ export default function CartSheetItem({
               />
             </Link>
 
-            <div className="flex flex-col pl-6 mt-2">
+            <div className={`flex flex-col ${i18n.language === "ar" ? " pr-6" : " pl-6"} mt-2`}>
               <Link
                 onClick={onNavigate}
                 href={`/ProductDetails/${item.product._id}`}
@@ -46,7 +50,7 @@ export default function CartSheetItem({
               </Link>
 
               <p className="mt-2 text-xs text-muted-foreground text-[#7c818b]">
-                Vendor:{" "}
+                {t("cart.vendor")}:{" "}
                 <span className="text-[#1d2128]">
                   {item.product.brand.name}
                 </span>
@@ -60,18 +64,38 @@ export default function CartSheetItem({
               <div className="mt-4 flex items-center gap-4">
                 <Button
                   variant="outline"
+                  disabled={item.count === 1}
+                  onClick={() => {
+                    if (item.count === 1) return;
+                    dispatch(
+                      UpdateCartProductQuantity({
+                        productId: item.product._id,
+                        count: item.count - 1,
+                      }),
+                    );
+                  }}
                   size="icon"
-                  className="h-6 w-6 rounded-none text-lg bg-transparent text-[#7c818b] border-2 border-[#dadfe3] hover:border-[#1d2128] hover:text-[#1d2128] transition-all duration-300"
+                  className="h-6 w-6 rounded-none text-lg bg-transparent text-[#7c818b] border-2 border-[#dadfe3] 2xl:hover:border-[#1d2128] 2xl:hover:text-[#1d2128] transition-all duration-300"
                 >
                   -
                 </Button>
 
-                <span className="w-5 text-center text-base font-medium">1</span>
+                <span className="w-5 text-center text-base font-medium">
+                  {item.count}
+                </span>
 
                 <Button
+                  onClick={() => {
+                    dispatch(
+                      UpdateCartProductQuantity({
+                        productId: item.product._id,
+                        count: item.count + 1,
+                      }),
+                    );
+                  }}
                   variant="outline"
                   size="icon"
-                  className="h-6 w-6 rounded-none text-lg bg-transparent text-[#7c818b] border-2 border-[#dadfe3] hover:border-[#1d2128] hover:text-[#1d2128] transition-all duration-300"
+                  className="h-6 w-6 rounded-none text-lg bg-transparent text-[#7c818b] border-2 border-[#dadfe3] 2xl:hover:border-[#1d2128] 2xl:hover:text-[#1d2128] transition-all duration-300"
                 >
                   +
                 </Button>
@@ -84,13 +108,15 @@ export default function CartSheetItem({
             <Button
               variant="ghost"
               onClick={async () => {
-                const result = await dispatsh(
+                const result = await dispatch(
                   RemoveProductFromCart(item.product._id),
                 );
                 if (RemoveProductFromCart.fulfilled.match(result)) {
                   toast.success(t("cart.itemRemovedFromCart"));
                 } else if (RemoveProductFromCart.rejected.match(result)) {
-                  toast.error(result.payload ?? t("cart.failedToRemoveProduct"));
+                  toast.error(
+                    result.payload ?? t("cart.failedToRemoveProduct"),
+                  );
                 }
               }}
               size="icon"
