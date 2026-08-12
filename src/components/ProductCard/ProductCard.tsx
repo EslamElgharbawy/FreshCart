@@ -1,7 +1,11 @@
+import { actions } from "@/Features/AuthDialog.slice";
+import { AddProductToCart } from "@/Features/Cart.slice";
+import { useAppDispatch, useAppSelector } from "@/hooks/store.hooks";
 import { Product } from "@/Types/products";
 import { Heart, Scale } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import toast from "react-hot-toast";
 import { useTranslation } from "react-i18next";
 
 export default function ProductCard({
@@ -11,6 +15,24 @@ export default function ProductCard({
   images,
   _id,
 }: Product) {
+  const { token } = useAppSelector((store) => store.user);
+  const dispatch = useAppDispatch();
+
+  const handleSubmit = async () => {
+    if (!token) {
+      dispatch(actions.openAuthDialog("SignIn"));
+      return;
+    }
+    if (!_id) return;
+
+    try {
+      await dispatch(AddProductToCart(_id)).unwrap();
+
+      toast.success(t("cart.productAdded"));
+    } catch (error: any) {
+      toast.error(error.message || t("common.somethingWentWrong"));
+    }
+  };
   const { t } = useTranslation();
   return (
     <>
@@ -105,11 +127,11 @@ leading-4
               ${price}
             </span>
 
-            <a
-              href="#"
+            <button
+              onClick={handleSubmit}
               className="
         2xl:absolute inset-0
-    flex items-center justify-center
+    2xl:flex items-center justify-center 
     text-primary sm:max-2xl:opacity-80 font-semibold uppercase
     2xl:translate-y-3 2xl:opacity-0
     transition-all duration-300
@@ -137,7 +159,7 @@ leading-4
               >
                 {t("products.addToCart")}
               </span>
-            </a>
+            </button>
           </div>
         </div>
       </div>
