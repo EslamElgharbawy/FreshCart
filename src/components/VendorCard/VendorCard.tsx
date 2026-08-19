@@ -39,10 +39,10 @@ export default function VendorCard() {
         <BrandCardSkeleton />
       ) : (
         <>
-        {/* //* Mobile */}
+          {/* //* Mobile */}
           <div className="2xl:hidden">
             <Swiper
-            dir="ltr"
+              dir="ltr"
               spaceBetween={10}
               breakpoints={{
                 0: { slidesPerView: 1 },
@@ -55,7 +55,10 @@ export default function VendorCard() {
               {brands.map((brand) => {
                 const vendorProducts = brand.products.slice(0, 3);
                 return (
-                  <SwiperSlide key={brand._id} className="xl:!w-[250px] xl:!mr-3">
+                  <SwiperSlide
+                    key={brand._id}
+                    className="xl:!w-[250px] xl:!mr-3"
+                  >
                     <div key={brand._id} className="flex flex-col xl:gap-5">
                       <div className="my-5 flex items-center justify-center gap-5">
                         <Image
@@ -63,6 +66,7 @@ export default function VendorCard() {
                           width={100}
                           height={100}
                           alt="Vendor"
+                          className="!size-auto"
                         />
                         <div className="w-full">
                           <a
@@ -122,9 +126,7 @@ export default function VendorCard() {
             </Swiper>
           </div>
 
-
-        {/* //* Desktop */}
-
+          {/* //* Desktop */}
           {brands.map((brand) => {
             const vendorProducts = brand.products.slice(0, 3);
             return (

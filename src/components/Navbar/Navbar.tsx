@@ -78,7 +78,6 @@ export default function Navbar() {
   const { token, user, isLoggedIn, authChecked } = useAppSelector(
     (store) => store.user,
   );
-  console.log(user);
   const { cart } = useAppSelector((store) => store.CartSlice);
   const sections = [
     { name: "home", path: "/" },

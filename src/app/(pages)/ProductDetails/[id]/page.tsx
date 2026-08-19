@@ -49,7 +49,10 @@ import { useTranslation } from "react-i18next";
 import { Review } from "@/Types/reviews";
 import toast from "react-hot-toast";
 import { actions } from "@/Features/AuthDialog.slice";
-import { AddProductToCart } from "@/Features/Cart.slice";
+import {
+  AddProductToCart,
+  UpdateCartProductQuantity,
+} from "@/Features/Cart.slice";
 
 export default function page() {
   const [thumbsSwiper, setThumbsSwiper] = useState<SwiperType | null>(null);
@@ -109,7 +112,14 @@ export default function page() {
 
     try {
       await dispatch(AddProductToCart(productDetails._id)).unwrap();
-
+      if (counter > 1) {
+        await dispatch(
+          UpdateCartProductQuantity({
+            productId: productDetails._id,
+            count: counter,
+          }),
+        ).unwrap();
+      }
       toast.success(t("cart.productAdded"));
     } catch (error: any) {
       toast.error(error.message || t("common.somethingWentWrong"));

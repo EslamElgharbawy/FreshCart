@@ -14,6 +14,7 @@ const initialState: CartState = {
   error: null,
 };
 
+// ^ Add Product to Cart
 export const AddProductToCart = createAsyncThunk<
   CartData,
   string,
@@ -34,13 +35,12 @@ export const AddProductToCart = createAsyncThunk<
   return data.data;
 });
 
+// ^ Get Logged User Cart
 export const GetLoggedUserCart = createAsyncThunk<
   CartData,
   void,
   { state: RootState }
 >("cart/GetLoggedUserCart", async (_, { getState }) => {
-  console.log("GetLoggedUserCart Called");
-
   const token = getState().user.token;
   console.log("Token:", token);
   const { data } = await axios.get(
@@ -54,6 +54,7 @@ export const GetLoggedUserCart = createAsyncThunk<
   return data.data;
 });
 
+// ^ RemoveProductFromCart
 export const RemoveProductFromCart = createAsyncThunk<
   AddToCartResponse,
   string,
@@ -80,6 +81,8 @@ export const RemoveProductFromCart = createAsyncThunk<
     }
   },
 );
+
+// ^ UpdateCartProductQuantity
 export const UpdateCartProductQuantity = createAsyncThunk<
   AddToCartResponse,
   UpdateCartQuantityPayload,
@@ -109,6 +112,7 @@ export const UpdateCartProductQuantity = createAsyncThunk<
     }
   },
 );
+
 const CartSlice = createSlice({
   name: "cart",
   initialState,
@@ -134,7 +138,6 @@ const CartSlice = createSlice({
       state.error = null;
     });
     builder.addCase(GetLoggedUserCart.fulfilled, (state, action) => {
-      console.log("Cart Loaded", action.payload);
       state.loading = false;
       state.cart = action.payload;
     });
@@ -149,7 +152,6 @@ const CartSlice = createSlice({
       state.error = null;
     });
     builder.addCase(RemoveProductFromCart.fulfilled, (state, action) => {
-      console.log("Product Removed", action.payload);
       state.loading = false;
       state.cart = action.payload.data;
     });
