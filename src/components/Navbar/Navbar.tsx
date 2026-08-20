@@ -532,12 +532,13 @@ export default function Navbar() {
                               >
                                 {t("cart.checkout")}
                               </Button>
-                              <Button
-                                variant="outline"
-                                className="capitalize mx-auto mt-4 bg-transparent border-0 border-b border-b-current rounded-none px-0 h-auto w-fit justify-center"
+                              <Link
+                                href={"/Cart"}
+                                onClick={() => setOpenSheet(false)}
+                                className="capitalize mx-auto font-medium mt-4 bg-transparent border-0 border-b border-b-current rounded-none px-0 h-auto w-fit justify-center"
                               >
                                 {t("cart.viewCart")}
-                              </Button>
+                              </Link>
                             </SheetFooter>
                           </>
                         )}
