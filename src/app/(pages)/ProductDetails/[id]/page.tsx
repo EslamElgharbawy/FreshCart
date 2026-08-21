@@ -53,14 +53,15 @@ import {
   AddProductToCart,
   UpdateCartProductQuantity,
 } from "@/Features/Cart.slice";
+import QuantityCounter from "@/components/QuantityCounter/QuantityCounter";
 
 export default function page() {
   const [thumbsSwiper, setThumbsSwiper] = useState<SwiperType | null>(null);
   const [openReviewDialog, setOpenReviewDialog] = useState(false);
   const [selectedReview, setSelectedReview] = useState<Review | null>(null);
   const [open, setOpen] = useState(false);
+    const [counter, setCounter] = useState(1);
   const [index, setIndex] = useState(0);
-  const [counter, setCounter] = useState(1);
   const dispatch = useAppDispatch();
   const { id } = useParams();
   const { t, i18n } = useTranslation();
@@ -309,39 +310,10 @@ export default function page() {
                         >
                           {t("productDetails.quantity")} :
                         </label>
-                        <Input
-                          id="quantity"
-                          type="text"
-                          readOnly
+                        <QuantityCounter
                           value={counter}
-                          step={1}
-                          min={1}
-                          className="text-textMain border-[1px] border-border rounded w-[140px] h-[44px] !py-0 !px-3"
+                          onChange={setCounter}
                         />
-                        <div
-                          className={`absolute ${i18n.language === "en" ? "right-3 " : " left-3 "} top-1/2 -translate-y-1/2 flex justify-center items-center gap-2`}
-                        >
-                          <Button
-                            onClick={() => {
-                              if (counter > 1) {
-                                setCounter(counter - 1);
-                              }
-                            }}
-                            type="button"
-                            className="!bg-[#eee] rounded-full text-[#777] !font-normal text-lg w-6 h-6 border-none"
-                          >
-                            -
-                          </Button>
-                          <Button
-                            onClick={() => {
-                              setCounter(counter + 1);
-                            }}
-                            type="button"
-                            className="!bg-[#eee] rounded-full text-[#777] !font-normal text-lg w-6 h-6 border-none"
-                          >
-                            +
-                          </Button>
-                        </div>
                       </div>
 
                       <Button
