@@ -425,7 +425,9 @@ export default function Navbar() {
                               <span id="Currency">
                                 {currencySymbol[currency]}
                               </span>
-                              0.00
+                              {new Intl.NumberFormat("en-US").format(
+                                cart?.totalCartPrice || 0.00,
+                              )}
                             </span>
                           </span>
                           <span className="relative mb-1 group-hover:text-primary transition-all">

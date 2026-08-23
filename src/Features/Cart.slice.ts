@@ -113,6 +113,24 @@ export const UpdateCartProductQuantity = createAsyncThunk<
   },
 );
 
+// ^ Clear User Cart 
+export const ClearUserCart  = createAsyncThunk<
+  AddToCartResponse,
+  void,
+  { state: RootState }
+>("cart/ClearUserCart", async (_, { getState }) => {
+  const token = getState().user.token;
+  const { data } = await axios.delete(
+    "https://ecommerce.routemisr.com/api/v2/cart",
+    {
+      headers: {
+        token,
+      },
+    },
+  );
+  return data.data;
+});
+
 const CartSlice = createSlice({
   name: "cart",
   initialState,
@@ -170,6 +188,20 @@ const CartSlice = createSlice({
       state.cart = action.payload.data;
     });
     builder.addCase(UpdateCartProductQuantity.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.error.message || "Something went wrong";
+    });
+
+    // * ClearUserCart
+    builder.addCase(ClearUserCart.pending, (state) => {
+      state.loading = true;
+      state.error = null;
+    });
+    builder.addCase(ClearUserCart.fulfilled, (state, action) => {
+      state.loading = false;
+      state.cart = action.payload.data;
+    });
+    builder.addCase(ClearUserCart.rejected, (state, action) => {
       state.loading = false;
       state.error = action.error.message || "Something went wrong";
     });
