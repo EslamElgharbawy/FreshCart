@@ -264,7 +264,17 @@ export default function Cart() {
                         </svg>
                         Continue Shopping
                       </Button>
-                      <Button className="uppercase font-semibold mr-2 bg-transparent rounded-md text-[#333] !px-7 !py-3 h-auto border-[1px] border-[#ccc] hover:bg-[#e1e1e1] hover:border-[#e1e1e1] transition-all duration-300">
+                      <Button
+                        onClick={async () => {
+                          try {
+                            await dispatch(ClearUserCart()).unwrap();
+                            toast.success("Cart cleared");
+                          } catch {
+                            toast.error("Failed to clear cart");
+                          }
+                        }}
+                        className="uppercase font-semibold mr-2 bg-transparent rounded-md text-[#333] !px-7 !py-3 h-auto border-[1px] border-[#ccc] hover:bg-[#e1e1e1] hover:border-[#e1e1e1] transition-all duration-300"
+                      >
                         Clear cart
                       </Button>
                     </div>

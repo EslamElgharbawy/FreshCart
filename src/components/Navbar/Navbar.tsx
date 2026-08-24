@@ -426,7 +426,7 @@ export default function Navbar() {
                                 {currencySymbol[currency]}
                               </span>
                               {new Intl.NumberFormat("en-US").format(
-                                cart?.totalCartPrice || 0.00,
+                                cart?.totalCartPrice ?? 0,
                               )}
                             </span>
                           </span>
@@ -434,7 +434,7 @@ export default function Navbar() {
                             <span
                               className={`absolute -top-1  ${language === "EGY" ? "-left-1" : "-right-1"} w-[18px] h-[18px] bg-accent text-[#272b37] text-[11px] rounded-full flex justify-center items-center`}
                             >
-                              {cart?.products.length}
+                              {cart?.products.length ?? 0}
                             </span>
                             <svg
                               xmlns="http://www.w3.org/2000/svg"
@@ -466,9 +466,9 @@ export default function Navbar() {
                           <SheetTitle className="text-lg font-medium w-fit">
                             {t("cart.shoppingCart")}{" "}
                             <span>
-                              {cart?.products.length === 0
-                                ? ""
-                                : `(${cart?.products.length})`}
+                              {cart?.products.length
+                                ? `(${cart?.products.length})`
+                                : ""}
                             </span>
                           </SheetTitle>
                           <SheetClose asChild>
@@ -484,9 +484,9 @@ export default function Navbar() {
                             </Button>
                           </SheetClose>
                         </SheetHeader>
-                        {cart?.products.length === 0 ? (
+                        {!cart?.products.length ? (
                           <>
-                            <div className="flex flex-col justify-center items-center flex-1 text-[#7c818b] relative -top-[70]">
+                            <div className="flex flex-col justify-center items-center flex-1 text-[#7c818b] relative -top-[70px]">
                               <Image
                                 src={EmptyCart}
                                 alt="Empty Cart"
@@ -524,7 +524,7 @@ export default function Navbar() {
                                 <p>
                                   {currencySymbol[currency]}
                                   {new Intl.NumberFormat("en-US").format(
-                                    cart?.totalCartPrice || 0,
+                                    cart?.totalCartPrice ?? 0,
                                   )}
                                 </p>
                               </div>
@@ -935,7 +935,7 @@ export default function Navbar() {
                     <span
                       className={`absolute -top-1  ${language === "EGY" ? "-left-1" : "-right-1"} w-[16px] h-[16px] xl:w-[18px] xl:h-[18px] bg-accent text-[#272b37] text-[10px] rounded-full flex justify-center items-center`}
                     >
-                      {cart?.products.length}
+                      {cart?.products.length ?? 0}
                     </span>
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
