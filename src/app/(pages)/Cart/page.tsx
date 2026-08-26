@@ -25,19 +25,25 @@ import { Button } from "@/components/ui/button";
 import toast from "react-hot-toast";
 import { useTranslation } from "react-i18next";
 import CartSheetItem from "@/components/CartSheetItem/CartSheetItem";
+import CartItemSkeleton from "@/components/Skeletons/CartItemSkeleton";
+import CartSheetItemSkeleton from "@/components/Skeletons/CartSheetItemSkeleton";
 
 export default function Cart() {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
-  const { cart } = useAppSelector((store) => store.CartSlice);
+  const { cart, loading } = useAppSelector((store) => store.CartSlice);
+  const { token, authChecked } = useAppSelector((store) => store.user);
 
   const handleQuantityChange = async (productId: string, count: number) => {
     await dispatch(UpdateCartProductQuantity({ productId, count })).unwrap();
   };
 
   useEffect(() => {
-    dispatch(GetLoggedUserCart());
-  }, [dispatch]);
+    if (authChecked && token) {
+      dispatch(GetLoggedUserCart());
+    }
+  }, [dispatch, token, authChecked]);
+  const isBusy = !authChecked || loading;
   const [activeStep, setActiveStep] = useState("cart");
   return (
     <>
@@ -81,17 +87,16 @@ export default function Cart() {
             </TabsList>
 
             <TabsContent value="cart">
-              {(cart?.products?.length ?? 0) > 0 ? (
+              {isBusy || (cart?.products?.length ?? 0) > 0 ? (
                 <div className="pt-8 pb-12">
                   <div className="xl:grid grid-cols-12">
                     <div className="col-span-full 2xl:col-span-8 px-5">
                       <Table className="max-xl:hidden">
                         <TableHeader>
-                          <TableRow className="grid grid-cols-[14.79%_24.36%_17.29%_25.77%_14.79%_3%]">
+                          <TableRow className="grid grid-cols-[39.15%_17.29%_25.77%_14.79%_3%]">
                             <TableHead className="font-semibold text-base p-0 text-[#333] ">
                               Product
                             </TableHead>
-                            <TableHead className="font-semibold text-base p-0 text-[#333]"></TableHead>
                             <TableHead className="font-semibold text-base p-0 text-[#333]">
                               Price
                             </TableHead>
@@ -105,86 +110,92 @@ export default function Cart() {
                           </TableRow>
                         </TableHeader>
                         <TableBody>
-                          {cart?.products?.map((product) => (
-                            <TableRow
-                              key={product._id}
-                              className="grid grid-cols-[14.79%_24.36%_17.29%_25.77%_14.79%_3%] items-center"
-                            >
-                              <TableCell className="pr-5 py-5 pl-0 ">
-                                <Link
-                                  href={`/ProductDetails/${product.product._id}`}
-                                >
-                                  <Image
-                                    src={product.product.imageCover}
-                                    alt={product.product.title}
-                                    width={100}
-                                    height={100}
-                                  />
-                                </Link>
-                              </TableCell>
-                              <TableCell className="min-w-0 font-medium pr-8 py-5 pl-0 ">
-                                <Link
-                                  href={`/ProductDetails/${product.product._id}`}
-                                  className="truncate hover:text-primary transition-all duration-300"
-                                >
-                                  {product.product.title}
-                                </Link>
-                              </TableCell>
-                              <TableCell className="text-base text-[#666] pr-5 py-5 pl-0 ">
-                                ${product.price}
-                              </TableCell>
-                              <TableCell className="pr-5 py-5 pl-0 ">
-                                <div className="relative flex 2xl:justify-center items-center text-sm gap-3 w-fit">
-                                  <QuantityCounter
-                                    value={product.count}
-                                    onChange={(count) => {
-                                      handleQuantityChange(
-                                        product.product._id,
-                                        count,
+                          {isBusy ? (
+                            <CartItemSkeleton />
+                          ) : (
+                            cart?.products?.map((product) => (
+                              <TableRow
+                                key={product._id}
+                                className="grid grid-cols-[39.15%_17.29%_25.77%_14.79%_3%] items-center"
+                              >
+                                <TableCell className="pr-8 py-5 pl-0">
+                                  <div className="flex items-center gap-5">
+                                    <Link
+                                      href={`/ProductDetails/${product.product._id}`}
+                                    >
+                                      <Image
+                                        src={product.product.imageCover}
+                                        alt={product.product.title}
+                                        width={125}
+                                        height={125}
+                                      />
+                                    </Link>
+
+                                    <Link
+                                      href={`/ProductDetails/${product.product._id}`}
+                                      className="font-medium flex-1 truncate hover:text-primary transition-all duration-300"
+                                    >
+                                      {product.product.title}
+                                    </Link>
+                                  </div>
+                                </TableCell>
+
+                                <TableCell className="text-base text-[#666] pr-5 py-5 pl-0 ">
+                                  ${product.price}
+                                </TableCell>
+                                <TableCell className="pr-5 py-5 pl-0 ">
+                                  <div className="relative flex 2xl:justify-center items-center text-sm gap-3 w-fit">
+                                    <QuantityCounter
+                                      value={product.count}
+                                      onChange={(count) => {
+                                        handleQuantityChange(
+                                          product.product._id,
+                                          count,
+                                        );
+                                      }}
+                                    />
+                                  </div>
+                                </TableCell>
+                                <TableCell className="font-semibold text-base pr-5 py-5 pl-0  text-[#333]">
+                                  ${product.price * product.count}
+                                </TableCell>
+                                <TableCell className="p-0 w-fit">
+                                  <Button
+                                    variant="ghost"
+                                    onClick={async () => {
+                                      const result = await dispatch(
+                                        RemoveProductFromCart(
+                                          product.product._id,
+                                        ),
                                       );
+                                      if (
+                                        RemoveProductFromCart.fulfilled.match(
+                                          result,
+                                        )
+                                      ) {
+                                        toast.success(
+                                          t("cart.itemRemovedFromCart"),
+                                        );
+                                      } else if (
+                                        RemoveProductFromCart.rejected.match(
+                                          result,
+                                        )
+                                      ) {
+                                        toast.error(
+                                          result.payload ??
+                                            t("cart.failedToRemoveProduct"),
+                                        );
+                                      }
                                     }}
-                                  />
-                                </div>
-                              </TableCell>
-                              <TableCell className="font-semibold text-base pr-5 py-5 pl-0  text-[#333]">
-                                ${product.price * product.count}
-                              </TableCell>
-                              <TableCell className="p-0 w-fit">
-                                <Button
-                                  variant="ghost"
-                                  onClick={async () => {
-                                    const result = await dispatch(
-                                      RemoveProductFromCart(
-                                        product.product._id,
-                                      ),
-                                    );
-                                    if (
-                                      RemoveProductFromCart.fulfilled.match(
-                                        result,
-                                      )
-                                    ) {
-                                      toast.success(
-                                        t("cart.itemRemovedFromCart"),
-                                      );
-                                    } else if (
-                                      RemoveProductFromCart.rejected.match(
-                                        result,
-                                      )
-                                    ) {
-                                      toast.error(
-                                        result.payload ??
-                                          t("cart.failedToRemoveProduct"),
-                                      );
-                                    }
-                                  }}
-                                  size="icon"
-                                  className="hover:text-primary transition-all duration-300 "
-                                >
-                                  <Trash2 className="size-5" />
-                                </Button>
-                              </TableCell>
-                            </TableRow>
-                          ))}
+                                    size="icon"
+                                    className="hover:text-primary transition-all duration-300 "
+                                  >
+                                    <Trash2 className="size-5" />
+                                  </Button>
+                                </TableCell>
+                              </TableRow>
+                            ))
+                          )}
                         </TableBody>
                         <TableFooter>
                           <TableRow>
@@ -238,14 +249,18 @@ export default function Cart() {
 
                   {/* // &mobile */}
                   <div className="xl:hidden px-4">
-                    {cart?.products?.map((product) => (
-                      <div
-                        key={product._id}
-                        className="border-b-[1px] border-[#ecf0f4] last:border-0 mb-5"
-                      >
-                        <CartSheetItem item={product} />
-                      </div>
-                    ))}
+                    {isBusy ? (
+                      <CartSheetItemSkeleton />
+                    ) : (
+                      cart?.products?.map((product) => (
+                        <div
+                          key={product._id}
+                          className="border-b-[1px] border-[#ecf0f4] last:border-0 mb-5"
+                        >
+                          <CartSheetItem item={product} />
+                        </div>
+                      ))
+                    )}
                     <div className="flex flex-col items-center my-5 gap-3">
                       <Button className="uppercase w-full !px-7 !py-3 h-auto rounded-md bg-[#333] hover:bg-[#454545] transition-all duration-300 text-white font-semibold">
                         <svg

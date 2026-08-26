@@ -3,6 +3,7 @@ import { Product } from "./products";
 export interface CartState {
   cart: CartData | null;
   loading: boolean;
+  updating: boolean;
   error: string | null;
 }
 

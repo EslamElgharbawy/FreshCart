@@ -51,6 +51,8 @@ import {
 } from "@/components/ui/sheet";
 import CartSheetItem from "../CartSheetItem/CartSheetItem";
 import { GetLoggedUserCart } from "@/Features/Cart.slice";
+import CartBadgeLoader from "../Skeletons/CartBadgeLoader";
+import { Skeleton } from "../ui/skeleton";
 
 export default function Navbar() {
   const inputRef = useRef<HTMLInputElement | null>(null);
@@ -78,7 +80,9 @@ export default function Navbar() {
   const { token, user, isLoggedIn, authChecked } = useAppSelector(
     (store) => store.user,
   );
-  const { cart } = useAppSelector((store) => store.CartSlice);
+  const { cart, loading, updating } = useAppSelector(
+    (store) => store.CartSlice,
+  );
   const sections = [
     { name: "home", path: "/" },
     { name: "shop", path: "/Shop" },
@@ -100,6 +104,8 @@ export default function Navbar() {
       dispatch(GetLoggedUserCart());
     }
   }, [dispatch, isLoggedIn]);
+  const isBusy = !authChecked || updating || loading;
+
   return (
     <>
       {/* //& Desktop  */}
@@ -421,21 +427,33 @@ export default function Navbar() {
                             <p className="text-border text-[11px] font-medium group-hover:text-primary transition-all">
                               {t("navbar.cart")}
                             </p>
-                            <span className="font-bold text-end block group-hover:text-primary transition-all text-base leading-5">
+                            <div className="font-bold text-end group-hover:text-primary transition-all text-base leading-5 flex items-center justify-end gap-1">
                               <span id="Currency">
                                 {currencySymbol[currency]}
                               </span>
-                              {new Intl.NumberFormat("en-US").format(
-                                cart?.totalCartPrice ?? 0,
+
+                              {isBusy ? (
+                                <Skeleton className="h-4 w-16 rounded-sm" />
+                              ) : (
+                                <span>
+                                  {new Intl.NumberFormat("en-US").format(
+                                    cart?.totalCartPrice ?? 0,
+                                  )}
+                                </span>
                               )}
-                            </span>
+                            </div>
                           </span>
                           <span className="relative mb-1 group-hover:text-primary transition-all">
-                            <span
-                              className={`absolute -top-1  ${language === "EGY" ? "-left-1" : "-right-1"} w-[18px] h-[18px] bg-accent text-[#272b37] text-[11px] rounded-full flex justify-center items-center`}
-                            >
-                              {cart?.products.length ?? 0}
-                            </span>
+                            {isBusy ? (
+                              <CartBadgeLoader language={language} />
+                            ) : (
+                              <span
+                                className={`absolute -top-1  ${language === "EGY" ? "-left-1" : "-right-1"} w-[18px] h-[18px] bg-accent text-[#272b37] text-[11px] rounded-full flex justify-center items-center`}
+                              >
+                                {cart?.products.length ?? 0}
+                              </span>
+                            )}
+
                             <svg
                               xmlns="http://www.w3.org/2000/svg"
                               fill="none"
@@ -932,11 +950,16 @@ export default function Navbar() {
                     onClick={() => setOpenSheet(true)}
                     className="relative mb-1 2xl:hover:text-primary transition-all duration-300"
                   >
-                    <span
-                      className={`absolute -top-1  ${language === "EGY" ? "-left-1" : "-right-1"} w-[16px] h-[16px] xl:w-[18px] xl:h-[18px] bg-accent text-[#272b37] text-[10px] rounded-full flex justify-center items-center`}
-                    >
-                      {cart?.products.length ?? 0}
-                    </span>
+                    {isBusy ? (
+                      <CartBadgeLoader language={language} />
+                    ) : (
+                      <span
+                        className={`absolute -top-1  ${language === "EGY" ? "-left-1" : "-right-1"} w-[16px] h-[16px] xl:w-[18px] xl:h-[18px] bg-accent text-[#272b37] text-[10px] rounded-full flex justify-center items-center`}
+                      >
+                        {cart?.products.length ?? 0}
+                      </span>
+                    )}
+
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       fill="none"

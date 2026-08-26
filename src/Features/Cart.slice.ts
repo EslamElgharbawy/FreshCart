@@ -11,6 +11,7 @@ import axios from "axios";
 const initialState: CartState = {
   cart: null,
   loading: false,
+  updating: false,
   error: null,
 };
 
@@ -113,8 +114,8 @@ export const UpdateCartProductQuantity = createAsyncThunk<
   },
 );
 
-// ^ Clear User Cart 
-export const ClearUserCart  = createAsyncThunk<
+// ^ Clear User Cart
+export const ClearUserCart = createAsyncThunk<
   AddToCartResponse,
   void,
   { state: RootState }
@@ -138,15 +139,15 @@ const CartSlice = createSlice({
   extraReducers: (builder) => {
     // * Add Product to Cart
     builder.addCase(AddProductToCart.pending, (state) => {
-      state.loading = true;
+      state.updating  = true;
       state.error = null;
     });
     builder.addCase(AddProductToCart.fulfilled, (state, action) => {
-      state.loading = false;
+      state.updating  = false;
       state.cart = action.payload;
     });
     builder.addCase(AddProductToCart.rejected, (state, action) => {
-      state.loading = false;
+      state.updating  = false;
       state.error = action.error.message || "Something went wrong";
     });
 
@@ -166,43 +167,43 @@ const CartSlice = createSlice({
 
     // * Remove Product from Cart
     builder.addCase(RemoveProductFromCart.pending, (state) => {
-      state.loading = true;
+      state.updating = true;
       state.error = null;
     });
     builder.addCase(RemoveProductFromCart.fulfilled, (state, action) => {
-      state.loading = false;
+      state.updating = false;
       state.cart = action.payload.data;
     });
     builder.addCase(RemoveProductFromCart.rejected, (state, action) => {
-      state.loading = false;
+      state.updating = false;
       state.error = action.error.message || "Something went wrong";
     });
 
     // * UpdateCartProductQuantity
     builder.addCase(UpdateCartProductQuantity.pending, (state) => {
-      state.loading = true;
+      state.updating = true;
       state.error = null;
     });
     builder.addCase(UpdateCartProductQuantity.fulfilled, (state, action) => {
-      state.loading = false;
+      state.updating = false;
       state.cart = action.payload.data;
     });
     builder.addCase(UpdateCartProductQuantity.rejected, (state, action) => {
-      state.loading = false;
+      state.updating = false;
       state.error = action.error.message || "Something went wrong";
     });
 
     // * ClearUserCart
     builder.addCase(ClearUserCart.pending, (state) => {
-      state.loading = true;
+      state.updating = true;
       state.error = null;
     });
     builder.addCase(ClearUserCart.fulfilled, (state, action) => {
-      state.loading = false;
+      state.updating = false;
       state.cart = action.payload.data;
     });
     builder.addCase(ClearUserCart.rejected, (state, action) => {
-      state.loading = false;
+      state.updating = false;
       state.error = action.error.message || "Something went wrong";
     });
   },
