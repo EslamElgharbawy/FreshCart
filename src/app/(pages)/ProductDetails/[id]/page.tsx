@@ -60,7 +60,7 @@ export default function page() {
   const [openReviewDialog, setOpenReviewDialog] = useState(false);
   const [selectedReview, setSelectedReview] = useState<Review | null>(null);
   const [open, setOpen] = useState(false);
-    const [counter, setCounter] = useState(1);
+  const [counter, setCounter] = useState(1);
   const [index, setIndex] = useState(0);
   const dispatch = useAppDispatch();
   const { id } = useParams();
@@ -262,7 +262,9 @@ export default function page() {
                   <div className="mb-3">
                     <h1 className="text-3xl font-bold text-[#333] mt-5">
                       <span>$</span>
-                      {productDetails?.price}
+                      {new Intl.NumberFormat("en-US").format(
+                        productDetails?.price ?? 0,
+                      )}
                     </h1>
                   </div>
                   <div className="flex items-center capitalize text-xs text-[#999] mb-4 gap-2">

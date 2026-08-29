@@ -27,6 +27,7 @@ import { useTranslation } from "react-i18next";
 import CartSheetItem from "@/components/CartSheetItem/CartSheetItem";
 import CartItemSkeleton from "@/components/Skeletons/CartItemSkeleton";
 import CartSheetItemSkeleton from "@/components/Skeletons/CartSheetItemSkeleton";
+import CartTotals from "@/components/CartTotals/CartTotals";
 
 export default function Cart() {
   const { t } = useTranslation();
@@ -43,8 +44,15 @@ export default function Cart() {
       dispatch(GetLoggedUserCart());
     }
   }, [dispatch, token, authChecked]);
+
   const isBusy = !authChecked || loading;
   const [activeStep, setActiveStep] = useState("cart");
+  useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  }, [activeStep]);
   return (
     <>
       <section>
@@ -88,10 +96,10 @@ export default function Cart() {
 
             <TabsContent value="cart">
               {isBusy || (cart?.products?.length ?? 0) > 0 ? (
-                <div className="pt-8 pb-12">
+                <div className="pt-3 xl:pt-8 pb-12">
                   <div className="xl:grid grid-cols-12">
                     <div className="col-span-full 2xl:col-span-8 px-5">
-                      <Table className="max-xl:hidden">
+                      <Table className="max-xl:hidden xl:max-2xl:mb-10">
                         <TableHeader>
                           <TableRow className="grid grid-cols-[39.15%_17.29%_25.77%_14.79%_3%]">
                             <TableHead className="font-semibold text-base p-0 text-[#333] ">
@@ -118,10 +126,11 @@ export default function Cart() {
                                 key={product._id}
                                 className="grid grid-cols-[39.15%_17.29%_25.77%_14.79%_3%] items-center"
                               >
-                                <TableCell className="pr-8 py-5 pl-0">
-                                  <div className="flex items-center gap-5">
+                                <TableCell className="pr-8 py-5 pl-0 min-w-0">
+                                  <div className="flex items-center gap-5 min-w-0">
                                     <Link
                                       href={`/ProductDetails/${product.product._id}`}
+                                      className="shrink-0"
                                     >
                                       <Image
                                         src={product.product.imageCover}
@@ -244,55 +253,71 @@ export default function Cart() {
                       </Table>
                     </div>
 
-                    <div className="col-span-full 2xl:col-span-4"></div>
+                    <div className="col-span-full 2xl:col-span-4 px-5">
+                      <div className="max-xl:hidden">
+                        <CartTotals
+                          cart={cart}
+                          isBusy={isBusy}
+                          onCheckout={() => setActiveStep("checkout")}
+                        />
+                      </div>
+                    </div>
                   </div>
 
                   {/* // &mobile */}
                   <div className="xl:hidden px-4">
-                    {isBusy ? (
-                      <CartSheetItemSkeleton />
-                    ) : (
-                      cart?.products?.map((product) => (
-                        <div
-                          key={product._id}
-                          className="border-b-[1px] border-[#ecf0f4] last:border-0 mb-5"
+                    <div className="mb-10">
+                      {isBusy ? (
+                        <CartSheetItemSkeleton />
+                      ) : (
+                        cart?.products?.map((product) => (
+                          <div
+                            key={product._id}
+                            className="border-b-[1px] border-[#ecf0f4] last:border-0"
+                          >
+                            <CartSheetItem item={product} />
+                          </div>
+                        ))
+                      )}
+                      <div className="flex flex-col items-center my-5 gap-3">
+                        <Button className="uppercase w-full !px-7 !py-3 h-auto rounded-md bg-[#333] hover:bg-[#454545] transition-all duration-300 text-white font-semibold">
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            strokeWidth="1.5"
+                            stroke="currentColor"
+                            className="size-5"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18"
+                            />
+                          </svg>
+                          Continue Shopping
+                        </Button>
+                        <Button
+                          onClick={async () => {
+                            try {
+                              await dispatch(ClearUserCart()).unwrap();
+                              toast.success("Cart cleared");
+                            } catch {
+                              toast.error("Failed to clear cart");
+                            }
+                          }}
+                          className="uppercase font-semibold mr-2 bg-transparent rounded-md text-[#333] !px-7 !py-3 h-auto border-[1px] border-[#ccc] hover:bg-[#e1e1e1] hover:border-[#e1e1e1] transition-all duration-300"
                         >
-                          <CartSheetItem item={product} />
-                        </div>
-                      ))
-                    )}
-                    <div className="flex flex-col items-center my-5 gap-3">
-                      <Button className="uppercase w-full !px-7 !py-3 h-auto rounded-md bg-[#333] hover:bg-[#454545] transition-all duration-300 text-white font-semibold">
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          strokeWidth="1.5"
-                          stroke="currentColor"
-                          className="size-5"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18"
-                          />
-                        </svg>
-                        Continue Shopping
-                      </Button>
-                      <Button
-                        onClick={async () => {
-                          try {
-                            await dispatch(ClearUserCart()).unwrap();
-                            toast.success("Cart cleared");
-                          } catch {
-                            toast.error("Failed to clear cart");
-                          }
-                        }}
-                        className="uppercase font-semibold mr-2 bg-transparent rounded-md text-[#333] !px-7 !py-3 h-auto border-[1px] border-[#ccc] hover:bg-[#e1e1e1] hover:border-[#e1e1e1] transition-all duration-300"
-                      >
-                        Clear cart
-                      </Button>
+                          Clear cart
+                        </Button>
+                      </div>
                     </div>
+
+                    <CartTotals
+                      cart={cart}
+                      isBusy={isBusy}
+                      onCheckout={() => setActiveStep("checkout")}
+                    />
                   </div>
                 </div>
               ) : (

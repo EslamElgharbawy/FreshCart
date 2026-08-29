@@ -104,7 +104,7 @@ export default function Navbar() {
       dispatch(GetLoggedUserCart());
     }
   }, [dispatch, isLoggedIn]);
-  const isBusy = !authChecked || updating || loading;
+  const isBusy = !authChecked || loading;
 
   return (
     <>
