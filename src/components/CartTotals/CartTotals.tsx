@@ -4,6 +4,8 @@ import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { CartData } from "@/Types/cart";
 import { Skeleton } from "../ui/skeleton";
+import { useTranslation } from "react-i18next";
+import i18n from "@/i18n";
 interface CartTotalsProps {
   cart: CartData | null;
   isBusy: boolean;
@@ -14,10 +16,12 @@ export default function CartTotals({
   onCheckout,
   isBusy,
 }: CartTotalsProps) {
+  const { t } = useTranslation();
+  const dir = i18n.dir();
   return (
     <div className="w-full rounded-lg border border-[#eee] bg-white p-8">
       <h2 className="text-xl font-bold uppercase tracking-[-0.2px] text-[#333]">
-        CART TOTALS
+       {t("cart.cartTotals")}
       </h2>
 
       {isBusy ? (
@@ -51,7 +55,7 @@ export default function CartTotals({
 
       <div className="flex items-center justify-between pt-5">
         <span className="text-base font-semibold tracking-[-0.4px] text-[#333]">
-          Total
+          {t("cart.total")}
         </span>
 
         <span className="text-base font-semibold text-[#333]">
@@ -70,8 +74,8 @@ export default function CartTotals({
         onClick={onCheckout}
         className="mt-5 h-11 lg:h-12  w-full rounded-md bg-[#333] text-xs lg:text-sm font-bold uppercase tracking-wide text-white transition-all duration-300 hover:bg-[#444]"
       >
-        Proceed to checkout
-        <ArrowRight className="ml-2 size-4" />
+        {t("cart.proceedToCheckout")}
+        <ArrowRight className={`size-4 ${dir === "rtl" ? "rotate-180 mr-2" : "ml-2"}`} />
       </Button>
     </div>
   );

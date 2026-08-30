@@ -28,12 +28,19 @@ import CartSheetItem from "@/components/CartSheetItem/CartSheetItem";
 import CartItemSkeleton from "@/components/Skeletons/CartItemSkeleton";
 import CartSheetItemSkeleton from "@/components/Skeletons/CartSheetItemSkeleton";
 import CartTotals from "@/components/CartTotals/CartTotals";
+import i18n from "@/i18n";
+import { Field, FieldGroup } from "@/components/ui/field";
+import { useFormik } from "formik";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+import { Checkbox } from "@/components/ui/checkbox";
 
 export default function Cart() {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const { cart, loading } = useAppSelector((store) => store.CartSlice);
   const { token, authChecked } = useAppSelector((store) => store.user);
+  const dir = i18n.dir();
 
   const handleQuantityChange = async (productId: string, count: number) => {
     await dispatch(UpdateCartProductQuantity({ productId, count })).unwrap();
@@ -53,11 +60,24 @@ export default function Cart() {
       behavior: "smooth",
     });
   }, [activeStep]);
+
+  const formik = useFormik({
+    initialValues: {
+      details: "",
+      phone: "",
+      city: "",
+      postalCode: "",
+    },
+    onSubmit: (values) => {
+      console.log(values);
+    },
+  });
   return (
     <>
       <section>
         <div className="pt-3 xl:pt-8">
           <Tabs
+            dir={dir}
             defaultValue="cart"
             value={activeStep}
             onValueChange={setActiveStep}
@@ -68,29 +88,29 @@ export default function Cart() {
                 className={`text-lg lg:text-xl font-bold text-[#666] data-[state=active]:bg-transparent ${activeStep === "cart" ? " data-[state=active]:text-primary" : "text-[#333]"} data-[state=active]:after:opacity-0 group-data-[variant=default]/tabs-list:data-[state=active]:shadow-none`}
                 value="cart"
               >
-                Shopping Cart
+                {t("cart.shoppingCart")}
               </TabsTrigger>
               <ChevronRight
                 size={24}
-                className={`${activeStep === "checkout" || activeStep === "complete" ? "text-[#333]" : "text-[#999]"}  font-bold`}
+                className={`${activeStep === "checkout" || activeStep === "complete" ? "text-[#333]" : "text-[#999]"}  font-bold rtl:rotate-180`}
               />
 
               <TabsTrigger
                 className={`text-lg lg:text-xl font-bold text-[#666] data-[state=active]:bg-transparent ${activeStep === "checkout" ? "data-[state=active]:text-primary " : activeStep === "complete" ? "text-[#333]" : "text-[#666]"} data-[state=active]:text-primary data-[state=active]:after:opacity-0 group-data-[variant=default]/tabs-list:data-[state=active]:shadow-none`}
                 value="checkout"
               >
-                Checkout
+                {t("cart.checkout")}
               </TabsTrigger>
               <ChevronRight
                 size={24}
-                className={`${activeStep === "complete" ? "text-[#333]" : "text-[#999]"}  font-bold`}
+                className={`${activeStep === "complete" ? "text-[#333]" : "text-[#999]"}  font-bold rtl:rotate-180`}
               />
 
               <TabsTrigger
                 className={`text-lg lg:text-xl font-bold text-[#666] data-[state=active]:bg-transparent ${activeStep === "checkout" ? " data-[state=active]:text-primary " : "text-[#666]"} data-[state=active]:text-primary data-[state=active]:after:opacity-0 group-data-[variant=default]/tabs-list:data-[state=active]:shadow-none`}
                 value="complete"
               >
-                Order Complete
+                {t("cart.orderComplete")}
               </TabsTrigger>
             </TabsList>
 
@@ -103,16 +123,16 @@ export default function Cart() {
                         <TableHeader>
                           <TableRow className="grid grid-cols-[39.15%_17.29%_25.77%_14.79%_3%]">
                             <TableHead className="font-semibold text-base p-0 text-[#333] ">
-                              Product
+                              {t("cart.product")}
                             </TableHead>
                             <TableHead className="font-semibold text-base p-0 text-[#333]">
-                              Price
+                              {t("cart.price")}
                             </TableHead>
                             <TableHead className="font-semibold text-base p-0 text-[#333]">
-                              Quantity
+                              {t("cart.quantity")}
                             </TableHead>
                             <TableHead className="font-semibold text-base p-0 text-[#333] ">
-                              Subtotal
+                              {t("cart.subtotal")}
                             </TableHead>
                             <TableHead className="font-semibold text-base p-0 text-[#333]"></TableHead>
                           </TableRow>
@@ -218,7 +238,7 @@ export default function Cart() {
                                       viewBox="0 0 24 24"
                                       strokeWidth="1.5"
                                       stroke="currentColor"
-                                      className="size-5"
+                                      className={`size-5 ${dir === "rtl" ? "rotate-180" : ""}`}
                                     >
                                       <path
                                         strokeLinecap="round"
@@ -226,7 +246,7 @@ export default function Cart() {
                                         d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18"
                                       />
                                     </svg>
-                                    Continue Shopping
+                                    {t("cart.continueShopping")}
                                   </Button>
                                 </div>
                                 <div>
@@ -236,14 +256,14 @@ export default function Cart() {
                                         await dispatch(
                                           ClearUserCart(),
                                         ).unwrap();
-                                        toast.success("Cart cleared");
+                                        toast.success(t("cart.cartCleared"));
                                       } catch {
-                                        toast.error("Failed to clear cart");
+                                        toast.error(t("cart.cartCleared"));
                                       }
                                     }}
                                     className="uppercase font-semibold mr-2 bg-transparent rounded-md text-[#333] !px-7 !py-3 h-auto border-[1px] border-[#ccc] hover:bg-[#e1e1e1] hover:border-[#e1e1e1] transition-all duration-300"
                                   >
-                                    Clear cart
+                                    {t("cart.clearCart")}
                                   </Button>
                                 </div>
                               </div>
@@ -295,7 +315,7 @@ export default function Cart() {
                               d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18"
                             />
                           </svg>
-                          Continue Shopping
+                          {t("cart.continueShopping")}
                         </Button>
                         <Button
                           onClick={async () => {
@@ -308,7 +328,7 @@ export default function Cart() {
                           }}
                           className="uppercase font-semibold mr-2 bg-transparent rounded-md text-[#333] !px-7 !py-3 h-auto border-[1px] border-[#ccc] hover:bg-[#e1e1e1] hover:border-[#e1e1e1] transition-all duration-300"
                         >
-                          Clear cart
+                          {t("cart.clearCart")}
                         </Button>
                       </div>
                     </div>
@@ -366,7 +386,106 @@ export default function Cart() {
               )}
             </TabsContent>
 
-            <TabsContent value="checkout">{/* Checkout */}</TabsContent>
+            <TabsContent value="checkout">
+              <div className="pt-3 xl:pt-8 pb-12">
+                <div className="xl:grid grid-cols-12">
+                  <div className="col-span-full 2xl:col-span-7 px-5">
+                    <form onSubmit={formik.handleSubmit}>
+                      <FieldGroup className="gap-7">
+                        <Field>
+                          <Label
+                            className="font-normal text-textMain !w-fit"
+                            htmlFor="details"
+                          >
+                            Street address
+                          </Label>
+                          <Input
+                            type="text"
+                            id="details"
+                            className="rounded-none py-2 px-5 h-auto text-sm"
+                            name="details"
+                            value={formik.values.details}
+                            onChange={formik.handleChange}
+                          />
+                          {/* {formik.touched.details && formik.errors.details && (
+                            <p className="text-sm text-red-500">
+                              {formik.errors.details}
+                            </p>
+                          )} */}
+                        </Field>
+                        <Field className="!gap-2">
+                          <Label
+                            className="font-normal text-textMain !w-fit"
+                            htmlFor="phone"
+                          >
+                            {t("registerForm.phone")}
+                          </Label>
+                          <Input
+                            type="tel"
+                            id="phone"
+                            className="rounded-none py-2 px-5 h-auto text-sm"
+                            name="phone"
+                            value={formik.values.phone}
+                            onChange={formik.handleChange}
+                          />
+                          {/* {formik.touched.password &&
+                            formik.errors.password && (
+                              <p className="text-sm text-red-500">
+                                {formik.errors.password}
+                              </p>
+                            )} */}
+                        </Field>
+                        <Field className="!gap-2">
+                          <Label
+                            className="font-normal text-textMain !w-fit"
+                            htmlFor="city"
+                          >
+                            Town / City
+                          </Label>
+                          <Input
+                            type="text"
+                            id="city"
+                            className="rounded-none py-2 px-5 h-auto text-sm"
+                            name="city"
+                            value={formik.values.city}
+                            onChange={formik.handleChange}
+                          />
+                          {/* {formik.touched.password &&
+                            formik.errors.password && (
+                              <p className="text-sm text-red-500">
+                                {formik.errors.password}
+                              </p>
+                            )} */}
+                        </Field>
+                        <Field className="!gap-2">
+                          <Label
+                            className="font-normal text-textMain !w-fit"
+                            htmlFor="postalCode"
+                          >
+                            Postcode
+                          </Label>
+                          <Input
+                            type="number"
+                            id="postalCode"
+                            className="rounded-none py-2 px-5 h-auto text-sm"
+                            name="postalCode"
+                            value={formik.values.postalCode}
+                            onChange={formik.handleChange}
+                          />
+                          {/* {formik.touched.password &&
+                            formik.errors.password && (
+                              <p className="text-sm text-red-500">
+                                {formik.errors.password}
+                              </p>
+                            )} */}
+                        </Field>
+                      </FieldGroup>
+                    </form>
+                  </div>
+                  <div className="col-span-full 2xl:col-span-5 px-5"></div>
+                </div>
+              </div>
+            </TabsContent>
 
             <TabsContent value="complete">{/* Order Complete */}</TabsContent>
           </Tabs>
