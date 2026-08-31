@@ -34,6 +34,7 @@ import { useFormik } from "formik";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
+import OrderReviewCard from "@/components/OrderReviewCard/OrderReviewCard";
 
 export default function Cart() {
   const { t } = useTranslation();
@@ -78,7 +79,7 @@ export default function Cart() {
         <div className="pt-3 xl:pt-8">
           <Tabs
             dir={dir}
-            defaultValue="cart"
+            defaultValue="checkout"
             value={activeStep}
             onValueChange={setActiveStep}
             className="flex-col gap-8"
@@ -482,7 +483,9 @@ export default function Cart() {
                       </FieldGroup>
                     </form>
                   </div>
-                  <div className="col-span-full 2xl:col-span-5 px-5"></div>
+                  <div className="col-span-full 2xl:col-span-5 px-5">
+                    <OrderReviewCard cart={cart} isBusy={isBusy} />
+                  </div>
                 </div>
               </div>
             </TabsContent>
