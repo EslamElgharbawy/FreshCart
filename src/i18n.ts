@@ -334,6 +334,7 @@ const resources = {
         failedToClearCart: "Failed to clear cart",
         returnToShop: "Return to shop",
         proceedToCheckout: "Proceed to checkout",
+        cartTotals: "Cart Totals"
       },
       footer: {
         supportText: "Got Question? Call us 24/7",

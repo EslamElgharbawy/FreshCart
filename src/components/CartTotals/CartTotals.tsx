@@ -42,11 +42,11 @@ export default function CartTotals({
             key={product._id}
             className="flex items-center justify-between border-b border-[#eee] py-5"
           >
-            <p className="text-xs font-medium text-[#666]">
-              {product.product.title} ×{product.count}
-            </p>
+            <div className="text-sm font-medium text-[#666]">
+              {product.product.title} × {product.count}
+            </div>
 
-            <p className="text-xs font-medium text-[#666]">
+            <p className="text-sm font-medium text-[#666] ps-5">
               ${new Intl.NumberFormat("en-US").format(product.price)}
             </p>
           </div>

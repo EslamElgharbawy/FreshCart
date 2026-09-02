@@ -5,9 +5,8 @@ import { Skeleton } from "../ui/skeleton";
 import { CartData } from "@/Types/cart";
 import { useTranslation } from "react-i18next";
 import i18n from "@/i18n";
-import { Label } from "../ui/label";
 import { useState } from "react";
-import { Accordion, AccordionContent, AccordionItem } from "../ui/accordion";
+import { Accordion, AccordionItem } from "../ui/accordion";
 import { motion, AnimatePresence } from "framer-motion";
 
 interface CartTotalsProps {
@@ -45,7 +44,7 @@ export default function OrderReviewCard({ cart, isBusy }: CartTotalsProps) {
   const { t } = useTranslation();
   const dir = i18n.dir();
   return (
-    <div className="w-full rounded-lg border border-[#eee] bg-white p-8">
+    <div className="w-full rounded-lg border border-[#eee] bg-white max-xl:p-5 p-8">
       <h2 className="text-xl font-bold uppercase tracking-[-0.2px] text-[#333] mb-3">
         Your order
       </h2>
@@ -71,14 +70,14 @@ export default function OrderReviewCard({ cart, isBusy }: CartTotalsProps) {
               {product.product.title} ×{product.count}
             </p>
 
-            <p className="text-sm text-[#666]">
+            <p className="text-sm text-[#666] ps-5">
               ${new Intl.NumberFormat("en-US").format(product.price)}
             </p>
           </div>
         ))
       )}
 
-      <div className="flex items-center justify-between py-5 ">
+      <div className="flex items-center justify-between py-5">
         <span className="text-base font-semibold tracking-[-0.4px] text-[#333]">
           {t("cart.total")}
         </span>
@@ -94,7 +93,7 @@ export default function OrderReviewCard({ cart, isBusy }: CartTotalsProps) {
         </span>
       </div>
 
-      <h4 className="text-base font-semibold text-[#333] mb-5 pt-6 border-t border-[#eee]">
+      <h4 className="text-base font-semibold text-[#333] mb-6 pt-6 border-t border-[#eee]">
         Payment Methods
       </h4>
 
@@ -140,7 +139,7 @@ export default function OrderReviewCard({ cart, isBusy }: CartTotalsProps) {
                     }}
                     className="overflow-hidden"
                   >
-                    <div className="pl-8 pt-2 text-xs leading-relaxed text-[#666]">
+                    <div className="pl-8 pt-2 text-xs xl:text-sm leading-relaxed text-[#666]">
                       {method.description}
                     </div>
                   </motion.div>

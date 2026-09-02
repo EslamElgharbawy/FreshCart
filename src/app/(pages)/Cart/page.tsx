@@ -33,7 +33,6 @@ import { Field, FieldGroup } from "@/components/ui/field";
 import { useFormik } from "formik";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
-import { Checkbox } from "@/components/ui/checkbox";
 import OrderReviewCard from "@/components/OrderReviewCard/OrderReviewCard";
 
 export default function Cart() {
@@ -294,7 +293,7 @@ export default function Cart() {
                         cart?.products?.map((product) => (
                           <div
                             key={product._id}
-                            className="border-b-[1px] border-[#ecf0f4] last:border-0"
+                            className="border-b-[1px] border-[#ecf0f4] last:border-0 mb-5"
                           >
                             <CartSheetItem item={product} />
                           </div>
@@ -483,7 +482,7 @@ export default function Cart() {
                       </FieldGroup>
                     </form>
                   </div>
-                  <div className="col-span-full 2xl:col-span-5 px-5">
+                  <div className="col-span-full 2xl:col-span-5 px-5 max-2xl:mt-10">
                     <OrderReviewCard cart={cart} isBusy={isBusy} />
                   </div>
                 </div>
