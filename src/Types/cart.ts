@@ -5,6 +5,7 @@ export interface CartState {
   loading: boolean;
   updating: boolean;
   error: string | null;
+  activeStep: "cart" | "checkout" | "complete";
 }
 
 export interface CartProduct {

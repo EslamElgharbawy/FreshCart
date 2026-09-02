@@ -35,10 +35,10 @@ import { lang } from "@/Types/Lang";
 import { useAppDispatch, useAppSelector } from "@/hooks/store.hooks";
 import { MobileMenu } from "../MobileMenu/MobileMenu";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { actions } from "@/Features/AuthDialog.slice";
 import { getCategories } from "@/Features/Categoreis.slice";
-import { GetLoggedUserCart } from "@/Features/Cart.slice";
+import { GetLoggedUserCart, setActiveStep } from "@/Features/Cart.slice";
 import CartBadgeLoader from "../Skeletons/CartBadgeLoader";
 import CartSheet from "../CartSheet/CartSheet";
 
@@ -55,7 +55,7 @@ export default function Navbar() {
   const { t, i18n } = useTranslation();
   const dispatch = useAppDispatch();
   const pathname = usePathname();
-
+  const router = useRouter();
   const isHome = pathname === "/";
 
   const { categories } = useAppSelector((store) => store.categoriesSlice);
@@ -66,6 +66,7 @@ export default function Navbar() {
   const { cart, loading, updating } = useAppSelector(
     (store) => store.CartSlice,
   );
+
   const sections = [
     { name: "home", path: "/" },
     { name: "shop", path: "/Shop" },
@@ -397,7 +398,18 @@ export default function Navbar() {
                       </span>
                     </div>
                     <div className="w-[1px] h-10 bg-[#EEEEEE1A] mx-5"></div>
-                    <CartSheet currency={currency} language={language} openSheet={openSheet} setOpenSheet={setOpenSheet}/>
+                    <CartSheet
+                      currency={currency}
+                      language={language}
+                      openSheet={openSheet}
+                      setOpenSheet={setOpenSheet}
+                      onCheckout={() =>
+                        dispatch(
+                          setActiveStep("checkout"),
+                          router.push("/Cart"),
+                        )
+                      }
+                    />
                   </div>
                 </div>
                 <div className="search&offers flex items-center h-[54.2px]">

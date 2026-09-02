@@ -1,7 +1,7 @@
 "use client";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ChevronRight, Trash2 } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import {
   Table,
   TableBody,
@@ -16,6 +16,7 @@ import {
   ClearUserCart,
   GetLoggedUserCart,
   RemoveProductFromCart,
+  setActiveStep,
   UpdateCartProductQuantity,
 } from "@/Features/Cart.slice";
 import QuantityCounter from "@/components/QuantityCounter/QuantityCounter";
@@ -38,7 +39,9 @@ import OrderReviewCard from "@/components/OrderReviewCard/OrderReviewCard";
 export default function Cart() {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
-  const { cart, loading } = useAppSelector((store) => store.CartSlice);
+  const { cart, loading, activeStep } = useAppSelector(
+    (store) => store.CartSlice,
+  );
   const { token, authChecked } = useAppSelector((store) => store.user);
   const dir = i18n.dir();
 
@@ -53,7 +56,6 @@ export default function Cart() {
   }, [dispatch, token, authChecked]);
 
   const isBusy = !authChecked || loading;
-  const [activeStep, setActiveStep] = useState("cart");
   useEffect(() => {
     window.scrollTo({
       top: 0,
@@ -78,7 +80,7 @@ export default function Cart() {
         <div className="pt-3 xl:pt-8">
           <Tabs
             dir={dir}
-            defaultValue="checkout"
+            defaultValue="cart"
             value={activeStep}
             onValueChange={setActiveStep}
             className="flex-col gap-8"

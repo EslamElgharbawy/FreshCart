@@ -19,14 +19,16 @@ import CartBadgeLoader from "../Skeletons/CartBadgeLoader";
 import CartSheetItem from "../CartSheetItem/CartSheetItem";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { useAppSelector } from "@/hooks/store.hooks";
+import { useAppDispatch, useAppSelector } from "@/hooks/store.hooks";
 import i18n from "@/i18n";
 import { Currency } from "@/Types/currency";
+import { setActiveStep } from "@/Features/Cart.slice";
 
 interface CartSheetProps {
   currency: Currency;
   language: string;
   openSheet: boolean;
+  onCheckout: () => void;
   setOpenSheet: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
@@ -35,10 +37,12 @@ export default function CartSheet({
   language,
   openSheet,
   setOpenSheet,
+  onCheckout,
 }: CartSheetProps) {
   const { authChecked } = useAppSelector((store) => store.user);
   const { cart, loading } = useAppSelector((store) => store.CartSlice);
   const { t } = useTranslation();
+  const dispatch = useAppDispatch();
   const currencySymbol = {
     USD: "$",
     EUR: "€",
@@ -184,7 +188,10 @@ export default function CartSheet({
 
               <Button
                 type="submit"
-                onClick={() => setOpenSheet(false)}
+                onClick={() => {
+                  setOpenSheet(false);
+                  onCheckout();
+                }}
                 className="text-sm !leading-[60px] text-white font-medium px-7 h-auto rounded-sm w-full"
               >
                 {t("cart.checkout")}
@@ -192,7 +199,9 @@ export default function CartSheet({
 
               <Link
                 href="/Cart"
-                onClick={() => setOpenSheet(false)}
+                onClick={() => {
+                  (dispatch(setActiveStep("cart")), setOpenSheet(false));
+                }}
                 className="capitalize mx-auto font-medium mt-4 bg-transparent border-0 border-b border-b-current rounded-none px-0 h-auto w-fit justify-center"
               >
                 {t("cart.viewCart")}

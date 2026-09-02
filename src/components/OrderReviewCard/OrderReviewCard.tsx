@@ -67,7 +67,7 @@ export default function OrderReviewCard({ cart, isBusy }: CartTotalsProps) {
             className="flex items-center justify-between border-b border-[#eee] py-5"
           >
             <p className="text-sm text-[#666]">
-              {product.product.title} ×{product.count}
+              {product.product.title} × {product.count}
             </p>
 
             <p className="text-sm text-[#666] ps-5">

@@ -13,6 +13,7 @@ const initialState: CartState = {
   loading: false,
   updating: false,
   error: null,
+  activeStep: "cart",
 };
 
 // ^ Add Product to Cart
@@ -135,19 +136,23 @@ export const ClearUserCart = createAsyncThunk<
 const CartSlice = createSlice({
   name: "cart",
   initialState,
-  reducers: {},
+  reducers: {
+    setActiveStep: (state, action) => {
+      state.activeStep = action.payload;
+    },
+  },
   extraReducers: (builder) => {
     // * Add Product to Cart
     builder.addCase(AddProductToCart.pending, (state) => {
-      state.updating= true;
+      state.updating = true;
       state.error = null;
     });
     builder.addCase(AddProductToCart.fulfilled, (state, action) => {
-      state.updating= false;
+      state.updating = false;
       state.cart = action.payload;
     });
     builder.addCase(AddProductToCart.rejected, (state, action) => {
-      state.updating= false;
+      state.updating = false;
       state.error = action.error.message || "Something went wrong";
     });
 
@@ -208,5 +213,5 @@ const CartSlice = createSlice({
     });
   },
 });
-export const actions = CartSlice.actions;
+export const { setActiveStep } = CartSlice.actions;
 export default CartSlice.reducer;
