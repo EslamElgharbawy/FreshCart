@@ -17,18 +17,16 @@ import { Skeleton } from "@/components/ui/skeleton";
 import EmptyCart from "../../assets/images/empty-bag.svg";
 import CartBadgeLoader from "../Skeletons/CartBadgeLoader";
 import CartSheetItem from "../CartSheetItem/CartSheetItem";
-import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { useAppDispatch, useAppSelector } from "@/hooks/store.hooks";
+import {useAppSelector } from "@/hooks/store.hooks";
 import i18n from "@/i18n";
 import { Currency } from "@/Types/currency";
-import { setActiveStep } from "@/Features/Cart.slice";
+import { useRouter } from "next/navigation";
 
 interface CartSheetProps {
   currency: Currency;
   language: string;
   openSheet: boolean;
-  onCheckout: () => void;
   setOpenSheet: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
@@ -37,12 +35,12 @@ export default function CartSheet({
   language,
   openSheet,
   setOpenSheet,
-  onCheckout,
 }: CartSheetProps) {
   const { authChecked } = useAppSelector((store) => store.user);
   const { cart, loading } = useAppSelector((store) => store.CartSlice);
   const { t } = useTranslation();
-  const dispatch = useAppDispatch();
+  const router = useRouter();
+
   const currencySymbol = {
     USD: "$",
     EUR: "€",
@@ -190,7 +188,7 @@ export default function CartSheet({
                 type="submit"
                 onClick={() => {
                   setOpenSheet(false);
-                  onCheckout();
+                  router.push("/Cart?step=checkout");
                 }}
                 className="text-sm !leading-[60px] text-white font-medium px-7 h-auto rounded-sm w-full"
               >
@@ -200,7 +198,7 @@ export default function CartSheet({
               <Link
                 href="/Cart"
                 onClick={() => {
-                  (dispatch(setActiveStep("cart")), setOpenSheet(false));
+                  setOpenSheet(false);
                 }}
                 className="capitalize mx-auto font-medium mt-4 bg-transparent border-0 border-b border-b-current rounded-none px-0 h-auto w-fit justify-center"
               >

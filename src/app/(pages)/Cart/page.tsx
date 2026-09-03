@@ -16,7 +16,6 @@ import {
   ClearUserCart,
   GetLoggedUserCart,
   RemoveProductFromCart,
-  setActiveStep,
   UpdateCartProductQuantity,
 } from "@/Features/Cart.slice";
 import QuantityCounter from "@/components/QuantityCounter/QuantityCounter";
@@ -35,19 +34,25 @@ import { useFormik } from "formik";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import OrderReviewCard from "@/components/OrderReviewCard/OrderReviewCard";
+import { useRouter, useSearchParams } from "next/navigation";
 
 export default function Cart() {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
-  const { cart, loading, activeStep } = useAppSelector(
-    (store) => store.CartSlice,
-  );
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
+  const step = searchParams.get("step");
+  const { cart, loading } = useAppSelector((store) => store.CartSlice);
   const { token, authChecked } = useAppSelector((store) => store.user);
   const dir = i18n.dir();
 
   const handleQuantityChange = async (productId: string, count: number) => {
     await dispatch(UpdateCartProductQuantity({ productId, count })).unwrap();
   };
+
+  const currentStep =
+    step === "checkout" || step === "complete" ? step : "cart";
 
   useEffect(() => {
     if (authChecked && token) {
@@ -61,7 +66,7 @@ export default function Cart() {
       top: 0,
       behavior: "smooth",
     });
-  }, [activeStep]);
+  }, [currentStep]);
 
   const formik = useFormik({
     initialValues: {
@@ -80,36 +85,39 @@ export default function Cart() {
         <div className="pt-3 xl:pt-8">
           <Tabs
             dir={dir}
-            defaultValue="cart"
-            value={activeStep}
-            onValueChange={setActiveStep}
+            value={currentStep}
+            onValueChange={(newStep) => {
+              router.push(
+                newStep === "cart" ? "/Cart" : `/Cart?step=${newStep}`,
+              );
+            }}
             className="flex-col gap-8"
           >
             <TabsList className="py-5 mx-auto max-xl:flex-wrap gap-y-2 sm:max-md:max-w-[320px] md:max-lg:max-w-[330px] lg:max-xl:max-w-[350px]">
               <TabsTrigger
-                className={`text-lg lg:text-xl font-bold text-[#666] data-[state=active]:bg-transparent ${activeStep === "cart" ? " data-[state=active]:text-primary" : "text-[#333]"} data-[state=active]:after:opacity-0 group-data-[variant=default]/tabs-list:data-[state=active]:shadow-none`}
+                className={`text-lg lg:text-xl font-bold text-[#666] data-[state=active]:bg-transparent ${currentStep === "cart" ? " data-[state=active]:text-primary" : "text-[#333]"} data-[state=active]:after:opacity-0 group-data-[variant=default]/tabs-list:data-[state=active]:shadow-none`}
                 value="cart"
               >
                 {t("cart.shoppingCart")}
               </TabsTrigger>
               <ChevronRight
                 size={24}
-                className={`${activeStep === "checkout" || activeStep === "complete" ? "text-[#333]" : "text-[#999]"}  font-bold rtl:rotate-180`}
+                className={`${currentStep === "checkout" || currentStep === "complete" ? "text-[#333]" : "text-[#999]"}  font-bold rtl:rotate-180`}
               />
 
               <TabsTrigger
-                className={`text-lg lg:text-xl font-bold text-[#666] data-[state=active]:bg-transparent ${activeStep === "checkout" ? "data-[state=active]:text-primary " : activeStep === "complete" ? "text-[#333]" : "text-[#666]"} data-[state=active]:text-primary data-[state=active]:after:opacity-0 group-data-[variant=default]/tabs-list:data-[state=active]:shadow-none`}
+                className={`text-lg lg:text-xl font-bold text-[#666] data-[state=active]:bg-transparent ${currentStep === "checkout" ? "data-[state=active]:text-primary " : currentStep === "complete" ? "text-[#333]" : "text-[#666]"} data-[state=active]:text-primary data-[state=active]:after:opacity-0 group-data-[variant=default]/tabs-list:data-[state=active]:shadow-none`}
                 value="checkout"
               >
                 {t("cart.checkout")}
               </TabsTrigger>
               <ChevronRight
                 size={24}
-                className={`${activeStep === "complete" ? "text-[#333]" : "text-[#999]"}  font-bold rtl:rotate-180`}
+                className={`${currentStep === "complete" ? "text-[#333]" : "text-[#999]"}  font-bold rtl:rotate-180`}
               />
 
               <TabsTrigger
-                className={`text-lg lg:text-xl font-bold text-[#666] data-[state=active]:bg-transparent ${activeStep === "checkout" ? " data-[state=active]:text-primary " : "text-[#666]"} data-[state=active]:text-primary data-[state=active]:after:opacity-0 group-data-[variant=default]/tabs-list:data-[state=active]:shadow-none`}
+                className={`text-lg lg:text-xl font-bold text-[#666] data-[state=active]:bg-transparent ${currentStep === "checkout" ? " data-[state=active]:text-primary " : "text-[#666]"} data-[state=active]:text-primary data-[state=active]:after:opacity-0 group-data-[variant=default]/tabs-list:data-[state=active]:shadow-none`}
                 value="complete"
               >
                 {t("cart.orderComplete")}
@@ -277,11 +285,7 @@ export default function Cart() {
 
                     <div className="col-span-full 2xl:col-span-4 px-5">
                       <div className="max-xl:hidden">
-                        <CartTotals
-                          cart={cart}
-                          isBusy={isBusy}
-                          onCheckout={() => setActiveStep("checkout")}
-                        />
+                        <CartTotals cart={cart} isBusy={isBusy} />
                       </div>
                     </div>
                   </div>
@@ -335,11 +339,7 @@ export default function Cart() {
                       </div>
                     </div>
 
-                    <CartTotals
-                      cart={cart}
-                      isBusy={isBusy}
-                      onCheckout={() => setActiveStep("checkout")}
-                    />
+                    <CartTotals cart={cart} isBusy={isBusy} />
                   </div>
                 </div>
               ) : (

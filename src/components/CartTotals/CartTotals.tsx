@@ -6,22 +6,19 @@ import { CartData } from "@/Types/cart";
 import { Skeleton } from "../ui/skeleton";
 import { useTranslation } from "react-i18next";
 import i18n from "@/i18n";
+import { useRouter } from "next/navigation";
 interface CartTotalsProps {
   cart: CartData | null;
   isBusy: boolean;
-  onCheckout: () => void;
 }
-export default function CartTotals({
-  cart,
-  onCheckout,
-  isBusy,
-}: CartTotalsProps) {
+export default function CartTotals({ cart, isBusy }: CartTotalsProps) {
+  const router = useRouter();
   const { t } = useTranslation();
   const dir = i18n.dir();
   return (
     <div className="w-full rounded-lg border border-[#eee] bg-white p-8">
       <h2 className="text-xl font-bold uppercase tracking-[-0.2px] text-[#333]">
-       {t("cart.cartTotals")}
+        {t("cart.cartTotals")}
       </h2>
 
       {isBusy ? (
@@ -71,11 +68,13 @@ export default function CartTotals({
 
       <Button
         type="button"
-        onClick={onCheckout}
+        onClick={() => router.push("/Cart?step=checkout")}
         className="mt-5 h-11 lg:h-12  w-full rounded-md bg-[#333] text-xs lg:text-sm font-bold uppercase tracking-wide text-white transition-all duration-300 hover:bg-[#444]"
       >
         {t("cart.proceedToCheckout")}
-        <ArrowRight className={`size-4 ${dir === "rtl" ? "rotate-180 mr-2" : "ml-2"}`} />
+        <ArrowRight
+          className={`size-4 ${dir === "rtl" ? "rotate-180 mr-2" : "ml-2"}`}
+        />
       </Button>
     </div>
   );

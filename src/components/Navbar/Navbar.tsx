@@ -38,7 +38,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { usePathname, useRouter } from "next/navigation";
 import { actions } from "@/Features/AuthDialog.slice";
 import { getCategories } from "@/Features/Categoreis.slice";
-import { GetLoggedUserCart, setActiveStep } from "@/Features/Cart.slice";
+import { GetLoggedUserCart } from "@/Features/Cart.slice";
 import CartBadgeLoader from "../Skeletons/CartBadgeLoader";
 import CartSheet from "../CartSheet/CartSheet";
 
@@ -55,7 +55,6 @@ export default function Navbar() {
   const { t, i18n } = useTranslation();
   const dispatch = useAppDispatch();
   const pathname = usePathname();
-  const router = useRouter();
   const isHome = pathname === "/";
 
   const { categories } = useAppSelector((store) => store.categoriesSlice);
@@ -403,12 +402,6 @@ export default function Navbar() {
                       language={language}
                       openSheet={openSheet}
                       setOpenSheet={setOpenSheet}
-                      onCheckout={() =>
-                        dispatch(
-                          setActiveStep("checkout"),
-                          router.push("/Cart"),
-                        )
-                      }
                     />
                   </div>
                 </div>
