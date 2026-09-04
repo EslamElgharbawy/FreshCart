@@ -190,7 +190,7 @@ export default function CartSheet({
                 onClick={() => {
                   setOpenSheet(false);
                   dispatch(setActiveStep("checkout"));
-                  router.push("/Cart?step=checkout");
+                  router.push("/Cart");
                 }}
                 className="text-sm !leading-[60px] text-white font-medium px-7 h-auto rounded-sm w-full"
               >
