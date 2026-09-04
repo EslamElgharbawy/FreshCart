@@ -4,7 +4,6 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Skeleton } from "../ui/skeleton";
 import { CartData } from "@/Types/cart";
 import { useTranslation } from "react-i18next";
-import i18n from "@/i18n";
 import { useState } from "react";
 import { Accordion, AccordionItem } from "../ui/accordion";
 import { motion, AnimatePresence } from "framer-motion";
@@ -12,37 +11,30 @@ import { motion, AnimatePresence } from "framer-motion";
 interface CartTotalsProps {
   cart: CartData | null;
   isBusy: boolean;
+  paymentMethod: string;
+  onPaymentMethodChange: (value: string) => void;
 }
 
 const paymentMethods = [
   {
-    id: "bacs",
-    label: "Direct bank transfer",
-    description:
-      "Make your payment directly into our bank account. Please use your Order ID as the payment reference. Your order will not be shipped until the funds have cleared in our account.",
-  },
-  {
-    id: "cheque",
-    label: "Check payments",
-    description:
-      "Please send a check to Store Name, Store Street, Store Town, Store State / County, Store Postcode.",
-  },
-  {
-    id: "cod",
+    id: "Cash",
     label: "Cash on delivery",
     description: "Pay with cash upon delivery.",
   },
   {
-    id: "paypal",
-    label: "PayPal",
-    description:
-      "Pay via PayPal; you can pay with your credit card if you don't have a PayPal account.",
+    id: "stripe",
+    label: "Online Payment (Stripe)",
+    description: "Pay securely via Stripe using your credit or debit card.",
   },
 ];
-export default function OrderReviewCard({ cart, isBusy }: CartTotalsProps) {
-  const [paymentMethod, setPaymentMethod] = useState("bacs");
+
+export default function OrderReviewCard({
+  cart,
+  isBusy,
+  paymentMethod,
+  onPaymentMethodChange,
+}: CartTotalsProps) {
   const { t } = useTranslation();
-  const dir = i18n.dir();
   return (
     <div className="w-full rounded-lg border border-[#eee] bg-white max-xl:p-5 p-8">
       <h2 className="text-xl font-bold uppercase tracking-[-0.2px] text-[#333] mb-3">
@@ -99,7 +91,7 @@ export default function OrderReviewCard({ cart, isBusy }: CartTotalsProps) {
 
       <RadioGroup
         value={paymentMethod}
-        onValueChange={setPaymentMethod}
+        onValueChange={onPaymentMethodChange}
         className="space-y-2"
       >
         {paymentMethods.map((method) => (
@@ -115,7 +107,7 @@ export default function OrderReviewCard({ cart, isBusy }: CartTotalsProps) {
                 <RadioGroupItem value={method.id} id={method.id} />
                 <button
                   type="button"
-                  onClick={() => setPaymentMethod(method.id)}
+                  onClick={() => onPaymentMethodChange(method.id)}
                   className="text-sm font-medium text-[#333]"
                 >
                   {method.label}
@@ -151,10 +143,10 @@ export default function OrderReviewCard({ cart, isBusy }: CartTotalsProps) {
       </RadioGroup>
 
       <Button
-        type="button"
+        type="submit"
         className="mt-5 h-11 lg:h-12  w-full rounded-md bg-[#333] text-xs lg:text-sm font-semibold uppercase tracking-wide text-white transition-all duration-300 hover:bg-[#444]"
       >
-        place order
+        {paymentMethod === "Cash" ? "place order" : "Proceed to stripe"}
       </Button>
     </div>
   );

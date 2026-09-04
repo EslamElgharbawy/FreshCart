@@ -1,7 +1,7 @@
 "use client";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ChevronRight, Trash2 } from "lucide-react";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import {
   Table,
   TableBody,
@@ -36,11 +36,14 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import OrderReviewCard from "@/components/OrderReviewCard/OrderReviewCard";
 import { useRouter } from "next/navigation";
+import { CreateCashOrder } from "@/Features/checkout.slice";
 
 export default function CartContent() {
   const { t } = useTranslation();
   const router = useRouter();
   const dispatch = useAppDispatch();
+  const [paymentMethod, setPaymentMethod] = useState("Cash");
+
   const { cart, loading, activeStep, stepInitialized } = useAppSelector(
     (store) => store.CartSlice,
   );
@@ -72,8 +75,31 @@ export default function CartContent() {
       city: "",
       postalCode: "",
     },
-    onSubmit: (values) => {
-      console.log(values);
+    onSubmit: async (values) => {
+      if (!cart?._id) return;
+      toast.loading(t("waiting..."), { id: "placingOrder" });
+      if (paymentMethod === "Cash") {
+        const results = await dispatch(
+          CreateCashOrder({
+            cartId: cart._id,
+            values,
+          }),
+        );
+        if (CreateCashOrder.fulfilled.match(results)) {
+          toast.success("order Placed Successfully ", {
+            id: "placingOrder",
+          });
+          formik.resetForm();
+          dispatch(GetLoggedUserCart());
+          dispatch(setActiveStep("complete"));
+        } else {
+          toast.error("Failed To Place Order", {
+            id: "placingOrder",
+          });
+        }
+      } else {
+        // هنا هنحط Stripe thunk
+      }
     },
   });
 
@@ -393,106 +419,156 @@ export default function CartContent() {
             </TabsContent>
 
             <TabsContent value="checkout">
-              <div className="pt-3 xl:pt-8 pb-12">
-                <div className="xl:grid grid-cols-12">
-                  <div className="col-span-full 2xl:col-span-7 px-5">
-                    <form onSubmit={formik.handleSubmit}>
-                      <FieldGroup className="gap-7">
-                        <Field>
-                          <Label
-                            className="font-normal text-textMain !w-fit"
-                            htmlFor="details"
-                          >
-                            Street address
-                          </Label>
-                          <Input
-                            type="text"
-                            id="details"
-                            className="rounded-none py-2 px-5 h-auto text-sm"
-                            name="details"
-                            value={formik.values.details}
-                            onChange={formik.handleChange}
-                          />
-                          {/* {formik.touched.details && formik.errors.details && (
+              {isBusy || (cart?.products?.length ?? 0) > 0 ? (
+                <div className="pt-3 xl:pt-8 pb-12">
+                  <form onSubmit={formik.handleSubmit}>
+                    <div className="xl:grid grid-cols-12">
+                      <div className="col-span-full 2xl:col-span-7 px-5">
+                        <FieldGroup className="gap-7">
+                          <Field>
+                            <Label
+                              className="font-normal text-textMain !w-fit"
+                              htmlFor="details"
+                            >
+                              Street address
+                            </Label>
+                            <Input
+                              type="text"
+                              id="details"
+                              className="rounded-none py-2 px-5 h-auto text-sm"
+                              name="details"
+                              value={formik.values.details}
+                              onChange={formik.handleChange}
+                            />
+                            {/* {formik.touched.details && formik.errors.details && (
                             <p className="text-sm text-red-500">
                               {formik.errors.details}
                             </p>
                           )} */}
-                        </Field>
-                        <Field className="!gap-2">
-                          <Label
-                            className="font-normal text-textMain !w-fit"
-                            htmlFor="phone"
-                          >
-                            {t("registerForm.phone")}
-                          </Label>
-                          <Input
-                            type="tel"
-                            id="phone"
-                            className="rounded-none py-2 px-5 h-auto text-sm"
-                            name="phone"
-                            value={formik.values.phone}
-                            onChange={formik.handleChange}
-                          />
-                          {/* {formik.touched.password &&
+                          </Field>
+                          <Field className="!gap-2">
+                            <Label
+                              className="font-normal text-textMain !w-fit"
+                              htmlFor="phone"
+                            >
+                              {t("registerForm.phone")}
+                            </Label>
+                            <Input
+                              type="tel"
+                              id="phone"
+                              className="rounded-none py-2 px-5 h-auto text-sm"
+                              name="phone"
+                              value={formik.values.phone}
+                              onChange={formik.handleChange}
+                            />
+                            {/* {formik.touched.password &&
                             formik.errors.password && (
                               <p className="text-sm text-red-500">
                                 {formik.errors.password}
                               </p>
                             )} */}
-                        </Field>
-                        <Field className="!gap-2">
-                          <Label
-                            className="font-normal text-textMain !w-fit"
-                            htmlFor="city"
-                          >
-                            Town / City
-                          </Label>
-                          <Input
-                            type="text"
-                            id="city"
-                            className="rounded-none py-2 px-5 h-auto text-sm"
-                            name="city"
-                            value={formik.values.city}
-                            onChange={formik.handleChange}
-                          />
-                          {/* {formik.touched.password &&
+                          </Field>
+                          <Field className="!gap-2">
+                            <Label
+                              className="font-normal text-textMain !w-fit"
+                              htmlFor="city"
+                            >
+                              Town / City
+                            </Label>
+                            <Input
+                              type="text"
+                              id="city"
+                              className="rounded-none py-2 px-5 h-auto text-sm"
+                              name="city"
+                              value={formik.values.city}
+                              onChange={formik.handleChange}
+                            />
+                            {/* {formik.touched.password &&
                             formik.errors.password && (
                               <p className="text-sm text-red-500">
                                 {formik.errors.password}
                               </p>
                             )} */}
-                        </Field>
-                        <Field className="!gap-2">
-                          <Label
-                            className="font-normal text-textMain !w-fit"
-                            htmlFor="postalCode"
-                          >
-                            Postcode
-                          </Label>
-                          <Input
-                            type="number"
-                            id="postalCode"
-                            className="rounded-none py-2 px-5 h-auto text-sm"
-                            name="postalCode"
-                            value={formik.values.postalCode}
-                            onChange={formik.handleChange}
-                          />
-                          {/* {formik.touched.password &&
+                          </Field>
+                          <Field className="!gap-2">
+                            <Label
+                              className="font-normal text-textMain !w-fit"
+                              htmlFor="postalCode"
+                            >
+                              Postcode
+                            </Label>
+                            <Input
+                              type="number"
+                              id="postalCode"
+                              className="rounded-none py-2 px-5 h-auto text-sm"
+                              name="postalCode"
+                              value={formik.values.postalCode}
+                              onChange={formik.handleChange}
+                            />
+                            {/* {formik.touched.password &&
                             formik.errors.password && (
                               <p className="text-sm text-red-500">
                                 {formik.errors.password}
                               </p>
                             )} */}
-                        </Field>
-                      </FieldGroup>
-                    </form>
-                  </div>
-                  <div className="col-span-full 2xl:col-span-5 px-5 max-2xl:mt-10">
-                    <OrderReviewCard cart={cart} isBusy={isBusy} />
-                  </div>
+                          </Field>
+                        </FieldGroup>
+                      </div>
+                      <div className="col-span-full 2xl:col-span-5 px-5 max-2xl:mt-10">
+                        <OrderReviewCard
+                          cart={cart}
+                          isBusy={isBusy}
+                          paymentMethod={paymentMethod}
+                          onPaymentMethodChange={setPaymentMethod}
+                        />
+                      </div>
+                    </div>
+                  </form>
                 </div>
-              </div>
+              ) : (
+                <div>
+                  <div className="flex justify-center gap-2 mb-5 px-5 py-4 font-semibold text-[#777]">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      className="lucide lucide-circle-alert-icon lucide-circle-alert"
+                    >
+                      <circle cx="12" cy="12" r="10" />
+                      <line x1="12" x2="12" y1="8" y2="12" />
+                      <line x1="12" x2="12.01" y1="16" y2="16" />
+                    </svg>
+                    Your cart is currently empty.
+                  </div>
+
+                  <div className="mb-8">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      strokeWidth={1.5}
+                      stroke="#aaa"
+                      className="size-20 block mx-auto"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M15.75 10.5V6a3.75 3.75 0 1 0-7.5 0v4.5m11.356-1.993 1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 0 1-1.12-1.243l1.264-12A1.125 1.125 0 0 1 5.513 7.5h12.974c.576 0 1.059.435 1.119 1.007ZM8.625 10.5a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm7.5 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z"
+                      />
+                    </svg>
+                  </div>
+
+                  <Button className="uppercase !px-7 !py-3 h-auto rounded-md bg-[#333] hover:bg-[#454545] transition-all duration-300 text-white font-semibold block mx-auto">
+                    Return to shop{" "}
+                  </Button>
+                </div>
+              )}
             </TabsContent>
 
             <TabsContent value="complete">{/* Order Complete */}</TabsContent>

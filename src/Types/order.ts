@@ -1,3 +1,9 @@
+export interface OrderState {
+  order: OrderResponse | null;
+  isLoading: boolean;
+  error: string | null;
+}
+
 export interface OrderResponse {
   status: string;
   message: string;
