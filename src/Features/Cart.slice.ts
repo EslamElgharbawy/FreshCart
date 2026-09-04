@@ -13,7 +13,7 @@ const initialState: CartState = {
   loading: false,
   updating: false,
   error: null,
-  activeStep: "cart",
+  activeStep: "shoppingCart",
   stepInitialized: false,
 };
 

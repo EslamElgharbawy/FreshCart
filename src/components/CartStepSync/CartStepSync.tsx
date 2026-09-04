@@ -12,10 +12,10 @@ export default function CartStepSync() {
   useEffect(() => {
     const step = searchParams.get("step");
 
-    if (step === "checkout" || step === "complete") {
+    if (step === "shoppingCart" || step === "checkout" || step === "complete") {
       dispatch(setActiveStep(step));
     } else {
-      dispatch(setActiveStep("cart"));
+      dispatch(setActiveStep("shoppingCart"));
     }
     dispatch(setStepInitialized(true));
   }, [searchParams, dispatch]);

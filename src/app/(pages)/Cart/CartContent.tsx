@@ -89,20 +89,18 @@ export default function CartContent() {
             value={activeStep}
             onValueChange={(newStep) => {
               dispatch(setActiveStep(newStep));
-              router.replace(
-                newStep === "cart" ? "/Cart" : `/Cart?step=${newStep}`,
-              );
+              if (newStep === "shoppingCart") {
+                router.push("/Cart");
+              } else {
+                router.push(`/Cart?step=${newStep}`);
+              }
             }}
             className="flex-col gap-8"
           >
             <TabsList className="py-5 mx-auto max-xl:flex-wrap gap-y-2 sm:max-md:max-w-[320px] md:max-lg:max-w-[330px] lg:max-xl:max-w-[350px]">
               <TabsTrigger
-                className={`text-lg lg:text-xl font-bold text-[#666] data-[state=active]:bg-transparent ${activeStep === "cart" ? " data-[state=active]:text-primary" : "text-[#333]"} data-[state=active]:after:opacity-0 group-data-[variant=default]/tabs-list:data-[state=active]:shadow-none`}
-                value="cart"
-                onClick={() => {
-                  dispatch(setActiveStep("cart"));
-                  router.push("/Cart");
-                }}
+                className={`text-lg lg:text-xl font-bold text-[#666] data-[state=active]:bg-transparent ${activeStep === "shoppingCart" ? " data-[state=active]:text-primary" : "text-[#333]"} data-[state=active]:after:opacity-0 group-data-[variant=default]/tabs-list:data-[state=active]:shadow-none`}
+                value="shoppingCart"
               >
                 {t("cart.shoppingCart")}
               </TabsTrigger>
@@ -130,7 +128,7 @@ export default function CartContent() {
               </TabsTrigger>
             </TabsList>
 
-            <TabsContent value="cart">
+            <TabsContent value="shoppingCart">
               {isBusy || (cart?.products?.length ?? 0) > 0 ? (
                 <div className="pt-3 xl:pt-8 pb-12">
                   <div className="xl:grid grid-cols-12">
