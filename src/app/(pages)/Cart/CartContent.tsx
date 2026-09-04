@@ -99,6 +99,10 @@ export default function CartContent() {
               <TabsTrigger
                 className={`text-lg lg:text-xl font-bold text-[#666] data-[state=active]:bg-transparent ${activeStep === "cart" ? " data-[state=active]:text-primary" : "text-[#333]"} data-[state=active]:after:opacity-0 group-data-[variant=default]/tabs-list:data-[state=active]:shadow-none`}
                 value="cart"
+                onClick={() => {
+                  dispatch(setActiveStep("cart"));
+                  router.push("/Cart");
+                }}
               >
                 {t("cart.shoppingCart")}
               </TabsTrigger>
