@@ -18,10 +18,11 @@ import EmptyCart from "../../assets/images/empty-bag.svg";
 import CartBadgeLoader from "../Skeletons/CartBadgeLoader";
 import CartSheetItem from "../CartSheetItem/CartSheetItem";
 import { useTranslation } from "react-i18next";
-import {useAppSelector } from "@/hooks/store.hooks";
+import { useAppDispatch, useAppSelector } from "@/hooks/store.hooks";
 import i18n from "@/i18n";
 import { Currency } from "@/Types/currency";
 import { useRouter } from "next/navigation";
+import { setActiveStep } from "@/Features/Cart.slice";
 
 interface CartSheetProps {
   currency: Currency;
@@ -40,7 +41,7 @@ export default function CartSheet({
   const { cart, loading } = useAppSelector((store) => store.CartSlice);
   const { t } = useTranslation();
   const router = useRouter();
-
+  const dispatch = useAppDispatch();
   const currencySymbol = {
     USD: "$",
     EUR: "€",
@@ -185,9 +186,10 @@ export default function CartSheet({
               </div>
 
               <Button
-                type="submit"
+                type="button"
                 onClick={() => {
                   setOpenSheet(false);
+                  dispatch(setActiveStep("checkout"));
                   router.push("/Cart?step=checkout");
                 }}
                 className="text-sm !leading-[60px] text-white font-medium px-7 h-auto rounded-sm w-full"

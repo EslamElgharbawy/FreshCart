@@ -16,6 +16,7 @@ import {
   ClearUserCart,
   GetLoggedUserCart,
   RemoveProductFromCart,
+  setActiveStep,
   UpdateCartProductQuantity,
 } from "@/Features/Cart.slice";
 import QuantityCounter from "@/components/QuantityCounter/QuantityCounter";
@@ -87,6 +88,10 @@ export default function CartContent() {
             dir={dir}
             value={currentStep}
             onValueChange={(newStep) => {
+              dispatch(
+                setActiveStep(newStep as "cart" | "checkout" | "complete"),
+              );
+
               router.push(
                 newStep === "cart" ? "/Cart" : `/Cart?step=${newStep}`,
               );

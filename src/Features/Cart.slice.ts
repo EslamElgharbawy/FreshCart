@@ -13,6 +13,7 @@ const initialState: CartState = {
   loading: false,
   updating: false,
   error: null,
+  activeStep: "cart",
 };
 
 // ^ Add Product to Cart
@@ -43,7 +44,6 @@ export const GetLoggedUserCart = createAsyncThunk<
   { state: RootState }
 >("cart/GetLoggedUserCart", async (_, { getState }) => {
   const token = getState().user.token;
-  console.log("Token:", token);
   const { data } = await axios.get(
     "https://ecommerce.routemisr.com/api/v2/cart",
     {
@@ -135,7 +135,11 @@ export const ClearUserCart = createAsyncThunk<
 const CartSlice = createSlice({
   name: "cart",
   initialState,
-  reducers: {},
+  reducers: {
+    setActiveStep: (state, action) => {
+      state.activeStep = action.payload;
+    },
+  },
   extraReducers: (builder) => {
     // * Add Product to Cart
     builder.addCase(AddProductToCart.pending, (state) => {
@@ -208,5 +212,5 @@ const CartSlice = createSlice({
     });
   },
 });
-export const actions = CartSlice.actions;
+export const { setActiveStep } = CartSlice.actions;
 export default CartSlice.reducer;

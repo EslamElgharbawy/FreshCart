@@ -7,12 +7,15 @@ import { Skeleton } from "../ui/skeleton";
 import { useTranslation } from "react-i18next";
 import i18n from "@/i18n";
 import { useRouter } from "next/navigation";
+import { setActiveStep } from "@/Features/Cart.slice";
+import { useAppDispatch } from "@/hooks/store.hooks";
 interface CartTotalsProps {
   cart: CartData | null;
   isBusy: boolean;
 }
 export default function CartTotals({ cart, isBusy }: CartTotalsProps) {
   const router = useRouter();
+  const dispatch = useAppDispatch();
   const { t } = useTranslation();
   const dir = i18n.dir();
   return (
@@ -68,7 +71,10 @@ export default function CartTotals({ cart, isBusy }: CartTotalsProps) {
 
       <Button
         type="button"
-        onClick={() => router.push("/Cart?step=checkout")}
+        onClick={() => {
+          dispatch(setActiveStep("checkout"));
+          router.push("/Cart?step=checkout");
+        }}
         className="mt-5 h-11 lg:h-12  w-full rounded-md bg-[#333] text-xs lg:text-sm font-bold uppercase tracking-wide text-white transition-all duration-300 hover:bg-[#444]"
       >
         {t("cart.proceedToCheckout")}
