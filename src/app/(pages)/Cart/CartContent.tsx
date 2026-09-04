@@ -68,6 +68,9 @@ export default function CartContent() {
       behavior: "smooth",
     });
   }, [currentStep]);
+  useEffect(() => {
+    dispatch(setActiveStep(currentStep));
+  }, [currentStep, dispatch]);
 
   const formik = useFormik({
     initialValues: {
@@ -88,10 +91,6 @@ export default function CartContent() {
             dir={dir}
             value={currentStep}
             onValueChange={(newStep) => {
-              dispatch(
-                setActiveStep(newStep as "cart" | "checkout" | "complete"),
-              );
-
               router.push(
                 newStep === "cart" ? "/Cart" : `/Cart?step=${newStep}`,
               );
