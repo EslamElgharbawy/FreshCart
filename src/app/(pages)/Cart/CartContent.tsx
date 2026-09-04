@@ -89,7 +89,7 @@ export default function CartContent() {
             value={activeStep}
             onValueChange={(newStep) => {
               dispatch(setActiveStep(newStep));
-              router.push(
+              router.replace(
                 newStep === "cart" ? "/Cart" : `/Cart?step=${newStep}`,
               );
             }}
