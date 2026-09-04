@@ -14,6 +14,7 @@ const initialState: CartState = {
   updating: false,
   error: null,
   activeStep: "cart",
+  stepInitialized: false,
 };
 
 // ^ Add Product to Cart
@@ -139,6 +140,9 @@ const CartSlice = createSlice({
     setActiveStep: (state, action) => {
       state.activeStep = action.payload;
     },
+    setStepInitialized: (state, action) => {
+      state.stepInitialized = action.payload;
+    },
   },
   extraReducers: (builder) => {
     // * Add Product to Cart
@@ -212,5 +216,5 @@ const CartSlice = createSlice({
     });
   },
 });
-export const { setActiveStep } = CartSlice.actions;
+export const { setActiveStep, setStepInitialized } = CartSlice.actions;
 export default CartSlice.reducer;

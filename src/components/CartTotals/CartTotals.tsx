@@ -73,6 +73,7 @@ export default function CartTotals({ cart, isBusy }: CartTotalsProps) {
         type="button"
         onClick={() => {
           dispatch(setActiveStep("checkout"));
+          router.push("/Cart?step=checkout");
         }}
         className="mt-5 h-11 lg:h-12  w-full rounded-md bg-[#333] text-xs lg:text-sm font-bold uppercase tracking-wide text-white transition-all duration-300 hover:bg-[#444]"
       >

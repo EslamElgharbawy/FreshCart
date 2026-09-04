@@ -35,24 +35,21 @@ import { useFormik } from "formik";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import OrderReviewCard from "@/components/OrderReviewCard/OrderReviewCard";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 
 export default function CartContent() {
   const { t } = useTranslation();
-  const dispatch = useAppDispatch();
   const router = useRouter();
-  // const searchParams = useSearchParams();
-
-  // const step = searchParams.get("step");
-  const { cart, loading,activeStep } = useAppSelector((store) => store.CartSlice);
+  const dispatch = useAppDispatch();
+  const { cart, loading, activeStep, stepInitialized } = useAppSelector(
+    (store) => store.CartSlice,
+  );
   const { token, authChecked } = useAppSelector((store) => store.user);
   const dir = i18n.dir();
 
   const handleQuantityChange = async (productId: string, count: number) => {
     await dispatch(UpdateCartProductQuantity({ productId, count })).unwrap();
   };
-
-  // const activeStep = "cart";
 
   useEffect(() => {
     if (authChecked && token) {
@@ -67,9 +64,6 @@ export default function CartContent() {
       behavior: "smooth",
     });
   }, [activeStep]);
-  // useEffect(() => {
-  //   dispatch(setActiveStep(currentStep));
-  // }, [currentStep, dispatch]);
 
   const formik = useFormik({
     initialValues: {
@@ -82,6 +76,10 @@ export default function CartContent() {
       console.log(values);
     },
   });
+
+  if (!stepInitialized) {
+    return null;
+  }
   return (
     <>
       <section>
@@ -89,15 +87,11 @@ export default function CartContent() {
           <Tabs
             dir={dir}
             value={activeStep}
-            // onValueChange={(newStep) => {
-            //   router.push(
-            //     newStep === "cart" ? "/Cart" : `/Cart?step=${newStep}`,
-            //   );
-            // }}
             onValueChange={(newStep) => {
-              console.log("TAB CHANGE:", newStep);
-
               dispatch(setActiveStep(newStep));
+              router.push(
+                newStep === "cart" ? "/Cart" : `/Cart?step=${newStep}`,
+              );
             }}
             className="flex-col gap-8"
           >
