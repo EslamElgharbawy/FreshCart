@@ -36,7 +36,7 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import OrderReviewCard from "@/components/OrderReviewCard/OrderReviewCard";
 import { useRouter } from "next/navigation";
-import { CreateCashOrder } from "@/Features/checkout.slice";
+import { CheckoutSession, CreateCashOrder } from "@/Features/checkout.slice";
 
 export default function CartContent() {
   const { t } = useTranslation();
@@ -98,7 +98,21 @@ export default function CartContent() {
           });
         }
       } else {
-        // هنا هنحط Stripe thunk
+        const results = await dispatch(
+          CheckoutSession({
+            cartId: cart._id,
+            values,
+          }),
+        );
+        if (CheckoutSession.fulfilled.match(results)) {
+          setTimeout(() => {
+            location.href = results.payload.session.url;
+          }, 2000);
+        } else {
+          toast.error("Failed To Place Order", {
+            id: "placingOrder",
+          });
+        }
       }
     },
   });
@@ -116,9 +130,9 @@ export default function CartContent() {
             onValueChange={(newStep) => {
               dispatch(setActiveStep(newStep));
               if (newStep === "shoppingCart") {
-                router.push("/Cart");
+                router.push("/cart");
               } else {
-                router.push(`/Cart?step=${newStep}`);
+                router.push(`/cart?step=${newStep}`);
               }
             }}
             className="flex-col gap-8"
@@ -343,7 +357,7 @@ export default function CartContent() {
                             viewBox="0 0 24 24"
                             strokeWidth="1.5"
                             stroke="currentColor"
-                            className="size-5"
+                            className={`size-5 ${dir === "rtl" ? "rotate-180" : ""}`}
                           >
                             <path
                               strokeLinecap="round"

@@ -1,10 +1,15 @@
 import { RootState } from "@/Store/Store";
-import { OrderResponse, OrderState } from "@/Types/order";
+import {
+  CheckoutSessionResponse,
+  OrderResponse,
+  OrderState,
+} from "@/Types/order";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 
 const initialState: OrderState = {
   order: null,
+  session: null,
   isLoading: false,
   error: null,
 };
@@ -37,7 +42,7 @@ export const CreateCashOrder = createAsyncThunk<
 });
 
 export const CheckoutSession = createAsyncThunk<
-  OrderResponse,
+  CheckoutSessionResponse,
   {
     cartId: string;
     values: {
@@ -76,6 +81,18 @@ const checkOutSlice = createSlice({
       state.order = action.payload;
     });
     builder.addCase(CreateCashOrder.rejected, (state, action) => {
+      state.isLoading = false;
+      state.error = action.error.message || "An error occurred";
+    });
+
+    builder.addCase(CheckoutSession.pending, (state) => {
+      state.isLoading = true;
+    });
+    builder.addCase(CheckoutSession.fulfilled, (state, action) => {
+      state.isLoading = false;
+      state.session = action.payload;
+    });
+    builder.addCase(CheckoutSession.rejected, (state, action) => {
       state.isLoading = false;
       state.error = action.error.message || "An error occurred";
     });

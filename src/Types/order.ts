@@ -1,5 +1,6 @@
 export interface OrderState {
   order: OrderResponse | null;
+  session : CheckoutSessionResponse | null;
   isLoading: boolean;
   error: string | null;
 }
@@ -11,7 +12,14 @@ export interface OrderResponse {
   pricing: OrderPricing;
   data: OrderData;
 }
-
+export interface CheckoutSessionResponse {
+  status: string;
+  session: {
+    url: string;
+    success_url: string;
+    cancel_url: string;
+  };
+}
 export interface OrderUser {
   id: string;
   name: string;
