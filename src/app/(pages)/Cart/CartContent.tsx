@@ -533,7 +533,7 @@ export default function CartContent() {
                           </Field>
                         </FieldGroup>
                       </div>
-                      <div className="col-span-full 2xl:col-span-5 px-5 max-2xl:mt-10">
+                      <div className="col-span-full 2xl:col-span-5  px-5 max-2xl:mt-10">
                         <OrderReviewCard
                           cart={cart}
                           isBusy={isBusy}
