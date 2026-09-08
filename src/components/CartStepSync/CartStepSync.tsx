@@ -12,7 +12,7 @@ export default function CartStepSync() {
   useEffect(() => {
     const step = searchParams.get("step");
 
-    if (step === "shoppingCart" || step === "checkout" || step === "complete") {
+    if (step === "shoppingCart" || step === "checkout") {
       dispatch(setActiveStep(step));
     } else {
       dispatch(setActiveStep("shoppingCart"));

@@ -111,6 +111,7 @@ export default function CartSheet({
           data-[state=open]:animate-in
           data-[state=closed]:animate-out
           sm:max-lg:data-[side=right]:!w-[85%]
+          sm:max-lg:data-[side=left]:!w-[85%]
           ${
             i18n.language === "ar"
               ? "data-[state=open]:slide-in-from-left data-[state=closed]:slide-out-to-left"

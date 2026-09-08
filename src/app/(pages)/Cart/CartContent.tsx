@@ -37,6 +37,8 @@ import { Input } from "@/components/ui/input";
 import OrderReviewCard from "@/components/OrderReviewCard/OrderReviewCard";
 import { useRouter } from "next/navigation";
 import { CheckoutSession, CreateCashOrder } from "@/Features/checkout.slice";
+import * as Yup from "yup";
+import { phoneRegex } from "@/lib/utils";
 
 export default function CartContent() {
   const { t } = useTranslation();
@@ -68,6 +70,14 @@ export default function CartContent() {
     });
   }, [activeStep]);
 
+  const validationSchema = Yup.object({
+    details: Yup.string().required("Street address is required"),
+    phone: Yup.string()
+      .required(t("validation.phoneRequired"))
+      .matches(phoneRegex, t("validation.invalidPhone")),
+    city: Yup.string().required("City is required"),
+    postalCode: Yup.string().required("Postcode is required"),
+  });
   const formik = useFormik({
     initialValues: {
       details: "",
@@ -75,6 +85,7 @@ export default function CartContent() {
       city: "",
       postalCode: "",
     },
+    validationSchema,
     onSubmit: async (values) => {
       if (!cart?._id) return;
       toast.loading(t("waiting..."), { id: "placingOrder" });
@@ -91,7 +102,7 @@ export default function CartContent() {
           });
           formik.resetForm();
           dispatch(GetLoggedUserCart());
-          dispatch(setActiveStep("complete"));
+          router.push("/allorders");
         } else {
           toast.error("Failed To Place Order", {
             id: "placingOrder",
@@ -106,12 +117,14 @@ export default function CartContent() {
         );
         if (CheckoutSession.fulfilled.match(results)) {
           setTimeout(() => {
+            toast.dismiss("placingOrder");
             location.href = results.payload.session.url;
-          }, 2000);
+          }, 1200);
         } else {
           toast.error("Failed To Place Order", {
             id: "placingOrder",
           });
+          
         }
       }
     },
@@ -146,25 +159,14 @@ export default function CartContent() {
               </TabsTrigger>
               <ChevronRight
                 size={24}
-                className={`${activeStep === "checkout" || activeStep === "complete" ? "text-[#333]" : "text-[#999]"}  font-bold rtl:rotate-180`}
+                className={`${activeStep === "checkout" ? "text-[#333]" : "text-[#999]"}  font-bold rtl:rotate-180`}
               />
 
               <TabsTrigger
-                className={`text-lg lg:text-xl font-bold text-[#666] data-[state=active]:bg-transparent ${activeStep === "checkout" ? "data-[state=active]:text-primary " : activeStep === "complete" ? "text-[#333]" : "text-[#666]"} data-[state=active]:text-primary data-[state=active]:after:opacity-0 group-data-[variant=default]/tabs-list:data-[state=active]:shadow-none`}
+                className={`text-lg lg:text-xl font-bold text-[#666] data-[state=active]:bg-transparent ${activeStep === "checkout" ? "data-[state=active]:text-primary " : "text-[#666]"} data-[state=active]:text-primary data-[state=active]:after:opacity-0 group-data-[variant=default]/tabs-list:data-[state=active]:shadow-none`}
                 value="checkout"
               >
                 {t("cart.checkout")}
-              </TabsTrigger>
-              <ChevronRight
-                size={24}
-                className={`${activeStep === "complete" ? "text-[#333]" : "text-[#999]"}  font-bold rtl:rotate-180`}
-              />
-
-              <TabsTrigger
-                className={`text-lg lg:text-xl font-bold text-[#666] data-[state=active]:bg-transparent ${activeStep === "checkout" ? " data-[state=active]:text-primary " : "text-[#666]"} data-[state=active]:text-primary data-[state=active]:after:opacity-0 group-data-[variant=default]/tabs-list:data-[state=active]:shadow-none`}
-                value="complete"
-              >
-                {t("cart.orderComplete")}
               </TabsTrigger>
             </TabsList>
 
@@ -453,12 +455,14 @@ export default function CartContent() {
                               name="details"
                               value={formik.values.details}
                               onChange={formik.handleChange}
+                              onBlur={formik.handleBlur}
                             />
-                            {/* {formik.touched.details && formik.errors.details && (
-                            <p className="text-sm text-red-500">
-                              {formik.errors.details}
-                            </p>
-                          )} */}
+                            {formik.touched.details &&
+                              formik.errors.details && (
+                                <p className="text-sm text-red-500">
+                                  {formik.errors.details}
+                                </p>
+                              )}
                           </Field>
                           <Field className="!gap-2">
                             <Label
@@ -474,13 +478,13 @@ export default function CartContent() {
                               name="phone"
                               value={formik.values.phone}
                               onChange={formik.handleChange}
+                              onBlur={formik.handleBlur}
                             />
-                            {/* {formik.touched.password &&
-                            formik.errors.password && (
+                            {formik.touched.phone && formik.errors.phone && (
                               <p className="text-sm text-red-500">
-                                {formik.errors.password}
+                                {formik.errors.phone}
                               </p>
-                            )} */}
+                            )}
                           </Field>
                           <Field className="!gap-2">
                             <Label
@@ -496,13 +500,13 @@ export default function CartContent() {
                               name="city"
                               value={formik.values.city}
                               onChange={formik.handleChange}
+                              onBlur={formik.handleBlur}
                             />
-                            {/* {formik.touched.password &&
-                            formik.errors.password && (
+                            {formik.touched.city && formik.errors.city && (
                               <p className="text-sm text-red-500">
-                                {formik.errors.password}
+                                {formik.errors.city}
                               </p>
-                            )} */}
+                            )}
                           </Field>
                           <Field className="!gap-2">
                             <Label
@@ -512,19 +516,20 @@ export default function CartContent() {
                               Postcode
                             </Label>
                             <Input
-                              type="number"
+                              type="text"
                               id="postalCode"
                               className="rounded-none py-2 px-5 h-auto text-sm"
                               name="postalCode"
                               value={formik.values.postalCode}
                               onChange={formik.handleChange}
+                              onBlur={formik.handleBlur}
                             />
-                            {/* {formik.touched.password &&
-                            formik.errors.password && (
-                              <p className="text-sm text-red-500">
-                                {formik.errors.password}
-                              </p>
-                            )} */}
+                            {formik.touched.postalCode &&
+                              formik.errors.postalCode && (
+                                <p className="text-sm text-red-500">
+                                  {formik.errors.postalCode}
+                                </p>
+                              )}
                           </Field>
                         </FieldGroup>
                       </div>
@@ -584,8 +589,6 @@ export default function CartContent() {
                 </div>
               )}
             </TabsContent>
-
-            <TabsContent value="complete">{/* Order Complete */}</TabsContent>
           </Tabs>
         </div>
       </section>
