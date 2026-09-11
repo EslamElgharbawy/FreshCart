@@ -103,3 +103,34 @@ export interface OrderBrand {
   slug: string;
   image: string;
 }
+
+export type OrderStatus = "in_transit" | "processing" | "delivered" | "cancelled";
+export type ItemAction = "trackItem" | "buyAgain" | "startReturn" | "writeReview";
+
+export interface OrderItem {
+  id: string;
+  name: string;
+  imageUrl: string;
+  variant: string;
+  price: number;
+  actions: ItemAction[];
+  returnEligibleUntil?: string;
+}
+
+export interface OrderShippingInfo {
+  message: string;
+  subMessage: string;
+  trackingUrl?: string;
+}
+
+export interface Order {
+  id: string;
+  orderNumber: string;
+  placedDate: string;
+  total: number;
+  status: OrderStatus;
+  shipping?: OrderShippingInfo;
+  items: OrderItem[];
+  detailsUrl?: string;
+  helpUrl?: string;
+}

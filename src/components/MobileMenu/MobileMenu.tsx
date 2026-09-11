@@ -40,7 +40,6 @@ const sections = [
   { name: "home", path: "/" },
   { name: "shop", path: "/Shop" },
   { name: "vendors", path: "/Vendors" },
-  { name: "deals", path: "/Deals" },
 ];
 
 export function MobileMenu() {
