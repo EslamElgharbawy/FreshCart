@@ -103,119 +103,133 @@ import { Input } from "@/components/ui/input";
 
 // app/orders/page.tsx
 
-import type { ItemAction, OrderItem } from "@/components/OrderCard/OrderCard";
-import { useMemo, useState } from "react";
-import { Order } from "@/Types/order";
+import type { ItemAction } from "@/components/OrderCard/OrderCard";
+import { useEffect, useMemo, useState } from "react";
 import OrdersList from "@/components/OrdersList/OrdersList";
+import { getUserOrders } from "@/Features/Order.slice";
+import { useAppDispatch, useAppSelector } from "@/hooks/store.hooks";
+import { AllOrder, OrderCartItem } from "@/Types/order";
 
-type OrderTabKey = "all" | "in_progress" | "delivered";
+// type OrderTabKey = "all" | "in_progress" | "delivered";
 
-function matchesTab(order: Order, tab: OrderTabKey): boolean {
-  if (tab === "all") return true;
-  if (tab === "in_progress") return order.status === "in_transit" || order.status === "processing";
-  if (tab === "delivered") return order.status === "delivered";
-  return true;
-}
+// function matchesTab(order: Order, tab: OrderTabKey): boolean {
+//   if (tab === "all") return true;
+//   if (tab === "in_progress")
+//     return order.status === "in_transit" || order.status === "processing";
+//   if (tab === "delivered") return order.status === "delivered";
+//   return true;
+// }
 
 // شيلها واستبدلها بالداتا الحقيقية بتاعتك
-const mockOrders: Order[] = [
-  {
-    id: "1",
-    orderNumber: "WEB-9847562",
-    placedDate: "Dec 12, 2024",
-    total: 127.97,
-    status: "in_transit",
-    shipping: {
-      message: "Arriving Dec 18-20",
-      subMessage: "Your package is on its way",
-      trackingUrl: "#",
-    },
-    detailsUrl: "#",
-    helpUrl: "#",
-    items: [
-      {
-        id: "1-1",
-        name: "Oversized Cotton Hoodie",
-        variant: "Black · L",
-        price: 49.99,
-        imageUrl: "https://placehold.co/160x160/e5e7eb/9ca3af?text=Hoodie",
-        actions: ["trackItem"],
-      },
-      {
-        id: "1-2",
-        name: "High-Rise Straight Jeans",
-        variant: "Medium Blue · 32",
-        price: 59.99,
-        imageUrl: "https://placehold.co/160x160/e5e7eb/9ca3af?text=Jeans",
-        actions: ["trackItem"],
-      },
-      {
-        id: "1-3",
-        name: "Basic Crew Neck Tee",
-        variant: "White · M",
-        price: 17.99,
-        imageUrl: "https://placehold.co/160x160/e5e7eb/9ca3af?text=Tee",
-        actions: ["trackItem"],
-      },
-    ],
-  },
-  {
-    id: "2",
-    orderNumber: "WEB-9841203",
-    placedDate: "Dec 5, 2024",
-    total: 89.98,
-    status: "delivered",
-    detailsUrl: "#",
-    helpUrl: "#",
-    items: [
-      {
-        id: "2-1",
-        name: "Leather Crossbody Bag",
-        variant: "Burgundy · One Size",
-        price: 69.99,
-        imageUrl: "https://placehold.co/160x160/e5e7eb/9ca3af?text=Bag",
-        actions: ["buyAgain", "startReturn", "writeReview"],
-        returnEligibleUntil: "Jan 10, 2025",
-      },
-    ],
-  },
-];
+// const mockOrders: Order[] = [
+//   {
+//     id: "1",
+//     orderNumber: "WEB-9847562",
+//     placedDate: "Dec 12, 2024",
+//     total: 127.97,
+//     status: "in_transit",
+//     shipping: {
+//       message: "Arriving Dec 18-20",
+//       subMessage: "Your package is on its way",
+//       trackingUrl: "#",
+//     },
+//     detailsUrl: "#",
+//     helpUrl: "#",
+//     items: [
+//       {
+//         id: "1-1",
+//         name: "Oversized Cotton Hoodie",
+//         variant: "Black · L",
+//         price: 49.99,
+//         imageUrl: "https://placehold.co/160x160/e5e7eb/9ca3af?text=Hoodie",
+//         actions: ["trackItem"],
+//       },
+//       {
+//         id: "1-2",
+//         name: "High-Rise Straight Jeans",
+//         variant: "Medium Blue · 32",
+//         price: 59.99,
+//         imageUrl: "https://placehold.co/160x160/e5e7eb/9ca3af?text=Jeans",
+//         actions: ["trackItem"],
+//       },
+//       {
+//         id: "1-3",
+//         name: "Basic Crew Neck Tee",
+//         variant: "White · M",
+//         price: 17.99,
+//         imageUrl: "https://placehold.co/160x160/e5e7eb/9ca3af?text=Tee",
+//         actions: ["trackItem"],
+//       },
+//     ],
+//   },
+//   {
+//     id: "2",
+//     orderNumber: "WEB-9841203",
+//     placedDate: "Dec 5, 2024",
+//     total: 89.98,
+//     status: "delivered",
+//     detailsUrl: "#",
+//     helpUrl: "#",
+//     items: [
+//       {
+//         id: "2-1",
+//         name: "Leather Crossbody Bag",
+//         variant: "Burgundy · One Size",
+//         price: 69.99,
+//         imageUrl: "https://placehold.co/160x160/e5e7eb/9ca3af?text=Bag",
+//         actions: ["buyAgain", "startReturn", "writeReview"],
+//         returnEligibleUntil: "Jan 10, 2025",
+//       },
+//     ],
+//   },
+// ];
 
-interface OrdersPageProps {
-  orders?: Order[];
-}
+// interface OrdersPageProps {
+//   orders?: Order[];
+// }
 
-export default function OrdersPage({ orders = mockOrders }: OrdersPageProps) {
+export default function OrdersPage() {
   const [search, setSearch] = useState("");
-
+  const dispatch = useAppDispatch();
+  const { user } = useAppSelector((store) => store.user);
+  const { orders } = useAppSelector((store) => store.orderSlice);
   // فيلتر البحث بيتطبق قبل التقسيم على التابات
   const searchedOrders = useMemo(() => {
     const query = search.trim().toLowerCase();
     if (!query) return orders;
 
     return orders.filter((order) => {
-      const matchesOrderNumber = order.orderNumber.toLowerCase().includes(query);
-      const matchesItem = order.items.some((item) => item.name.toLowerCase().includes(query));
-      return matchesOrderNumber || matchesItem;
+      const matchesItem = order.cartItems.some((item) =>
+        item.product.title.toLowerCase().includes(query),
+      );
+      return matchesItem;
     });
   }, [orders, search]);
 
   // كل تاب ليه ليستة مفلترة خاصة بيه، مبنية على searchedOrders
   const allOrders = searchedOrders;
   const inProgressOrders = useMemo(
-    () => searchedOrders.filter((order) => matchesTab(order, "in_progress")),
-    [searchedOrders]
+    () => searchedOrders.filter((order) => !order.isDelivered),
+    [searchedOrders],
   );
   const deliveredOrders = useMemo(
-    () => searchedOrders.filter((order) => matchesTab(order, "delivered")),
-    [searchedOrders]
+    () => searchedOrders.filter((order) => order.isDelivered),
+    [searchedOrders],
   );
 
-  function handleItemAction(action: ItemAction, item: OrderItem, order: Order) {
+  function handleItemAction(
+    action: ItemAction,
+    item: OrderCartItem,
+    order: AllOrder,
+  ) {
     // وصل هنا اللوجيك الحقيقي بتاعك (navigation, API call, modal..)
-    console.log(action, item.id, order.id);
+    console.log(action, item._id, order.id);
   }
-
+  useEffect(() => {
+    if (user?.id) {
+      dispatch(getUserOrders(user.id));
+    }
+  }, [user?.id, dispatch]);
   return (
     <div className="pt-3 xl:py-12">
       <div className="container mx-auto px-4">

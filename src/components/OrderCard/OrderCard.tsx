@@ -1,16 +1,6 @@
-// components/OrderCard.tsx
+import { OrderCartItem } from "@/Types/order";
 
 export type ItemAction = "trackItem" | "buyAgain" | "startReturn" | "writeReview";
-
-export interface OrderItem {
-  id: string;
-  name: string;
-  imageUrl: string;
-  variant: string; // "Black · L"
-  price: number;
-  actions: ItemAction[];
-  returnEligibleUntil?: string;
-}
 
 const actionConfig: Record<ItemAction, { label: string; variant: "default" | "outline" | "ghost" }> = {
   trackItem: { label: "Track Item", variant: "default" },
@@ -26,8 +16,8 @@ const variantClass: Record<"default" | "outline" | "ghost", string> = {
 };
 
 interface OrderCardProps {
-  item: OrderItem;
-  onAction?: (action: ItemAction, item: OrderItem) => void;
+  item: OrderCartItem;
+  onAction?: (action: ItemAction, item: OrderCartItem) => void;
 }
 
 // الكارد ده بس بيعرض المنتج الواحد: صورة + اسم + variant + أزرار + سعر
@@ -35,19 +25,19 @@ export default function OrderCard({ item, onAction }: OrderCardProps) {
   return (
     <div className="flex gap-4 border-b border-gray-100 px-6 py-5 last:border-b-0">
       <img
-        src={item.imageUrl}
-        alt={item.name}
+        src={item.product.imageCover}
+        alt={item.product.title}
         className="h-20 w-20 flex-shrink-0 rounded-lg bg-gray-100 object-cover"
       />
 
       <div className="flex flex-1 flex-col justify-between">
         <div>
-          <h3 className="text-sm font-semibold text-gray-900">{item.name}</h3>
-          <p className="mt-0.5 text-sm text-gray-500">{item.variant}</p>
+          <h3 className="text-sm font-semibold text-gray-900">{item.product.title}</h3>
+          <p className="mt-0.5 text-sm text-gray-500"> Quantity: {item.count}</p>
         </div>
 
         <div className="mt-2 flex flex-wrap items-center gap-2">
-          {item.actions.map((action) => {
+          {/* {item.actions.map((action) => {
             const config = actionConfig[action];
             return (
               <button
@@ -59,14 +49,14 @@ export default function OrderCard({ item, onAction }: OrderCardProps) {
                 {config.label}
               </button>
             );
-          })}
+          })} */}
         </div>
 
-        {item.returnEligibleUntil && (
+        {/* {item.returnEligibleUntil && (
           <p className="mt-2 text-xs text-gray-400">
             Eligible for return until {item.returnEligibleUntil}
           </p>
-        )}
+        )} */}
       </div>
 
       <div className="flex-shrink-0 text-sm font-semibold text-gray-900">

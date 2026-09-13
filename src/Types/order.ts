@@ -1,6 +1,11 @@
 export interface OrderState {
   order: OrderResponse | null;
-  session : CheckoutSessionResponse | null;
+  session: CheckoutSessionResponse | null;
+  isLoading: boolean;
+  error: string | null;
+}
+export interface UserOrdersState {
+  orders: UserOrdersResponse;
   isLoading: boolean;
   error: string | null;
 }
@@ -104,33 +109,40 @@ export interface OrderBrand {
   image: string;
 }
 
-export type OrderStatus = "in_transit" | "processing" | "delivered" | "cancelled";
-export type ItemAction = "trackItem" | "buyAgain" | "startReturn" | "writeReview";
+// export type OrderStatus = "processing" | "delivered";
+export type ItemAction =
+  | "trackItem"
+  | "buyAgain"
+  | "startReturn"
+  | "writeReview";
 
-export interface OrderItem {
-  id: string;
-  name: string;
-  imageUrl: string;
-  variant: string;
-  price: number;
-  actions: ItemAction[];
-  returnEligibleUntil?: string;
+export interface AllOrdersResponse {
+  results: number;
+  metadata: OrdersMetadata;
+  data: AllOrder[];
 }
 
-export interface OrderShippingInfo {
-  message: string;
-  subMessage: string;
-  trackingUrl?: string;
+export interface OrdersMetadata {
+  currentPage: number;
+  numberOfPages: number;
+  limit: number;
+  nextPage?: number;
 }
-
-export interface Order {
-  id: string;
-  orderNumber: string;
-  placedDate: string;
-  total: number;
-  status: OrderStatus;
-  shipping?: OrderShippingInfo;
-  items: OrderItem[];
-  detailsUrl?: string;
-  helpUrl?: string;
+export type UserOrdersResponse = AllOrder[];
+export interface AllOrder {
+  shippingAddress: ShippingAddress;
+  taxPrice: number;
+  shippingPrice: number;
+  totalOrderPrice: number;
+  paymentMethodType: "cash" | "card";
+  isPaid: boolean;
+  isDelivered: boolean;
+  _id: string;
+  user: OrderDetailsUser;
+  cartItems: OrderCartItem[];
+  paidAt?: string;
+  createdAt: string;
+  updatedAt: string;
+  id: number;
+  __v: number;
 }

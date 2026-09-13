@@ -1,36 +1,36 @@
-// components/OrdersList.tsx
-import OrderCard, { type ItemAction, type OrderItem } from "@/components/OrderCard/OrderCard";
+import OrderCard, { type ItemAction } from "@/components/OrderCard/OrderCard";
+import { AllOrder, OrderCartItem, UserOrdersResponse } from "@/Types/order";
 
-type OrderStatus = "in_transit" | "processing" | "delivered" | "cancelled";
+type OrderStatus = "in_transit" | "processing" | "delivered";
 
-interface OrderShippingInfo {
-  message: string;
-  subMessage: string;
-  trackingUrl?: string;
-}
-
-export interface Order {
-  id: string;
-  orderNumber: string;
-  placedDate: string;
-  total: number;
-  status: OrderStatus;
-  shipping?: OrderShippingInfo;
-  items: OrderItem[];
-  detailsUrl?: string;
-  helpUrl?: string;
-}
-
-const statusConfig: Record<OrderStatus, { label: string; dotClass: string; textClass: string }> = {
-  in_transit: { label: "In Transit", dotClass: "bg-blue-600", textClass: "text-blue-600" },
-  processing: { label: "Processing", dotClass: "bg-amber-500", textClass: "text-amber-600" },
-  delivered: { label: "Delivered", dotClass: "bg-green-600", textClass: "text-green-600" },
-  cancelled: { label: "Cancelled", dotClass: "bg-red-500", textClass: "text-red-600" },
+const statusConfig: Record<
+  OrderStatus,
+  { label: string; dotClass: string; textClass: string }
+> = {
+  in_transit: {
+    label: "In Transit",
+    dotClass: "bg-blue-600",
+    textClass: "text-blue-600",
+  },
+  processing: {
+    label: "Processing",
+    dotClass: "bg-amber-500",
+    textClass: "text-amber-600",
+  },
+  delivered: {
+    label: "Delivered",
+    dotClass: "bg-green-600",
+    textClass: "text-green-600",
+  },
 };
 
 interface OrdersListProps {
-  orders: Order[];
-  onItemAction?: (action: ItemAction, item: OrderItem, order: Order) => void;
+  orders: UserOrdersResponse;
+  onItemAction?: (
+    action: ItemAction,
+    item: OrderCartItem,
+    order: AllOrder,
+  ) => void;
   emptyMessage?: string;
 }
 
@@ -51,39 +51,52 @@ export default function OrdersList({
   return (
     <div className="flex flex-col gap-6">
       {orders.map((order) => {
-        const status = statusConfig[order.status];
+        // const status = statusConfig[order.status];
 
         return (
-          <div key={order.id} className="overflow-hidden rounded-xl border border-gray-200 bg-white">
+          <div
+            key={order.id}
+            className="overflow-hidden rounded-xl border border-gray-200 bg-white"
+          >
             {/* Order header */}
             <div className="flex flex-wrap items-center justify-between gap-4 px-6 py-4">
               <div className="flex flex-wrap gap-x-8 gap-y-1 text-sm">
                 <div>
                   <p className="text-gray-500">Order placed</p>
-                  <p className="font-medium text-gray-900">{order.placedDate}</p>
+                  <p className="font-medium text-gray-900">{order.createdAt}</p>
                 </div>
                 <div>
                   <p className="text-gray-500">Order number</p>
-                  <p className="font-medium text-gray-900">{order.orderNumber}</p>
+                  <p className="font-medium text-gray-900">{order.id}</p>
                 </div>
                 <div>
                   <p className="text-gray-500">Total</p>
-                  <p className="font-medium text-gray-900">${order.total.toFixed(2)}</p>
+                  <p className="font-medium text-gray-900">
+                    ${order.totalOrderPrice.toFixed(2)}
+                  </p>
                 </div>
               </div>
 
-              <span className={`inline-flex items-center gap-1.5 text-sm font-medium ${status.textClass}`}>
+              {/* <span
+                className={`inline-flex items-center gap-1.5 text-sm font-medium ${status.textClass}`}
+              >
                 <span className={`h-2 w-2 rounded-full ${status.dotClass}`} />
                 {status.label}
-              </span>
+              </span> */}
             </div>
 
             {/* Shipping banner */}
-            {order.shipping && (
+            {order.shippingAddress && (
               <div className="flex items-center justify-between gap-4 border-y border-gray-100 bg-gray-50 px-6 py-3">
                 <div className="flex items-center gap-3">
                   <span className="flex h-8 w-8 items-center justify-center rounded-full bg-blue-100 text-blue-600">
-                    <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <svg
+                      className="h-4 w-4"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      strokeWidth={2}
+                    >
                       <path
                         strokeLinecap="round"
                         strokeLinejoin="round"
@@ -92,38 +105,58 @@ export default function OrdersList({
                     </svg>
                   </span>
                   <div>
-                    <p className="text-sm font-medium text-gray-900">{order.shipping.message}</p>
-                    <p className="text-xs text-gray-500">{order.shipping.subMessage}</p>
+                    <p className="text-sm font-medium text-gray-900">
+                      {order.shippingAddress.city}
+                    </p>
+                    <p className="text-xs text-gray-500">
+                      {order.shippingAddress.details}
+                    </p>
+                    <p className="text-xs text-gray-500">
+                      {order.shippingAddress.phone}
+                    </p>
+                    <p className="text-xs text-gray-500">
+                      {order.shippingAddress.postalCode}
+                    </p>
                   </div>
                 </div>
 
-                {order.shipping.trackingUrl && (
-                  <a
-                    href={order.shipping.trackingUrl}
-                    className="inline-flex items-center gap-1 rounded-md border border-gray-200 bg-white px-3 py-1.5 text-xs font-medium text-gray-900 hover:bg-gray-50"
+                <a
+                  href="#"
+                  className="inline-flex items-center gap-1 rounded-md border border-gray-200 bg-white px-3 py-1.5 text-xs font-medium text-gray-900 hover:bg-gray-50"
+                >
+                  Track
+                  <svg
+                    className="h-3 w-3"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    strokeWidth={2}
                   >
-                    Track
-                    <svg className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 19.5l15-15m0 0H8.25m11.25 0v11.25" />
-                    </svg>
-                  </a>
-                )}
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M4.5 19.5l15-15m0 0H8.25m11.25 0v11.25"
+                    />
+                  </svg>
+                </a>
               </div>
             )}
 
             {/* Items */}
             <div>
-              {order.items.map((item) => (
+              {order.cartItems.map((item) => (
                 <OrderCard
-                  key={item.id}
+                  key={item._id}
                   item={item}
-                  onAction={(action, clickedItem) => onItemAction?.(action, clickedItem, order)}
+                  onAction={(action, clickedItem) =>
+                    onItemAction?.(action, clickedItem, order)
+                  }
                 />
               ))}
             </div>
 
             {/* Footer */}
-            <div className="flex items-center justify-between border-t border-gray-100 px-6 py-4">
+            {/* <div className="flex items-center justify-between border-t border-gray-100 px-6 py-4">
               {order.detailsUrl ? (
                 <a
                   href={order.detailsUrl}
@@ -143,7 +176,7 @@ export default function OrdersList({
                   Need Help?
                 </a>
               )}
-            </div>
+            </div> */}
           </div>
         );
       })}
