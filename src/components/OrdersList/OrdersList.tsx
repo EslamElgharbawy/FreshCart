@@ -1,29 +1,6 @@
 import OrderCard, { type ItemAction } from "@/components/OrderCard/OrderCard";
 import { AllOrder, OrderCartItem, UserOrdersResponse } from "@/Types/order";
 
-type OrderStatus = "in_transit" | "processing" | "delivered";
-
-const statusConfig: Record<
-  OrderStatus,
-  { label: string; dotClass: string; textClass: string }
-> = {
-  in_transit: {
-    label: "In Transit",
-    dotClass: "bg-blue-600",
-    textClass: "text-blue-600",
-  },
-  processing: {
-    label: "Processing",
-    dotClass: "bg-amber-500",
-    textClass: "text-amber-600",
-  },
-  delivered: {
-    label: "Delivered",
-    dotClass: "bg-green-600",
-    textClass: "text-green-600",
-  },
-};
-
 interface OrdersListProps {
   orders: UserOrdersResponse;
   onItemAction?: (
@@ -51,8 +28,6 @@ export default function OrdersList({
   return (
     <div className="flex flex-col gap-6">
       {orders.map((order) => {
-        // const status = statusConfig[order.status];
-
         return (
           <div
             key={order.id}
@@ -63,7 +38,13 @@ export default function OrdersList({
               <div className="flex flex-wrap gap-x-8 gap-y-1 text-sm">
                 <div>
                   <p className="text-gray-500">Order placed</p>
-                  <p className="font-medium text-gray-900">{order.createdAt}</p>
+                  <p className="font-medium text-gray-900">
+                    {new Date(order.createdAt).toLocaleDateString("en-US", {
+                      month: "short",
+                      day: "numeric",
+                      year: "numeric",
+                    })}
+                  </p>
                 </div>
                 <div>
                   <p className="text-gray-500">Order number</p>
@@ -72,30 +53,42 @@ export default function OrdersList({
                 <div>
                   <p className="text-gray-500">Total</p>
                   <p className="font-medium text-gray-900">
-                    ${order.totalOrderPrice.toFixed(2)}
+                    $
+                    {new Intl.NumberFormat("en-US").format(
+                      order.totalOrderPrice,
+                    )}
                   </p>
                 </div>
               </div>
 
-              {/* <span
-                className={`inline-flex items-center gap-1.5 text-sm font-medium ${status.textClass}`}
-              >
-                <span className={`h-2 w-2 rounded-full ${status.dotClass}`} />
-                {status.label}
-              </span> */}
+              {order.isPaid ? (
+                <span
+                  className={"inline-flex items-center gap-1.5 text-sm font-medium text-green-600"}
+                >
+                  <span className={"h-2 w-2 rounded-full bg-green-600"} />
+                  Paid
+                </span>
+              ) : (
+                <span
+                  className={"inline-flex items-center gap-1.5 text-sm font-medium text-amber-600"}
+                >
+                  <span className={"h-2 w-2 rounded-full bg-amber-600"} />
+                  Cash on Delivery
+                </span>
+              )}
             </div>
 
             {/* Shipping banner */}
             {order.shippingAddress && (
               <div className="flex items-center justify-between gap-4 border-y border-gray-100 bg-gray-50 px-6 py-3">
                 <div className="flex items-center gap-3">
-                  <span className="flex h-8 w-8 items-center justify-center rounded-full bg-blue-100 text-blue-600">
+                  <span className="flex h-10 w-10 items-center justify-center rounded-full bg-blue-100 text-blue-600">
                     <svg
-                      className="h-4 w-4"
+                      className="h-6 w-6"
                       fill="none"
                       viewBox="0 0 24 24"
                       stroke="currentColor"
-                      strokeWidth={2}
+                      strokeWidth={1.6}
                     >
                       <path
                         strokeLinecap="round"
@@ -106,16 +99,16 @@ export default function OrdersList({
                   </span>
                   <div>
                     <p className="text-sm font-medium text-gray-900">
-                      {order.shippingAddress.city}
+                      {order.shippingAddress?.city}
                     </p>
                     <p className="text-xs text-gray-500">
-                      {order.shippingAddress.details}
+                      {order.shippingAddress?.details}
                     </p>
                     <p className="text-xs text-gray-500">
-                      {order.shippingAddress.phone}
+                      {order.shippingAddress?.phone}
                     </p>
                     <p className="text-xs text-gray-500">
-                      {order.shippingAddress.postalCode}
+                      {order.shippingAddress?.postalCode}
                     </p>
                   </div>
                 </div>

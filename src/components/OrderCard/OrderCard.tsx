@@ -1,8 +1,15 @@
 import { OrderCartItem } from "@/Types/order";
 
-export type ItemAction = "trackItem" | "buyAgain" | "startReturn" | "writeReview";
+export type ItemAction =
+  | "trackItem"
+  | "buyAgain"
+  | "startReturn"
+  | "writeReview";
 
-const actionConfig: Record<ItemAction, { label: string; variant: "default" | "outline" | "ghost" }> = {
+const actionConfig: Record<
+  ItemAction,
+  { label: string; variant: "default" | "outline" | "ghost" }
+> = {
   trackItem: { label: "Track Item", variant: "default" },
   buyAgain: { label: "Buy Again", variant: "outline" },
   startReturn: { label: "Start Return", variant: "outline" },
@@ -23,17 +30,22 @@ interface OrderCardProps {
 // الكارد ده بس بيعرض المنتج الواحد: صورة + اسم + variant + أزرار + سعر
 export default function OrderCard({ item, onAction }: OrderCardProps) {
   return (
-    <div className="flex gap-4 border-b border-gray-100 px-6 py-5 last:border-b-0">
+    <div className="flex gap-6 border-b border-gray-100 px-6 py-5 last:border-b-0">
       <img
         src={item.product.imageCover}
         alt={item.product.title}
-        className="h-20 w-20 flex-shrink-0 rounded-lg bg-gray-100 object-cover"
+        className="w-24 flex-shrink-0 rounded-lg bg-gray-100 object-cover"
       />
 
       <div className="flex flex-1 flex-col justify-between">
-        <div>
-          <h3 className="text-sm font-semibold text-gray-900">{item.product.title}</h3>
-          <p className="mt-0.5 text-sm text-gray-500"> Quantity: {item.count}</p>
+        <div className="max-w-[500px]">
+          <h3 className="text-sm font-semibold text-[#333]">
+            {item.product.title}
+          </h3>
+          <p className="mt-0.5 text-sm text-gray-500">
+            {" "}
+            Quantity: {item.count}
+          </p>
         </div>
 
         <div className="mt-2 flex flex-wrap items-center gap-2">
@@ -59,8 +71,8 @@ export default function OrderCard({ item, onAction }: OrderCardProps) {
         )} */}
       </div>
 
-      <div className="flex-shrink-0 text-sm font-semibold text-gray-900">
-        ${item.price.toFixed(2)}
+      <div className="flex-shrink-0 text-sm font-semibold text-[#333]">
+        ${new Intl.NumberFormat("en-US").format(item.price)}
       </div>
     </div>
   );
