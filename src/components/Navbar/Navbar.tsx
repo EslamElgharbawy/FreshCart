@@ -51,7 +51,6 @@ export default function Navbar() {
   const [openSheet, setOpenSheet] = useState(false);
   const [currencyOpen, setCurrencyOpen] = useState(false);
   const [languageOpen, setLanguageOpen] = useState(false);
-  const [active, setactive] = useState("home");
   const { t, i18n } = useTranslation();
   const dispatch = useAppDispatch();
   const pathname = usePathname();
@@ -66,10 +65,12 @@ export default function Navbar() {
     (store) => store.CartSlice,
   );
 
+  const pathName = usePathname();
   const sections = [
     { name: "home", path: "/" },
     { name: "shop", path: "/Shop" },
-    { name: "vendors", path: "/Vendors" },
+    { name: "cartTap", path: "/cart" },
+    // { name: "wishList", path: "/cart" },
   ];
   const firstName = user?.name?.split(" ")[0];
   useEffect(() => {
@@ -367,8 +368,11 @@ export default function Navbar() {
                       {sections.map((item) => (
                         <li
                           key={item.name}
-                          onClick={() => setactive(item.name)}
-                          className={`tap-item py-6 transition-all duration-300 ${active === item.name ? "text-primary" : "hover:text-primary"}`}
+                          className={`tap-item py-6 transition-all duration-300 ${
+                            pathname === item.path
+                              ? "text-primary"
+                              : "hover:text-primary"
+                          }`}
                         >
                           <Link href={item.path}>
                             {t(`navbar.${item.name}`)}

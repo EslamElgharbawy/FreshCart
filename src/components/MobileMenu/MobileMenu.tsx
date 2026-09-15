@@ -39,7 +39,7 @@ import { Button } from "../ui/button";
 const sections = [
   { name: "home", path: "/" },
   { name: "shop", path: "/Shop" },
-  { name: "vendors", path: "/Vendors" },
+  { name: "cartTap", path: "/cart" },
 ];
 
 export function MobileMenu() {

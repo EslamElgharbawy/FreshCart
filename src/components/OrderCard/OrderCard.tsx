@@ -1,34 +1,10 @@
 import { OrderCartItem } from "@/Types/order";
 
-export type ItemAction =
-  | "trackItem"
-  | "buyAgain"
-  | "startReturn"
-  | "writeReview";
-
-const actionConfig: Record<
-  ItemAction,
-  { label: string; variant: "default" | "outline" | "ghost" }
-> = {
-  trackItem: { label: "Track Item", variant: "default" },
-  buyAgain: { label: "Buy Again", variant: "outline" },
-  startReturn: { label: "Start Return", variant: "outline" },
-  writeReview: { label: "Write Review", variant: "ghost" },
-};
-
-const variantClass: Record<"default" | "outline" | "ghost", string> = {
-  default: "bg-gray-100 text-gray-900 hover:bg-gray-200",
-  outline: "border border-gray-200 text-gray-900 hover:bg-gray-50",
-  ghost: "text-gray-700 hover:bg-gray-50",
-};
-
 interface OrderCardProps {
   item: OrderCartItem;
-  onAction?: (action: ItemAction, item: OrderCartItem) => void;
 }
 
-// الكارد ده بس بيعرض المنتج الواحد: صورة + اسم + variant + أزرار + سعر
-export default function OrderCard({ item, onAction }: OrderCardProps) {
+export default function OrderCard({ item }: OrderCardProps) {
   return (
     <div className="flex gap-6 border-b border-gray-100 px-6 py-5 last:border-b-0">
       <img

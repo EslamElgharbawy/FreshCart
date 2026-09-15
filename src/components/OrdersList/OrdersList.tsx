@@ -1,27 +1,21 @@
-import OrderCard, { type ItemAction } from "@/components/OrderCard/OrderCard";
-import { AllOrder, OrderCartItem, UserOrdersResponse } from "@/Types/order";
+import OrderCard from "@/components/OrderCard/OrderCard";
+import { UserOrdersResponse } from "@/Types/order";
+import EmptyOrders from "../EmptyState/EmptyState";
 
 interface OrdersListProps {
   orders: UserOrdersResponse;
-  onItemAction?: (
-    action: ItemAction,
-    item: OrderCartItem,
-    order: AllOrder,
-  ) => void;
   emptyMessage?: string;
 }
 
-// ده الكومبوننت المشترك اللي يترندر جوه أي TabsContent بأي ليستة أوردرات
 export default function OrdersList({
   orders,
-  onItemAction,
-  emptyMessage = "مفيش أوردرات هنا.",
+  emptyMessage = "No orders yet.",
 }: OrdersListProps) {
   if (orders.length === 0) {
     return (
-      <div className="rounded-xl border border-dashed border-gray-200 px-6 py-16 text-center">
-        <p className="text-sm text-gray-500">{emptyMessage}</p>
-      </div>
+      <EmptyOrders
+        title={emptyMessage}
+      />
     );
   }
 
@@ -34,8 +28,8 @@ export default function OrdersList({
             className="overflow-hidden rounded-xl border border-gray-200 bg-white"
           >
             {/* Order header */}
-            <div className="flex flex-wrap items-center justify-between gap-4 px-6 py-4">
-              <div className="flex flex-wrap gap-x-8 gap-y-1 text-sm">
+            <div className="flex flex-col gap-4 px-4 py-4 lg:flex-row lg:items-center lg:justify-between lg:px-6">
+              <div className="flex flex-wrap gap-x-6 gap-y-3 text-sm lg:gap-x-8 lg:gap-y-1">
                 <div>
                   <p className="text-gray-500">Order placed</p>
                   <p className="font-medium text-gray-900">
@@ -63,14 +57,18 @@ export default function OrdersList({
 
               {order.isPaid ? (
                 <span
-                  className={"inline-flex items-center gap-1.5 text-sm font-medium text-green-600"}
+                  className={
+                    "inline-flex w-fit items-center gap-1.5 text-sm font-medium text-green-600"
+                  }
                 >
                   <span className={"h-2 w-2 rounded-full bg-green-600"} />
                   Paid
                 </span>
               ) : (
                 <span
-                  className={"inline-flex items-center gap-1.5 text-sm font-medium text-amber-600"}
+                  className={
+                    "inline-flex w-fit items-center gap-1.5 text-sm font-medium text-amber-600"
+                  }
                 >
                   <span className={"h-2 w-2 rounded-full bg-amber-600"} />
                   Cash on Delivery
@@ -80,9 +78,9 @@ export default function OrdersList({
 
             {/* Shipping banner */}
             {order.shippingAddress && (
-              <div className="flex items-center justify-between gap-4 border-y border-gray-100 bg-gray-50 px-6 py-3">
-                <div className="flex items-center gap-3">
-                  <span className="flex h-10 w-10 items-center justify-center rounded-full bg-blue-100 text-blue-600">
+              <div className="border-y border-gray-100 bg-gray-50 px-4 py-4 lg:px-6">
+                <div className="flex items-start lg:items-center gap-3">
+                  <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-blue-100 text-blue-600">
                     <svg
                       className="h-6 w-6"
                       fill="none"
@@ -97,79 +95,30 @@ export default function OrdersList({
                       />
                     </svg>
                   </span>
-                  <div>
-                    <p className="text-sm font-medium text-gray-900">
+                  <div className="min-w-0">
+                    <p className="break-words text-sm font-medium text-gray-900">
                       {order.shippingAddress?.city}
                     </p>
-                    <p className="text-xs text-gray-500">
+                    <p className="break-words text-xs text-gray-500">
                       {order.shippingAddress?.details}
                     </p>
-                    <p className="text-xs text-gray-500">
+                    <p className="break-words text-xs text-gray-500">
                       {order.shippingAddress?.phone}
                     </p>
-                    <p className="text-xs text-gray-500">
+                    <p className="break-words text-xs text-gray-500">
                       {order.shippingAddress?.postalCode}
                     </p>
                   </div>
                 </div>
-
-                <a
-                  href="#"
-                  className="inline-flex items-center gap-1 rounded-md border border-gray-200 bg-white px-3 py-1.5 text-xs font-medium text-gray-900 hover:bg-gray-50"
-                >
-                  Track
-                  <svg
-                    className="h-3 w-3"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    strokeWidth={2}
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M4.5 19.5l15-15m0 0H8.25m11.25 0v11.25"
-                    />
-                  </svg>
-                </a>
               </div>
             )}
 
             {/* Items */}
             <div>
               {order.cartItems.map((item) => (
-                <OrderCard
-                  key={item._id}
-                  item={item}
-                  onAction={(action, clickedItem) =>
-                    onItemAction?.(action, clickedItem, order)
-                  }
-                />
+                <OrderCard key={item._id} item={item} />
               ))}
             </div>
-
-            {/* Footer */}
-            {/* <div className="flex items-center justify-between border-t border-gray-100 px-6 py-4">
-              {order.detailsUrl ? (
-                <a
-                  href={order.detailsUrl}
-                  className="inline-flex items-center gap-1 text-sm font-medium text-gray-900 hover:underline"
-                >
-                  View order details
-                  <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
-                  </svg>
-                </a>
-              ) : (
-                <span />
-              )}
-
-              {order.helpUrl && (
-                <a href={order.helpUrl} className="text-sm font-medium text-gray-500 hover:text-gray-900">
-                  Need Help?
-                </a>
-              )}
-            </div> */}
           </div>
         );
       })}

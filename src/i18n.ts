@@ -8,9 +8,8 @@ const resources = {
       navbar: {
         home: "Home",
         shop: "Shop",
-        vendors: "Vendors",
-        deals: "Deals",
         cart: "Shopping Cart",
+        cartTap: "Cart",
         search: "Search in...",
         categories: "All Categories",
         flashSale: "Flash Sale",
@@ -334,7 +333,7 @@ const resources = {
         failedToClearCart: "Failed to clear cart",
         returnToShop: "Return to shop",
         proceedToCheckout: "Proceed to checkout",
-        cartTotals: "Cart Totals"
+        cartTotals: "Cart Totals",
       },
       footer: {
         supportText: "Got Question? Call us 24/7",
@@ -381,9 +380,8 @@ const resources = {
       navbar: {
         home: "الرئيسية",
         shop: "المتجر",
-        vendors: "التجار",
-        deals: "العروض",
         cart: "سلة المشتريات",
+        cartTap: "السلة",
         search: "ابحث في...",
         categories: "كل الأقسام",
         flashSale: "عروض سريعة",

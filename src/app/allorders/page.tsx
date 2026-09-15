@@ -1,199 +1,16 @@
 "use client";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Button } from "@/components/ui/button";
-import { Field } from "@/components/ui/field";
-import { Input } from "@/components/ui/input";
-// export default function page() {
-//   return (
-//     <>
-//       <section>
-//         <div className="pt-3 xl:py-12">
-//           <div className="container mx-auto px-4">
-//             <div className="mb-8">
-//               <h1 className="text-2xl font-semibold text-[#333]">Your Orders</h1>
-//               <p className="text-textMain">Track, return, or buy items again</p>
-//             </div>
-//             <div className=" ">
-//               <Tabs defaultValue="overview" className="flex-col gap-8">
-//                 <div className="flex justify-between items-center">
-//                   <TabsList>
-//                     <TabsTrigger className="data-[state=active]:bg-transparent group-data-[variant=default]/tabs-list:data-[state=active]:shadow-none pb-1" value="overview">Overview</TabsTrigger>
-//                     <TabsTrigger className="data-[state=active]:bg-transparent group-data-[variant=default]/tabs-list:data-[state=active]:shadow-none pb-1" value="analytics">Analytics</TabsTrigger>
-//                     <TabsTrigger className="data-[state=active]:bg-transparent group-data-[variant=default]/tabs-list:data-[state=active]:shadow-none pb-1" value="reports">Reports</TabsTrigger>
-//                     <TabsTrigger className="data-[state=active]:bg-transparent group-data-[variant=default]/tabs-list:data-[state=active]:shadow-none pb-1" value="settings">Settings</TabsTrigger>
-//                   </TabsList>
-//                   <Field orientation="horizontal" className="w-fit">
-//                     <Input type="search" placeholder="Search..." />
-//                     <Button>Search</Button>
-//                   </Field>
-//                 </div>
-//                 <TabsContent value="overview">
-//                   <Card>
-//                     <CardHeader>
-//                       <CardTitle>Overview</CardTitle>
-//                       <CardDescription>
-//                         View your key metrics and recent project activity. Track
-//                         progress across all your active projects.
-//                       </CardDescription>
-//                     </CardHeader>
-//                     <CardContent className="text-sm text-muted-foreground">
-//                       You have 12 active projects and 3 pending tasks.
-//                     </CardContent>
-//                   </Card>
-//                 </TabsContent>
-//                 <TabsContent value="analytics">
-//                   <Card>
-//                     <CardHeader>
-//                       <CardTitle>Analytics</CardTitle>
-//                       <CardDescription>
-//                         Track performance and user engagement metrics. Monitor
-//                         trends and identify growth opportunities.
-//                       </CardDescription>
-//                     </CardHeader>
-//                     <CardContent className="text-sm text-muted-foreground">
-//                       Page views are up 25% compared to last month.
-//                     </CardContent>
-//                   </Card>
-//                 </TabsContent>
-//                 <TabsContent value="reports">
-//                   <Card>
-//                     <CardHeader>
-//                       <CardTitle>Reports</CardTitle>
-//                       <CardDescription>
-//                         Generate and download your detailed reports. Export data
-//                         in multiple formats for analysis.
-//                       </CardDescription>
-//                     </CardHeader>
-//                     <CardContent className="text-sm text-muted-foreground">
-//                       You have 5 reports ready and available to export.
-//                     </CardContent>
-//                   </Card>
-//                 </TabsContent>
-//                 <TabsContent value="settings">
-//                   <Card>
-//                     <CardHeader>
-//                       <CardTitle>Settings</CardTitle>
-//                       <CardDescription>
-//                         Manage your account preferences and options. Customize
-//                         your experience to fit your needs.
-//                       </CardDescription>
-//                     </CardHeader>
-//                     <CardContent className="text-sm text-muted-foreground">
-//                       Configure notifications, security, and themes.
-//                     </CardContent>
-//                   </Card>
-//                 </TabsContent>
-//               </Tabs>
-//             </div>
-//           </div>
-//         </div>
-//       </section>
-//     </>
-//   );
-// }
-// app/orders/page.tsx
-// app/orders/page.tsx
-
-// app/orders/page.tsx
-
-import type { ItemAction } from "@/components/OrderCard/OrderCard";
 import { useEffect, useMemo, useState } from "react";
 import OrdersList from "@/components/OrdersList/OrdersList";
 import { getUserOrders } from "@/Features/Order.slice";
 import { useAppDispatch, useAppSelector } from "@/hooks/store.hooks";
-import { AllOrder, OrderCartItem } from "@/Types/order";
-
-// type OrderTabKey = "all" | "in_progress" | "delivered";
-
-// function matchesTab(order: Order, tab: OrderTabKey): boolean {
-//   if (tab === "all") return true;
-//   if (tab === "in_progress")
-//     return order.status === "in_transit" || order.status === "processing";
-//   if (tab === "delivered") return order.status === "delivered";
-//   return true;
-// }
-
-// شيلها واستبدلها بالداتا الحقيقية بتاعتك
-// const mockOrders: Order[] = [
-//   {
-//     id: "1",
-//     orderNumber: "WEB-9847562",
-//     placedDate: "Dec 12, 2024",
-//     total: 127.97,
-//     status: "in_transit",
-//     shipping: {
-//       message: "Arriving Dec 18-20",
-//       subMessage: "Your package is on its way",
-//       trackingUrl: "#",
-//     },
-//     detailsUrl: "#",
-//     helpUrl: "#",
-//     items: [
-//       {
-//         id: "1-1",
-//         name: "Oversized Cotton Hoodie",
-//         variant: "Black · L",
-//         price: 49.99,
-//         imageUrl: "https://placehold.co/160x160/e5e7eb/9ca3af?text=Hoodie",
-//         actions: ["trackItem"],
-//       },
-//       {
-//         id: "1-2",
-//         name: "High-Rise Straight Jeans",
-//         variant: "Medium Blue · 32",
-//         price: 59.99,
-//         imageUrl: "https://placehold.co/160x160/e5e7eb/9ca3af?text=Jeans",
-//         actions: ["trackItem"],
-//       },
-//       {
-//         id: "1-3",
-//         name: "Basic Crew Neck Tee",
-//         variant: "White · M",
-//         price: 17.99,
-//         imageUrl: "https://placehold.co/160x160/e5e7eb/9ca3af?text=Tee",
-//         actions: ["trackItem"],
-//       },
-//     ],
-//   },
-//   {
-//     id: "2",
-//     orderNumber: "WEB-9841203",
-//     placedDate: "Dec 5, 2024",
-//     total: 89.98,
-//     status: "delivered",
-//     detailsUrl: "#",
-//     helpUrl: "#",
-//     items: [
-//       {
-//         id: "2-1",
-//         name: "Leather Crossbody Bag",
-//         variant: "Burgundy · One Size",
-//         price: 69.99,
-//         imageUrl: "https://placehold.co/160x160/e5e7eb/9ca3af?text=Bag",
-//         actions: ["buyAgain", "startReturn", "writeReview"],
-//         returnEligibleUntil: "Jan 10, 2025",
-//       },
-//     ],
-//   },
-// ];
-
-// interface OrdersPageProps {
-//   orders?: Order[];
-// }
 
 export default function OrdersPage() {
   const [search, setSearch] = useState("");
   const dispatch = useAppDispatch();
   const { user } = useAppSelector((store) => store.user);
   const { orders } = useAppSelector((store) => store.orderSlice);
-  // فيلتر البحث بيتطبق قبل التقسيم على التابات
+
   const searchedOrders = useMemo(() => {
     const query = search.trim().toLowerCase();
     if (!query) return orders;
@@ -206,25 +23,16 @@ export default function OrdersPage() {
     });
   }, [orders, search]);
 
-  // كل تاب ليه ليستة مفلترة خاصة بيه، مبنية على searchedOrders
   const allOrders = searchedOrders;
-  const inProgressOrders = useMemo(
-    () => searchedOrders.filter((order) => !order.isDelivered),
+  const paidOrders = useMemo(
+    () => searchedOrders.filter((order) => order.isPaid),
     [searchedOrders],
   );
-  const deliveredOrders = useMemo(
-    () => searchedOrders.filter((order) => order.isDelivered),
+  const cashOrders = useMemo(
+    () => searchedOrders.filter((order) => !order.isPaid),
     [searchedOrders],
   );
 
-  function handleItemAction(
-    action: ItemAction,
-    item: OrderCartItem,
-    order: AllOrder,
-  ) {
-    // وصل هنا اللوجيك الحقيقي بتاعك (navigation, API call, modal..)
-    console.log(action, item._id, order.id);
-  }
   useEffect(() => {
     if (user?.id) {
       dispatch(getUserOrders(user.id));
@@ -250,15 +58,15 @@ export default function OrdersPage() {
               </TabsTrigger>
               <TabsTrigger
                 className="data-[state=active]:bg-transparent group-data-[variant=default]/tabs-list:data-[state=active]:shadow-none pb-1"
-                value="InProgress"
+                value="Paid"
               >
-                In Progress
+                Paid
               </TabsTrigger>
               <TabsTrigger
                 className="data-[state=active]:bg-transparent group-data-[variant=default]/tabs-list:data-[state=active]:shadow-none pb-1"
-                value="Delivered"
+                value="Cash"
               >
-                Delivered
+                Cash on Delivery
               </TabsTrigger>
             </TabsList>
 
@@ -267,28 +75,25 @@ export default function OrdersPage() {
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               placeholder="Search orders..."
-              className="w-full max-w-xs rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm text-gray-900 placeholder:text-gray-400 focus:border-gray-400 focus:outline-none focus:ring-1 focus:ring-gray-400"
+              className="w-full max-w-xs rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-[#333] placeholder:text-gray-400 focus:border-gray-400 focus:outline-none focus:ring-1 focus:ring-gray-400"
             />
           </div>
 
-          {/* كل TabsContent بقى ليستة مختلفة فعليًا، مش نفس الحاجة */}
           <TabsContent value="AllOrders">
-            <OrdersList orders={allOrders} onItemAction={handleItemAction} />
+            <OrdersList orders={allOrders} />
           </TabsContent>
 
-          <TabsContent value="InProgress">
+          <TabsContent value="Paid">
             <OrdersList
-              orders={inProgressOrders}
-              onItemAction={handleItemAction}
-              emptyMessage="مفيش أوردرات تحت التنفيذ دلوقتي."
+              orders={paidOrders}
+              emptyMessage="No paid orders yet."
             />
           </TabsContent>
 
-          <TabsContent value="Delivered">
+          <TabsContent value="Cash">
             <OrdersList
-              orders={deliveredOrders}
-              onItemAction={handleItemAction}
-              emptyMessage="لسه مفيش أوردرات وصلت."
+              orders={cashOrders}
+              emptyMessage="No cash on delivery orders yet."
             />
           </TabsContent>
         </Tabs>
