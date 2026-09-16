@@ -4,13 +4,14 @@ import { useEffect, useMemo, useState } from "react";
 import OrdersList from "@/components/OrdersList/OrdersList";
 import { getUserOrders } from "@/Features/Order.slice";
 import { useAppDispatch, useAppSelector } from "@/hooks/store.hooks";
+import { useTranslation } from "react-i18next";
 
 export default function OrdersPage() {
   const [search, setSearch] = useState("");
   const dispatch = useAppDispatch();
+  const { t, i18n } = useTranslation();
   const { user } = useAppSelector((store) => store.user);
   const { orders } = useAppSelector((store) => store.orderSlice);
-
   const searchedOrders = useMemo(() => {
     const query = search.trim().toLowerCase();
     if (!query) return orders;
@@ -39,34 +40,44 @@ export default function OrdersPage() {
     }
   }, [user?.id, dispatch]);
   return (
-    <div className="pt-3 xl:py-12">
-      <div className="container mx-auto px-4">
+    <div className="pt-5 xl:py-12">
+      <div className="container mx-auto px-3 md:px-4">
         {/* Header */}
-        <header className="mb-8">
-          <h1 className="text-3xl font-semibold text-[#333]">Your Orders</h1>
-          <p className="mt-1 text-[#666]">Track, return, or buy items again</p>
+        <header className="mb-6 md:mb-8">
+          <h1 className="text-2xl font-semibold text-[#333] lg:text-3xl">
+            {t("orders.title")}
+          </h1>
+          <p className="mt-1 text-sm text-[#666] lg:text-base">
+            {t("orders.description")}
+          </p>
         </header>
 
-        <Tabs defaultValue="AllOrders" className="flex-col gap-8">
-          <div className="flex justify-between items-center">
-            <TabsList>
+        <Tabs
+          defaultValue="AllOrders"
+          className="flex-col gap-8"
+          dir={i18n.language === "ar" ? "rtl" : "ltr"}
+        >
+          <div className="flex flex-col items-start gap-4 xl:flex-row xl:items-center xl:justify-between">
+            <TabsList className="w-full overflow-x-auto xl:w-auto">
               <TabsTrigger
-                className="data-[state=active]:bg-transparent group-data-[variant=default]/tabs-list:data-[state=active]:shadow-none pb-1"
+                className="pb-1 data-[state=active]:bg-transparent group-data-[variant=default]/tabs-list:data-[state=active]:shadow-none"
                 value="AllOrders"
               >
-                All Orders
+                {t("orders.all")}
               </TabsTrigger>
+
               <TabsTrigger
-                className="data-[state=active]:bg-transparent group-data-[variant=default]/tabs-list:data-[state=active]:shadow-none pb-1"
+                className="pb-1 data-[state=active]:bg-transparent group-data-[variant=default]/tabs-list:data-[state=active]:shadow-none"
                 value="Paid"
               >
-                Paid
+                 {t("orders.paid")}
               </TabsTrigger>
+
               <TabsTrigger
-                className="data-[state=active]:bg-transparent group-data-[variant=default]/tabs-list:data-[state=active]:shadow-none pb-1"
+                className="pb-1 data-[state=active]:bg-transparent group-data-[variant=default]/tabs-list:data-[state=active]:shadow-none"
                 value="Cash"
               >
-                Cash on Delivery
+                {t("orders.cashOnDelivery")}
               </TabsTrigger>
             </TabsList>
 
@@ -74,26 +85,26 @@ export default function OrdersPage() {
               type="text"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              placeholder="Search orders..."
-              className="w-full max-w-xs rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-[#333] placeholder:text-gray-400 focus:border-gray-400 focus:outline-none focus:ring-1 focus:ring-gray-400"
+              placeholder={t("orders.search")}
+              className="max-xl:w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-[#333] placeholder:text-gray-400 focus:border-gray-400 focus:outline-none focus:ring-1 focus:ring-gray-400"
             />
           </div>
 
           <TabsContent value="AllOrders">
-            <OrdersList orders={allOrders} />
+            <OrdersList orders={allOrders} emptyMessage={t("orders.empty")}/>
           </TabsContent>
 
           <TabsContent value="Paid">
             <OrdersList
               orders={paidOrders}
-              emptyMessage="No paid orders yet."
+              emptyMessage={t("orders.emptyPaid")}
             />
           </TabsContent>
 
           <TabsContent value="Cash">
             <OrdersList
               orders={cashOrders}
-              emptyMessage="No cash on delivery orders yet."
+              emptyMessage={t("orders.emptyCash")}
             />
           </TabsContent>
         </Tabs>

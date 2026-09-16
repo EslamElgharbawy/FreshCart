@@ -1,6 +1,7 @@
 import OrderCard from "@/components/OrderCard/OrderCard";
 import { UserOrdersResponse } from "@/Types/order";
 import EmptyOrders from "../EmptyState/EmptyState";
+import { useTranslation } from "react-i18next";
 
 interface OrdersListProps {
   orders: UserOrdersResponse;
@@ -9,8 +10,10 @@ interface OrdersListProps {
 
 export default function OrdersList({
   orders,
-  emptyMessage = "No orders yet.",
+  emptyMessage,
 }: OrdersListProps) {
+    const { t, i18n } = useTranslation();
+  
   if (orders.length === 0) {
     return (
       <EmptyOrders
@@ -28,10 +31,10 @@ export default function OrdersList({
             className="overflow-hidden rounded-xl border border-gray-200 bg-white"
           >
             {/* Order header */}
-            <div className="flex flex-col gap-4 px-4 py-4 lg:flex-row lg:items-center lg:justify-between lg:px-6">
-              <div className="flex flex-wrap gap-x-6 gap-y-3 text-sm lg:gap-x-8 lg:gap-y-1">
+            <div className="flex flex-col gap-4 px-4 py-4 xl:flex-row xl:items-center xl:justify-between xl:px-6">
+              <div className="flex flex-wrap gap-x-6 gap-y-3 text-sm lg:gap-x-8 xl:gap-y-1">
                 <div>
-                  <p className="text-gray-500">Order placed</p>
+                  <p className="text-gray-500">{t("orders.orderPlaced")}</p>
                   <p className="font-medium text-gray-900">
                     {new Date(order.createdAt).toLocaleDateString("en-US", {
                       month: "short",
@@ -41,11 +44,11 @@ export default function OrdersList({
                   </p>
                 </div>
                 <div>
-                  <p className="text-gray-500">Order number</p>
+                  <p className="text-gray-500">{t("orders.orderNumber")}</p>
                   <p className="font-medium text-gray-900">{order.id}</p>
                 </div>
                 <div>
-                  <p className="text-gray-500">Total</p>
+                  <p className="text-gray-500">{t("orders.total")}</p>
                   <p className="font-medium text-gray-900">
                     $
                     {new Intl.NumberFormat("en-US").format(
@@ -62,7 +65,7 @@ export default function OrdersList({
                   }
                 >
                   <span className={"h-2 w-2 rounded-full bg-green-600"} />
-                  Paid
+                  {t("orders.paid")}
                 </span>
               ) : (
                 <span
@@ -71,22 +74,23 @@ export default function OrdersList({
                   }
                 >
                   <span className={"h-2 w-2 rounded-full bg-amber-600"} />
-                  Cash on Delivery
+                  {t("orders.cashOnDelivery")}
                 </span>
               )}
             </div>
 
             {/* Shipping banner */}
             {order.shippingAddress && (
-              <div className="border-y border-gray-100 bg-gray-50 px-4 py-4 lg:px-6">
-                <div className="flex items-start lg:items-center gap-3">
+              <div className="border-y border-gray-100 bg-gray-50 px-4 py-4 xl:px-6">
+                <div className="flex items-start xl:items-center gap-3">
                   <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-blue-100 text-blue-600">
                     <svg
-                      className="h-6 w-6"
+                      className={`h-6 w-6 ${i18n.language === "ar" ? "-scale-x-100" : ""}`}
                       fill="none"
                       viewBox="0 0 24 24"
                       stroke="currentColor"
                       strokeWidth={1.6}
+                      
                     >
                       <path
                         strokeLinecap="round"
