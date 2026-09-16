@@ -5,7 +5,7 @@ import { useTranslation } from "react-i18next";
 
 interface OrdersListProps {
   orders: UserOrdersResponse;
-  emptyMessage?: string;
+  emptyMessage: string;
 }
 
 export default function OrdersList({
