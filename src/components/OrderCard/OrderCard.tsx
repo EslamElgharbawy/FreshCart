@@ -6,7 +6,7 @@ interface OrderCardProps {
 }
 
 export default function OrderCard({ item }: OrderCardProps) {
-  const {t}=useTranslation()
+  const { t } = useTranslation();
   return (
     <div className="flex gap-4 lg:gap-6 border-b border-gray-100 px-4 lg:px-6 py-5 last:border-b-0">
       <img
@@ -21,7 +21,6 @@ export default function OrderCard({ item }: OrderCardProps) {
             {item.product.title}
           </h3>
           <p className="mt-0.5 text-sm text-gray-500">
-            {" "}
             {t("orders.quantity")} {item.count}
           </p>
         </div>

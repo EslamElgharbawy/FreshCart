@@ -2,24 +2,22 @@ import OrderCard from "@/components/OrderCard/OrderCard";
 import { UserOrdersResponse } from "@/Types/order";
 import EmptyOrders from "../EmptyState/EmptyState";
 import { useTranslation } from "react-i18next";
+import OrdersListSkeleton from "../Skeletons/OrderListSkeleton";
+import { useAppSelector } from "@/hooks/store.hooks";
 
 interface OrdersListProps {
   orders: UserOrdersResponse;
   emptyMessage: string;
 }
 
-export default function OrdersList({
-  orders,
-  emptyMessage,
-}: OrdersListProps) {
-    const { t, i18n } = useTranslation();
-  
+export default function OrdersList({ orders, emptyMessage }: OrdersListProps) {
+  const { isLoading } = useAppSelector((store) => store.orderSlice);
+  const { t, i18n } = useTranslation();
+  if (isLoading) {
+    return <OrdersListSkeleton />;
+  }
   if (orders.length === 0) {
-    return (
-      <EmptyOrders
-        title={emptyMessage}
-      />
-    );
+    return <EmptyOrders title={emptyMessage} />;
   }
 
   return (
@@ -90,7 +88,6 @@ export default function OrdersList({
                       viewBox="0 0 24 24"
                       stroke="currentColor"
                       strokeWidth={1.6}
-                      
                     >
                       <path
                         strokeLinecap="round"
