@@ -8,23 +8,23 @@ export default function OrdersListSkeleton() {
         >
           {/* Order Header */}
           <div className="flex flex-col gap-4 px-4 py-4 xl:flex-row xl:items-center xl:justify-between xl:px-6">
-            <div className="flex flex-wrap gap-x-8 gap-y-4">
+            <div className="flex flex-wrap gap-x-6 gap-y-3 lg:gap-x-8 xl:gap-y-1">
               {/* Date */}
               <div className="space-y-2">
-                <div className="h-3 w-20 rounded bg-gray-200" />
-                <div className="h-4 w-28 rounded bg-gray-200" />
+                <div className="h-3 w-16 rounded bg-gray-200" />
+                <div className="h-4 w-24 rounded bg-gray-200" />
               </div>
 
               {/* Order Number */}
               <div className="space-y-2">
-                <div className="h-3 w-24 rounded bg-gray-200" />
-                <div className="h-4 w-36 rounded bg-gray-200" />
+                <div className="h-3 w-20 rounded bg-gray-200" />
+                <div className="h-4 w-32 rounded bg-gray-200" />
               </div>
 
               {/* Total */}
               <div className="space-y-2">
-                <div className="h-3 w-16 rounded bg-gray-200" />
-                <div className="h-4 w-20 rounded bg-gray-200" />
+                <div className="h-3 w-14 rounded bg-gray-200" />
+                <div className="h-4 w-16 rounded bg-gray-200" />
               </div>
             </div>
 

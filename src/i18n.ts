@@ -245,6 +245,7 @@ const resources = {
         reviews: "Reviews",
         at: "at",
         somethingWentWrong: " Something went wrong",
+        returnToShop: "Return to shop",
       },
       productDetails: {
         category: "Category",
@@ -334,6 +335,21 @@ const resources = {
         returnToShop: "Return to shop",
         proceedToCheckout: "Proceed to checkout",
         cartTotals: "Cart Totals",
+      },
+      checkout: {
+        streetAddress: "Street address",
+        townCity: "Town / City",
+        postcode: "Postcode",
+        emptyCart: "Your cart is currently empty.",
+        yourOrder: "Your order",
+        paymentMethods: "Payment Methods",
+        cashOnDelivery: "Cash on delivery",
+        cashDescription: "Pay with cash upon delivery.",
+        onlinePayment: "Online Payment (Stripe)",
+        stripeDescription:
+          "Pay securely via Stripe using your credit or debit card.",
+        placeOrder: "Place order",
+        proceedToStripe: "Proceed to Stripe",
       },
       orders: {
         title: "Your Orders",
@@ -635,6 +651,7 @@ const resources = {
         reviews: "تقييمات",
         at: "في",
         somethingWentWrong: " حدث خطأ ما",
+        returnToShop: "العودة إلى المتجر",
       },
       productDetails: {
         category: "الفئة",
@@ -725,6 +742,21 @@ const resources = {
         returnToShop: "العودة إلى المتجر",
         proceedToCheckout: "المتابعة إلى إتمام الطلب",
         cartTotals: "إجماليات السلة",
+      },
+      checkout: {
+        streetAddress: "عنوان الشارع",
+        townCity: "المدينة",
+        postcode: "الرمز البريدي",
+        emptyCart: "السلة فارغة حاليًا.",
+        yourOrder: "طلبك",
+        paymentMethods: "طرق الدفع",
+        cashOnDelivery: "الدفع عند الاستلام",
+        cashDescription: "ادفع نقدًا عند استلام الطلب.",
+        onlinePayment: "الدفع الإلكتروني (Stripe)",
+        stripeDescription:
+          "ادفع بأمان باستخدام بطاقة الائتمان أو الخصم عبر Stripe.",
+        placeOrder: "تأكيد الطلب",
+        proceedToStripe: "المتابعة إلى Stripe",
       },
       orders: {
         title: "طلباتك",

@@ -18,13 +18,13 @@ interface CartTotalsProps {
 const paymentMethods = [
   {
     id: "Cash",
-    label: "Cash on delivery",
-    description: "Pay with cash upon delivery.",
+    label: "checkout.cashOnDelivery",
+    description: "checkout.cashDescription",
   },
   {
     id: "stripe",
-    label: "Online Payment (Stripe)",
-    description: "Pay securely via Stripe using your credit or debit card.",
+    label: "checkout.onlinePayment",
+    description: "checkout.stripeDescription",
   },
 ];
 
@@ -38,7 +38,7 @@ export default function OrderReviewCard({
   return (
     <div className="w-full rounded-lg border border-[#eee] bg-white max-xl:p-5 p-8">
       <h2 className="text-xl font-bold uppercase tracking-[-0.2px] text-[#333] mb-3">
-        Your order
+        {t("checkout.yourOrder")}
       </h2>
       {isBusy ? (
         <>
@@ -86,7 +86,7 @@ export default function OrderReviewCard({
       </div>
 
       <h4 className="text-base font-semibold text-[#333] mb-6 pt-6 border-t border-[#eee]">
-        Payment Methods
+        {t("checkout.paymentMethods")}
       </h4>
 
       <RadioGroup
@@ -110,7 +110,7 @@ export default function OrderReviewCard({
                   onClick={() => onPaymentMethodChange(method.id)}
                   className="text-sm font-medium text-[#333]"
                 >
-                  {method.label}
+                  {t(method.label)}
                 </button>
               </div>
 
@@ -132,7 +132,7 @@ export default function OrderReviewCard({
                     className="overflow-hidden"
                   >
                     <div className="pl-8 pt-2 text-xs xl:text-sm leading-relaxed text-[#666]">
-                      {method.description}
+                      {t(method.description)}
                     </div>
                   </motion.div>
                 )}
@@ -146,7 +146,9 @@ export default function OrderReviewCard({
         type="submit"
         className="mt-5 h-11 lg:h-12  w-full rounded-md bg-[#333] text-xs lg:text-sm font-semibold uppercase tracking-wide text-white transition-all duration-300 hover:bg-[#444]"
       >
-        {paymentMethod === "Cash" ? "place order" : "Proceed to stripe"}
+        {paymentMethod === "Cash"
+          ? t("checkout.placeOrder")
+          : t("checkout.proceedToStripe")}
       </Button>
     </div>
   );

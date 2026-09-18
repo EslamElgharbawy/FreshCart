@@ -4,7 +4,7 @@ import axios from "axios";
 
 const initialState: UserOrdersState = {
   orders: [],
-  isLoading: false,
+  loading: false,
   error: null,
 };
 
@@ -24,16 +24,16 @@ export const orderSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder.addCase(getUserOrders.pending, (state) => {
-      state.isLoading = true;
+      state.loading = true;
       state.error = null;
     });
     builder.addCase(getUserOrders.fulfilled, (state, action) => {
       state.orders = action.payload;
-      state.isLoading = false;
+      state.loading = false;
     });
     builder.addCase(getUserOrders.rejected, (state) => {
       state.error = "Failed to fetch orders";
-      state.isLoading = false;
+      state.loading = false;
     });
   },
 });

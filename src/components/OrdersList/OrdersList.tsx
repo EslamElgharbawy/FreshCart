@@ -3,17 +3,20 @@ import { UserOrdersResponse } from "@/Types/order";
 import EmptyOrders from "../EmptyState/EmptyState";
 import { useTranslation } from "react-i18next";
 import OrdersListSkeleton from "../Skeletons/OrderListSkeleton";
-import { useAppSelector } from "@/hooks/store.hooks";
 
 interface OrdersListProps {
   orders: UserOrdersResponse;
   emptyMessage: string;
+  isBusy: boolean;
 }
 
-export default function OrdersList({ orders, emptyMessage }: OrdersListProps) {
-  const { isLoading } = useAppSelector((store) => store.orderSlice);
+export default function OrdersList({
+  orders,
+  emptyMessage,
+  isBusy,
+}: OrdersListProps) {
   const { t, i18n } = useTranslation();
-  if (isLoading) {
+  if (isBusy) {
     return <OrdersListSkeleton />;
   }
   if (orders.length === 0) {

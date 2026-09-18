@@ -23,6 +23,7 @@ import i18n from "@/i18n";
 import { Currency } from "@/Types/currency";
 import { useRouter } from "next/navigation";
 import { setActiveStep } from "@/Features/Cart.slice";
+import useIsBusy from "@/hooks/useIsBusy.hooks";
 
 interface CartSheetProps {
   currency: Currency;
@@ -49,7 +50,10 @@ export default function CartSheet({
   const productsCount = cart?.products?.length ?? 0;
   const totalPrice = cart?.totalCartPrice ?? 0;
 
-  const isBusy = !authChecked || loading;
+  const isBusy = useIsBusy({
+      authChecked,
+      loading,
+    });
 
   return (
     <Sheet open={openSheet} onOpenChange={setOpenSheet}>

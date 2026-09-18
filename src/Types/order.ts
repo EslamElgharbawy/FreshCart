@@ -6,7 +6,7 @@ export interface OrderState {
 }
 export interface UserOrdersState {
   orders: UserOrdersResponse;
-  isLoading: boolean;
+  loading: boolean;
   error: string | null;
 }
 
@@ -109,7 +109,6 @@ export interface OrderBrand {
   image: string;
 }
 
-// export type OrderStatus = "processing" | "delivered";
 export type ItemAction =
   | "trackItem"
   | "buyAgain"

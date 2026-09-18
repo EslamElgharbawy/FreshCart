@@ -5,13 +5,15 @@ import OrdersList from "@/components/OrdersList/OrdersList";
 import { getUserOrders } from "@/Features/Order.slice";
 import { useAppDispatch, useAppSelector } from "@/hooks/store.hooks";
 import { useTranslation } from "react-i18next";
+import useIsBusy from "@/hooks/useIsBusy.hooks";
 
 export default function OrdersPage() {
   const [search, setSearch] = useState("");
   const dispatch = useAppDispatch();
   const { t, i18n } = useTranslation();
   const { user } = useAppSelector((store) => store.user);
-  const { orders } = useAppSelector((store) => store.orderSlice);
+  const { orders, loading } = useAppSelector((store) => store.orderSlice);
+  const { authChecked } = useAppSelector((store) => store.user);
   const searchedOrders = useMemo(() => {
     const query = search.trim().toLowerCase();
     if (!query) return orders;
@@ -39,6 +41,10 @@ export default function OrdersPage() {
       dispatch(getUserOrders(user.id));
     }
   }, [user?.id, dispatch]);
+  const isBusy = useIsBusy({
+    authChecked,
+    loading,
+  });
   return (
     <div className="pt-5 xl:py-12">
       <div className="container mx-auto px-3 md:px-4">
@@ -70,7 +76,7 @@ export default function OrdersPage() {
                 className="pb-1 data-[state=active]:bg-transparent group-data-[variant=default]/tabs-list:data-[state=active]:shadow-none"
                 value="Paid"
               >
-                 {t("orders.paid")}
+                {t("orders.paid")}
               </TabsTrigger>
 
               <TabsTrigger
@@ -91,12 +97,17 @@ export default function OrdersPage() {
           </div>
 
           <TabsContent value="AllOrders">
-            <OrdersList orders={allOrders} emptyMessage={t("orders.empty")}/>
+            <OrdersList
+              orders={allOrders}
+              isBusy={isBusy}
+              emptyMessage={t("orders.empty")}
+            />
           </TabsContent>
 
           <TabsContent value="Paid">
             <OrdersList
               orders={paidOrders}
+              isBusy={isBusy}
               emptyMessage={t("orders.emptyPaid")}
             />
           </TabsContent>
@@ -104,6 +115,7 @@ export default function OrdersPage() {
           <TabsContent value="Cash">
             <OrdersList
               orders={cashOrders}
+              isBusy={isBusy}
               emptyMessage={t("orders.emptyCash")}
             />
           </TabsContent>

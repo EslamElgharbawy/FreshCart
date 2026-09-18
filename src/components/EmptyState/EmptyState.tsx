@@ -1,10 +1,12 @@
 import Link from "next/link";
 import { Button } from "../ui/button";
+import { useTranslation } from "react-i18next";
 interface EmptyStateProps {
   title: string;
 }
 
 export default function EmptyState({ title }: EmptyStateProps) {
+  const { t } = useTranslation();
   return (
     <div>
       <div className="flex justify-center gap-2 mb-5 px-5 py-4 font-semibold text-[#777]">
@@ -24,7 +26,7 @@ export default function EmptyState({ title }: EmptyStateProps) {
           <line x1="12" x2="12" y1="8" y2="12" />
           <line x1="12" x2="12.01" y1="16" y2="16" />
         </svg>
-        {title}
+        {t(title, { defaultValue: title })}
       </div>
 
       <div className="mb-8">
@@ -45,7 +47,7 @@ export default function EmptyState({ title }: EmptyStateProps) {
       </div>
 
       <Button className="uppercase !px-7 !py-3 h-auto rounded-md bg-[#333] hover:bg-[#454545] transition-all duration-300 text-white font-semibold block mx-auto">
-        Return to shop{" "}
+        {t("common.returnToShop")}
       </Button>
     </div>
   );

@@ -41,6 +41,7 @@ import { getCategories } from "@/Features/Categoreis.slice";
 import { GetLoggedUserCart } from "@/Features/Cart.slice";
 import CartBadgeLoader from "../Skeletons/CartBadgeLoader";
 import CartSheet from "../CartSheet/CartSheet";
+import useIsBusy from "@/hooks/useIsBusy.hooks";
 
 export default function Navbar() {
   const inputRef = useRef<HTMLInputElement | null>(null);
@@ -87,7 +88,10 @@ export default function Navbar() {
       dispatch(GetLoggedUserCart());
     }
   }, [dispatch, isLoggedIn]);
-  const isBusy = !authChecked || loading;
+  const isBusy = useIsBusy({
+      authChecked,
+      loading,
+    });
 
   return (
     <>
