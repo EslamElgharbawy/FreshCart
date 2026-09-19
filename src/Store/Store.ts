@@ -7,6 +7,7 @@ import reviewsSlice from "@/Features/Reviews.slice";
 import AuthDialog from "@/Features/AuthDialog.slice";
 import CartSlice from "@/Features/Cart.slice";
 import orderSlice from "@/Features/Order.slice";
+import wishListSlice from "@/Features/WishList.slice";
 export const Store = configureStore({
   reducer: {
     user: userReducer,
@@ -17,6 +18,7 @@ export const Store = configureStore({
     AuthDialog,
     CartSlice,
     orderSlice,
+    wishListSlice,
   },
 });
 type AppStore = typeof Store;

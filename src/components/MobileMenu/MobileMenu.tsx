@@ -1,10 +1,8 @@
 "use client";
-import { Input } from "@/components/ui/input";
 import {
   Sheet,
   SheetClose,
   SheetContent,
-  SheetDescription,
   SheetHeader,
   SheetTitle,
   SheetTrigger,
@@ -35,6 +33,7 @@ import {
 } from "@/components/ui/input-group";
 import i18n from "@/i18n";
 import { Button } from "../ui/button";
+import { usePathname } from "next/navigation";
 
 const sections = [
   { name: "home", path: "/" },
@@ -43,9 +42,10 @@ const sections = [
 ];
 
 export function MobileMenu() {
-  const [active, setactive] = useState("home");
   const [isSheetOpen, setIsSheetOpen] = useState(false);
   const { t } = useTranslation();
+  const pathname = usePathname();
+
   const { categories } = useAppSelector((store) => store.categoriesSlice);
 
   const categoryIcons: Record<string, React.ElementType> = {
@@ -133,10 +133,7 @@ export function MobileMenu() {
                 {sections.map((item) => (
                   <li
                     key={item.name}
-                    onClick={() => {
-                      setactive(item.name);
-                    }}
-                    className={`tap-item px-2 py-4 transition-all duration-300 text-border border-b-[1px] border-b-[#333] last:border-b-0 ${active === item.name ? "text-primary" : ""}`}
+                    className={`tap-item px-2 py-4 transition-all duration-300 text-border border-b-[1px] border-b-[#333] last:border-b-0 ${pathname === item.path ? "text-primary" : ""}`}
                   >
                     <Link
                       href={item.path}

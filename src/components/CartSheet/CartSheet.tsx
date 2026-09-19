@@ -15,7 +15,6 @@ import {
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import EmptyCart from "../../assets/images/empty-bag.svg";
-import CartBadgeLoader from "../Skeletons/CartBadgeLoader";
 import CartSheetItem from "../CartSheetItem/CartSheetItem";
 import { useTranslation } from "react-i18next";
 import { useAppDispatch, useAppSelector } from "@/hooks/store.hooks";
@@ -51,9 +50,9 @@ export default function CartSheet({
   const totalPrice = cart?.totalCartPrice ?? 0;
 
   const isBusy = useIsBusy({
-      authChecked,
-      loading,
-    });
+    authChecked,
+    loading,
+  });
 
   return (
     <Sheet open={openSheet} onOpenChange={setOpenSheet}>
@@ -80,7 +79,13 @@ export default function CartSheet({
 
           <span className="relative mb-1 group-hover:text-primary transition-all">
             {isBusy ? (
-              <CartBadgeLoader language={language} />
+              <span
+                className={`absolute -top-1 ${
+                  language === "EGY" ? "-left-1" : "-right-1"
+                } w-[18px] h-[18px] bg-accent text-[#272b37] rounded-full flex justify-center items-center overflow-hidden`}
+              >
+                <span className="badge_loader" />
+              </span>
             ) : (
               <span
                 className={`absolute -top-1 ${

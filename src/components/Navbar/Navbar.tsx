@@ -39,9 +39,9 @@ import { usePathname, useRouter } from "next/navigation";
 import { actions } from "@/Features/AuthDialog.slice";
 import { getCategories } from "@/Features/Categoreis.slice";
 import { GetLoggedUserCart } from "@/Features/Cart.slice";
-import CartBadgeLoader from "../Skeletons/CartBadgeLoader";
 import CartSheet from "../CartSheet/CartSheet";
 import useIsBusy from "@/hooks/useIsBusy.hooks";
+import { GetLoggedUserWishlist } from "@/Features/WishList.slice";
 
 export default function Navbar() {
   const inputRef = useRef<HTMLInputElement | null>(null);
@@ -59,19 +59,17 @@ export default function Navbar() {
 
   const { categories } = useAppSelector((store) => store.categoriesSlice);
 
-  const { token, user, isLoggedIn, authChecked } = useAppSelector(
+  const { user, isLoggedIn, authChecked } = useAppSelector(
     (store) => store.user,
   );
-  const { cart, loading, updating } = useAppSelector(
-    (store) => store.CartSlice,
-  );
+  const { cart, loading } = useAppSelector((store) => store.CartSlice);
+  const { wishlist } = useAppSelector((store) => store.wishListSlice);
 
-  const pathName = usePathname();
   const sections = [
     { name: "home", path: "/" },
-    { name: "shop", path: "/Shop" },
+    { name: "shop", path: "/shop" },
     { name: "cartTap", path: "/cart" },
-    // { name: "wishList", path: "/cart" },
+    { name: "wishList", path: "/wishList" },
   ];
   const firstName = user?.name?.split(" ")[0];
   useEffect(() => {
@@ -86,12 +84,13 @@ export default function Navbar() {
   useEffect(() => {
     if (isLoggedIn) {
       dispatch(GetLoggedUserCart());
+      dispatch(GetLoggedUserWishlist());
     }
   }, [dispatch, isLoggedIn]);
   const isBusy = useIsBusy({
-      authChecked,
-      loading,
-    });
+    authChecked,
+    loading,
+  });
 
   return (
     <>
@@ -393,12 +392,23 @@ export default function Navbar() {
                         </a>
                       </span>
                       <span className="relative hover:text-primary transition-all duration-300">
-                        <span
-                          className={`absolute -top-1  ${language === "EGY" ? "-left-2" : "-right-2"} w-[18px] h-[18px] bg-accent text-[#272b37] text-[11px] rounded-full flex justify-center items-center`}
-                        >
-                          0
-                        </span>
-                        <a href="">
+                        {isBusy ? (
+                          <span
+                            className={`absolute -top-1 ${
+                              language === "EGY" ? "-left-2" : "-right-2"
+                            } w-[18px] h-[18px] bg-accent text-[#272b37] rounded-full flex justify-center items-center overflow-hidden`}
+                          >
+                            <span className="badge_loader" />
+                          </span>
+                        ) : (
+                          <span
+                            className={`absolute -top-1  ${language === "EGY" ? "-left-2" : "-right-2"} w-[18px] h-[18px] bg-accent text-[#272b37] text-[11px] rounded-full flex justify-center items-center`}
+                          >
+                            {wishlist.length}
+                          </span>
+                        )}
+
+                        <a href="/wishList">
                           <Heart size={27} />
                         </a>
                       </span>
@@ -781,14 +791,25 @@ export default function Navbar() {
                   )}
 
                   <a
-                    href="#"
+                    href="/wishList"
                     className="relative 2xl:hover:text-primary transition-all duration-300 "
                   >
-                    <span
-                      className={`absolute -top-1  ${language === "EGY" ? "-left-2" : "-right-2"} w-[16px] h-[16px] xl:w-[18px] xl:h-[18px] bg-accent text-[#272b37] text-[10px] rounded-full flex justify-center items-center`}
-                    >
-                      0
-                    </span>
+                    {isBusy ? (
+                      <span
+                        className={`absolute -top-1 ${
+                          language === "EGY" ? "-left-2" : "-right-2"
+                        } w-[16px] h-[16px] xl:w-[18px] xl:h-[18px] bg-accent text-[#272b37] rounded-full flex justify-center items-center overflow-hidden`}
+                      >
+                        <span className="badge_loader" />
+                      </span>
+                    ) : (
+                      <span
+                        className={`absolute -top-1  ${language === "EGY" ? "-left-2" : "-right-2"} w-[16px] h-[16px] xl:w-[18px] xl:h-[18px] bg-accent text-[#272b37] text-[10px] rounded-full flex justify-center items-center`}
+                      >
+                        {wishlist.length}
+                      </span>
+                    )}
+
                     <Heart className="w-[24px] h-[24px] lg:w-[26px] lg:h-[26px] xl:w-[32px] xl:h-[32px]" />
                   </a>
 
@@ -797,7 +818,13 @@ export default function Navbar() {
                     className="relative mb-1 2xl:hover:text-primary transition-all duration-300"
                   >
                     {isBusy ? (
-                      <CartBadgeLoader language={language} />
+                      <span
+                        className={`absolute -top-1 ${
+                          language === "EGY" ? "-left-1" : "-right-1"
+                        } w-[18px] h-[18px] bg-accent text-[#272b37] rounded-full flex justify-center items-center overflow-hidden`}
+                      >
+                        <span className="badge_loader" />
+                      </span>
                     ) : (
                       <span
                         className={`absolute -top-1  ${language === "EGY" ? "-left-1" : "-right-1"} w-[16px] h-[16px] xl:w-[18px] xl:h-[18px] bg-accent text-[#272b37] text-[10px] rounded-full flex justify-center items-center`}
