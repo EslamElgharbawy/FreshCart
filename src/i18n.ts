@@ -313,7 +313,7 @@ const resources = {
         reviewDeletedError: "Failed to delete review.",
       },
       cart: {
-        productAdded: "Product added",
+        productAdded: "Product added to cart",
         itemRemovedFromCart: "Removed",
         failedToRemoveProduct: "Failed to remove product",
         shoppingCart: "Shopping Cart",
@@ -367,6 +367,10 @@ const resources = {
         orderNumber: "Order number",
         total: "Total",
         quantity: "Quantity",
+      },
+      wishlist: {
+        addedSuccessfully: "Product added to wishlist",
+        removedSuccessfully: "Product removed ",
       },
       footer: {
         supportText: "Got Question? Call us 24/7",
@@ -721,7 +725,7 @@ const resources = {
         reviewDeletedError: "فشل في حذف التقييم.",
       },
       cart: {
-        productAdded: "تمت إضافة المنتج ",
+        productAdded: "تمت إضافة المنتج الى السله",
         itemRemovedFromCart: "تم الحذف",
         failedToRemoveProduct: "فشل حذف المنتج",
         shoppingCart: "سلة التسوق",
@@ -774,6 +778,10 @@ const resources = {
         orderNumber: "رقم الطلب",
         total: "الإجمالي",
         quantity: "الكمية",
+      },
+      wishlist: {
+        addedSuccessfully: "تمت إضافة المنتج إلى المفضلة",
+        removedSuccessfully: "تمت إزالة المنتج ",
       },
       footer: {
         supportText: "هل لديك سؤال؟ اتصل بنا 24/7",

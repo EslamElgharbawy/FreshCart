@@ -1,5 +1,6 @@
 import { actions } from "@/Features/AuthDialog.slice";
 import { AddProductToCart } from "@/Features/Cart.slice";
+import { AddProductToWishlist, GetLoggedUserWishlist } from "@/Features/WishList.slice";
 import { useAppDispatch, useAppSelector } from "@/hooks/store.hooks";
 import { Product } from "@/Types/products";
 import { Heart, Scale } from "lucide-react";
@@ -71,7 +72,7 @@ export default function ProductCard({
           </Link>
 
           <a
-            href="#"
+            href={`/ProductDetails/${_id}`}
             className="
       absolute bottom-0 left-0 right-0
       bg-primary
@@ -90,12 +91,26 @@ leading-4
             {t("products.quickView")}
           </a>
           <div className="flex justify-center items-center flex-col gap-2 absolute top-[10px] right-[10px] xl:top-4 xl:right-4 2xl:opacity-0 transition-all duration-300 2xl:group-hover:opacity-100">
-            <a
-              href="#"
+            <button
+              onClick={async () => {
+                if (!token) {
+                  dispatch(actions.openAuthDialog("SignIn"));
+                  return;
+                }
+                if (!_id) return;
+                try {
+                  await dispatch(AddProductToWishlist(_id)).unwrap();
+                  await dispatch(GetLoggedUserWishlist());
+
+                  toast.success(t("wishlist.addedSuccessfully"));
+                } catch (error: any) {
+                  toast.error(error.message || t("common.somethingWentWrong"));
+                }
+              }}
               className="w-8 h-8 2xl:w-10 2xl:h-10 rounded-full bg-white flex justify-center items-center border-[1px] text-[#999999] 2xl:hover:bg-primary 2xl:hover:border-transparent 2xl:hover:text-white transition-colors duration-300 group"
             >
               <Heart className="w-[18px] h-[18px] xl:w-[20px] xl:h-[20px]" />
-            </a>
+            </button>
             <a
               href="#"
               className="w-8 h-8 2xl:w-10 2xl:h-10 rounded-full bg-white flex justify-center items-center border-[1px] text-[#999999] 2xl:hover:bg-primary 2xl:hover:border-transparent 2xl:hover:text-white transition-colors duration-300 group"
