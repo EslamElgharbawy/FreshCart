@@ -1,11 +1,17 @@
+"use client";
 import { actions } from "@/Features/AuthDialog.slice";
 import { AddProductToCart } from "@/Features/Cart.slice";
-import { AddProductToWishlist, GetLoggedUserWishlist } from "@/Features/WishList.slice";
+import {
+  AddProductToWishlist,
+  GetLoggedUserWishlist,
+  RemoveProductFromWishlist,
+} from "@/Features/WishList.slice";
 import { useAppDispatch, useAppSelector } from "@/hooks/store.hooks";
 import { Product } from "@/Types/products";
 import { Heart, Scale } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { useTranslation } from "react-i18next";
 
@@ -16,7 +22,9 @@ export default function ProductCard({
   images,
   _id,
 }: Product) {
+  const [inWishList, setInWishList] = useState(false);
   const { token } = useAppSelector((store) => store.user);
+  const { wishlist } = useAppSelector((store) => store.wishListSlice);
   const dispatch = useAppDispatch();
 
   const handleSubmit = async () => {
@@ -35,6 +43,11 @@ export default function ProductCard({
     }
   };
   const { t } = useTranslation();
+  useEffect(() => {
+    const isExist = wishlist?.some((item) => item._id === _id);
+
+    setInWishList(isExist ? true : false);
+  }, [wishlist, _id]);
   return (
     <>
       <div className="group">
@@ -99,17 +112,33 @@ leading-4
                 }
                 if (!_id) return;
                 try {
-                  await dispatch(AddProductToWishlist(_id)).unwrap();
-                  await dispatch(GetLoggedUserWishlist());
+                  if (inWishList) {
+                    // Remove from Wishlist
+                    await dispatch(RemoveProductFromWishlist(_id)).unwrap();
 
-                  toast.success(t("wishlist.addedSuccessfully"));
+                    toast.success(t("wishlist.removedSuccessfully"));
+                  } else {
+                    // Add to Wishlist
+                    await dispatch(AddProductToWishlist(_id)).unwrap();
+
+                    toast.success(t("wishlist.addedSuccessfully"));
+                  }
+
+                  // Refresh Wishlist from API
+                  await dispatch(GetLoggedUserWishlist());
                 } catch (error: any) {
                   toast.error(error.message || t("common.somethingWentWrong"));
                 }
               }}
-              className="w-8 h-8 2xl:w-10 2xl:h-10 rounded-full bg-white flex justify-center items-center border-[1px] text-[#999999] 2xl:hover:bg-primary 2xl:hover:border-transparent 2xl:hover:text-white transition-colors duration-300 group"
+              className={`w-8 h-8 2xl:w-10 2xl:h-10 rounded-full flex justify-center items-center bg-white border-[1px] transition-colors duration-300 group ${
+                inWishList
+                  ? "bg-transparent text-primary"
+                  : " text-[#999999] 2xl:hover:bg-primary 2xl:hover:border-transparent 2xl:hover:text-white"
+              }`}
             >
-              <Heart className="w-[18px] h-[18px] xl:w-[20px] xl:h-[20px]" />
+              <Heart
+                className={`w-[18px] h-[18px] xl:w-[20px] xl:h-[20px] ${inWishList ? "fill-primary text-primary" : ""}`}
+              />
             </button>
             <a
               href="#"

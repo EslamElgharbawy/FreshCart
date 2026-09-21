@@ -54,6 +54,11 @@ import {
   UpdateCartProductQuantity,
 } from "@/Features/Cart.slice";
 import QuantityCounter from "@/components/QuantityCounter/QuantityCounter";
+import {
+  AddProductToWishlist,
+  GetLoggedUserWishlist,
+  RemoveProductFromWishlist,
+} from "@/Features/WishList.slice";
 
 export default function page() {
   const [thumbsSwiper, setThumbsSwiper] = useState<SwiperType | null>(null);
@@ -62,6 +67,7 @@ export default function page() {
   const [open, setOpen] = useState(false);
   const [counter, setCounter] = useState(1);
   const [index, setIndex] = useState(0);
+
   const dispatch = useAppDispatch();
   const { id } = useParams();
   const { t, i18n } = useTranslation();
@@ -75,6 +81,10 @@ export default function page() {
     (store) => store.reviewsSlice,
   );
   const { token } = useAppSelector((store) => store.user);
+  const { wishlist } = useAppSelector((store) => store.wishListSlice);
+
+  const inWishList = wishlist.some((item) => item._id === productDetails?._id);
+
   const socialIcons = [
     {
       id: 1,
@@ -354,8 +364,40 @@ export default function page() {
                     </div>
                     <div className="h-[18px] w-px bg-[#e1e1e1] ms-5 me-3" />
                     <div className="flex items-center text-[#333] h-full">
-                      <button className="hover:text-primary transition-all duration-300 py-3 px-2">
-                        <Heart strokeWidth={1.5} size={22} />
+                      <button
+                        onClick={async () => {
+                          if (!token) {
+                            dispatch(actions.openAuthDialog("SignIn"));
+                            return;
+                          }
+
+                          if (!productDetails?._id) return;
+
+                          try {
+                            if (inWishList) {
+                              await dispatch(
+                                RemoveProductFromWishlist(productDetails._id),
+                              ).unwrap();
+
+                              toast.success(t("wishlist.removedSuccessfully"));
+                            } else {
+                              await dispatch(
+                                AddProductToWishlist(productDetails._id),
+                              ).unwrap();
+
+                              toast.success(t("wishlist.addedSuccessfully"));
+                            }
+
+                            await dispatch(GetLoggedUserWishlist());
+                          } catch (error: any) {
+                            toast.error(
+                              error.message || t("common.somethingWentWrong"),
+                            );
+                          }
+                        }}
+                        className={`hover:text-primary transition-all duration-300 py-3 px-2 ${inWishList ? " text-primary" : ""}`}
+                      >
+                        <Heart strokeWidth={1.5} size={22} className={`${inWishList ? "fill-primary text-primary" : ""}`}/>
                       </button>
                       <button className="hover:text-primary transition-all duration-300 py-3 px-2">
                         <Scale strokeWidth={1.5} size={22} />

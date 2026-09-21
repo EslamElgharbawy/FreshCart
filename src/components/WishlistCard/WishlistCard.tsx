@@ -18,11 +18,11 @@ interface WishlistCardProps {
   product: WishlistProduct;
 }
 
-export default function WishlistCard({ product }: WishlistCardProps) {
+export default function WishlistCard({ product}: WishlistCardProps) {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const { token } = useAppSelector((store) => store.user);
-
+ 
   const handleSubmit = async () => {
     if (!token) {
       dispatch(actions.openAuthDialog("SignIn"));
@@ -78,8 +78,8 @@ leading-4
             onClick={async () => {
               try {
                 await dispatch(RemoveProductFromWishlist(product._id)).unwrap();
-                await dispatch(GetLoggedUserWishlist());
                 toast.success(t("wishlist.removedSuccessfully"));
+                await dispatch(GetLoggedUserWishlist());
               } catch (error: any) {
                 toast.error(error.message || t("common.somethingWentWrong"));
               }
