@@ -35,7 +35,7 @@ export default function ReviewCard({
           {review.user.name.charAt(0).toUpperCase()}
         </div>
 
-        <div className="flex-1 ">
+        <div className="flex-1">
           <div className="flex justify-between relative">
             <div className="flex justify-center flex-col 2xl:flex-row 2xl:items-center sm:max-2xl:mb-2 mb-1 gap-1 lg:gap-3">
               <h4 className="text-lg font-bold text-[#333]">
@@ -72,14 +72,14 @@ export default function ReviewCard({
                     </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent
-                    align="end"
-                    className="ring-0 min-w-0 w-auto border border-[#e5e7eb] "
+                    align={`${i18n.language === "ar" ? "start" : "end"}`}
+                    className="ring-0 min-w-0 w-auto border border-[#e5e7eb] bg-white"
                   >
                     <DropdownMenuItem
                       onClick={() => onEdit(review)}
-                      className="!gap-1 cursor-pointer transition-all duration-300 hover:!bg-gray-100"
+                      className="!gap-2 cursor-pointer transition-all duration-300 hover:!bg-gray-100"
                     >
-                      <Pencil className="mr-2 size-4" />
+                      <Pencil className="size-4" />
                       {t("reviewsSection.edit")}
                     </DropdownMenuItem>
                     <DropdownMenuItem
@@ -95,9 +95,9 @@ export default function ReviewCard({
                           toast.error(t("reviewsSection.reviewDeletedError"));
                         }
                       }}
-                      className="!gap-1 cursor-pointer transition-all duration-300 hover:!bg-gray-100"
+                      className="!gap-2 cursor-pointer transition-all duration-300 hover:!bg-gray-100"
                     >
-                      <Trash2 className="mr-2 size-4" />
+                      <Trash2 className="size-4" />
                       {t("reviewsSection.delete")}
                     </DropdownMenuItem>
                   </DropdownMenuContent>
@@ -114,7 +114,9 @@ export default function ReviewCard({
             />
           </div>
 
-          <p className="text-textMain leading-8 text-sm  break-all">{review.review}</p>
+          <p className="text-textMain leading-8 text-sm  break-all">
+            {review.review}
+          </p>
         </div>
       </div>
     </>

@@ -1,4 +1,3 @@
-"use client";
 import { actions } from "@/Features/AuthDialog.slice";
 import { AddProductToCart } from "@/Features/Cart.slice";
 import {
@@ -11,7 +10,6 @@ import { Product } from "@/Types/products";
 import { Heart, Scale } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { useTranslation } from "react-i18next";
 
@@ -22,10 +20,11 @@ export default function ProductCard({
   images,
   _id,
 }: Product) {
-  const [inWishList, setInWishList] = useState(false);
   const { token } = useAppSelector((store) => store.user);
   const { wishlist } = useAppSelector((store) => store.wishListSlice);
   const dispatch = useAppDispatch();
+  const { t } = useTranslation();
+
 
   const handleSubmit = async () => {
     if (!token) {
@@ -42,12 +41,9 @@ export default function ProductCard({
       toast.error(error.message || t("common.somethingWentWrong"));
     }
   };
-  const { t } = useTranslation();
-  useEffect(() => {
-    const isExist = wishlist?.some((item) => item._id === _id);
+  const inWishList = wishlist.some((item) => item._id === _id);
 
-    setInWishList(isExist ? true : false);
-  }, [wishlist, _id]);
+ 
   return (
     <>
       <div className="group">

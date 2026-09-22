@@ -76,12 +76,12 @@ export default function CartContent() {
   }, [activeStep]);
 
   const validationSchema = Yup.object({
-    details: Yup.string().required("Street address is required"),
+    details: Yup.string().required(t("validation.streetAddressRequired")),
     phone: Yup.string()
       .required(t("validation.phoneRequired"))
       .matches(phoneRegex, t("validation.invalidPhone")),
-    city: Yup.string().required("City is required"),
-    postalCode: Yup.string().required("Postcode is required"),
+    city: Yup.string().required(t("validation.cityRequired")),
+    postalCode: Yup.string().required(t("validation.postcodeRequired")),
   });
   const formik = useFormik({
     initialValues: {
@@ -120,6 +120,7 @@ export default function CartContent() {
             values,
           }),
         );
+
         if (CheckoutSession.fulfilled.match(results)) {
           setTimeout(() => {
             toast.dismiss("placingOrder");

@@ -73,7 +73,6 @@ const wishListSlice = createSlice({
       .addCase(AddProductToWishlist.fulfilled, (state, action) => {
         state.loading = false;
         state.wishlist = action.payload.data;
-
       })
       .addCase(AddProductToWishlist.rejected, (state, action) => {
         state.loading = false;
@@ -89,7 +88,6 @@ const wishListSlice = createSlice({
       .addCase(RemoveProductFromWishlist.fulfilled, (state, action) => {
         state.loading = false;
         state.wishlist = action.payload.data;
-
       })
       .addCase(RemoveProductFromWishlist.rejected, (state, action) => {
         state.loading = false;

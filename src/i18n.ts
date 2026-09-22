@@ -94,6 +94,10 @@ const resources = {
 
         verificationCodeRequired: "Verification code is required",
         verificationCodeMustBe6Digits: "Verification code must be 6 digits",
+
+        streetAddressRequired: "Street address is required",
+        cityRequired: "City is required",
+        postcodeRequired: "Postcode is required",
       },
       hero: {
         running: "Running",
@@ -502,6 +506,10 @@ const resources = {
         invalidPhone: "رقم الهاتف المصري غير صحيح",
         verificationCodeRequired: "رمز التحقق مطلوب",
         verificationCodeMustBe6Digits: "يجب أن يتكون رمز التحقق من 6 أرقام",
+
+        streetAddressRequired: "عنوان الشارع مطلوب",
+        cityRequired: "المدينة مطلوبة",
+        postcodeRequired: "الرمز البريدي مطلوب",
       },
       hero: {
         running: "الجري",

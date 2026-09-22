@@ -1,11 +1,12 @@
 "use client";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import OrdersList from "@/components/OrdersList/OrdersList";
 import { getUserOrders } from "@/Features/Order.slice";
 import { useAppDispatch, useAppSelector } from "@/hooks/store.hooks";
 import { useTranslation } from "react-i18next";
 import useIsBusy from "@/hooks/useIsBusy.hooks";
+import { Search, X } from "lucide-react";
 
 export default function OrdersPage() {
   const [search, setSearch] = useState("");
@@ -14,6 +15,7 @@ export default function OrdersPage() {
   const { user } = useAppSelector((store) => store.user);
   const { orders, loading } = useAppSelector((store) => store.orderSlice);
   const { authChecked } = useAppSelector((store) => store.user);
+  const inputRef = useRef<HTMLInputElement | null>(null);
   const searchedOrders = useMemo(() => {
     const query = search.trim().toLowerCase();
     if (!query) return orders;
@@ -87,13 +89,34 @@ export default function OrdersPage() {
               </TabsTrigger>
             </TabsList>
 
-            <input
-              type="text"
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              placeholder={t("orders.search")}
-              className="max-xl:w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-[#333] placeholder:text-gray-400 focus:border-gray-400 focus:outline-none focus:ring-1 focus:ring-gray-400"
-            />
+            <div className="relative max-xl:w-full">
+              {search ? (
+                <button
+                  type="button"
+                  onClick={() => setSearch("")}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 transition-colors hover:text-gray-600"
+                >
+                  <X className="size-5" />
+                </button>
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => inputRef.current?.focus()}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 transition-colors hover:text-gray-600"
+                >
+                  <Search className="size-5" />
+                </button>
+              )}
+
+              <input
+                type="text"
+                ref={inputRef}
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                placeholder={t("orders.search")}
+                className="max-xl:w-full rounded-lg border border-gray-300 bg-white py-2 pr-9 pl-3 text-sm text-[#333] placeholder:text-gray-400 focus:border-gray-400 focus:outline-none focus:ring-1 focus:ring-gray-400"
+              />
+            </div>
           </div>
 
           <TabsContent value="AllOrders">
