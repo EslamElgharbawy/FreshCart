@@ -2,6 +2,7 @@ import Image from "next/image";
 import MainBanner from "@/assets/images/banner1.jpg";
 import i18n from "@/i18n";
 import { useTranslation } from "react-i18next";
+import Link from "next/link";
 
 export default function PromoBanner() {
   const { t } = useTranslation();
@@ -41,10 +42,10 @@ export default function PromoBanner() {
             </sup>{" "}
             $159
           </h3>
-          <a
+          <Link
             className={`text-[10px] xl:text-sm  2xl:text-[14px] py-2 px-3 xl:py-3 xl:px-6 2xl:py-4 2xl:px-8 xl:leading-[14px] sm:max-2xl:leading-[10px] text-white bg-[#333] rounded-[4px] font-semibold flex items-center gap-2 w-fit ms-auto group  transition-colors duration-300 hover:bg-[#454545]
                    `}
-            href="#"
+            href="/shop"
           >
             {t("deals.shopNow")}
             <svg
@@ -61,7 +62,7 @@ export default function PromoBanner() {
                 d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3"
               />
             </svg>
-          </a>
+          </Link>
         </div>
       </div>
     </div>

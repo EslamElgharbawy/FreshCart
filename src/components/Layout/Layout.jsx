@@ -8,13 +8,13 @@ import AuthDialog from "../Auth/AuthDialog";
 
 export default function Layout({ children }) {
   const pathname = usePathname()
-    const isHome = pathname === "/";
+    const isFullPage  = pathname === "/" || pathname === "/shop";
   return (
     <>
       <div className="min-h-screen flex-col flex">
         <Navbar />
         <AuthDialog />
-        <main className={`flex-1 ${isHome ? "bg-background" : "mt-[152px] lg:mt-[169px] xl:mt-[240px] 2xl:mt-[185px]"}`}>{children}</main>
+        <main className={`flex-1 ${isFullPage  ? "bg-background" : "mt-[152px] lg:mt-[169px] xl:mt-[240px] 2xl:mt-[185px]"}`}>{children}</main>
         <Footer1 />
         <Footer2 />
       </div> 

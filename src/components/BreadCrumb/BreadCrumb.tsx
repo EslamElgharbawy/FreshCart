@@ -7,6 +7,7 @@ type BreadcrumbProps = {
   currentPage?: string;
   category?: string;
   subCategory?: string;
+  brand?: string;
 };
 export default function BreadCrumb({
   currentPage,

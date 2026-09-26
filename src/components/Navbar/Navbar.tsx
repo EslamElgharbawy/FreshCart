@@ -55,7 +55,7 @@ export default function Navbar() {
   const { t, i18n } = useTranslation();
   const dispatch = useAppDispatch();
   const pathname = usePathname();
-  const isHome = pathname === "/";
+  const isFullPage = pathname === "/" || pathname === "/shop";
 
   const { categories } = useAppSelector((store) => store.categoriesSlice);
 
@@ -96,7 +96,7 @@ export default function Navbar() {
     <>
       {/* //& Desktop  */}
       <header className="fixed top-0 left-0 right-0 z-50 hidden 2xl:block">
-        <div className={`bg-background relative ${isHome ? "h-[110px]" : ""}`}>
+        <div className={`bg-background relative ${isFullPage ? "h-[110px]" : ""}`}>
           {/* // ? top_bar */}
           <motion.div
             initial={{ height: 45, opacity: 1 }}
@@ -356,7 +356,7 @@ export default function Navbar() {
 
           {/* // ^ logo&taps */}
           <div
-            className={`logo&taps left-0 right-0 z-50 ${isScrolled ? "top-0" : `absolute top-[44px] ${isHome ? "mx-5" : ""}`}`}
+            className={`logo&taps left-0 right-0 z-50 ${isScrolled ? "top-0" : `absolute top-[44px] ${isFullPage ? "mx-5" : ""}`}`}
           >
             <div className="flex justify-center items-center">
               <div className="logo w-[20%] h-[140px] p-4 bg-primary flex justify-center items-center">
