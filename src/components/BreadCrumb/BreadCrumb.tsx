@@ -31,7 +31,7 @@ export default function BreadCrumb({
               <ChevronRight size={14} className="text-[#bbb] shrink-0" />
 
               <Link
-                href="/Shop"
+                href="/shop"
                 className="text-[#333] opacity-70 hover:opacity-100 transition-all duration-300"
               >
                 {t(`categories_menu.${category}`)}
@@ -44,7 +44,7 @@ export default function BreadCrumb({
               <ChevronRight size={14} className="text-[#bbb] shrink-0" />
 
               <Link
-                href="/Shop"
+                href="/shop"
                 className="text-[#333] opacity-70 hover:opacity-100 transition-all duration-300"
               >
                 {t(`subcategory.${subCategory}`)}

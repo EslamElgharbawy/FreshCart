@@ -37,7 +37,7 @@ import { usePathname } from "next/navigation";
 
 const sections = [
   { name: "home", path: "/" },
-  { name: "shop", path: "/Shop" },
+  { name: "shop", path: "/shop" },
   { name: "cartTap", path: "/cart" },
   { name: "wishList", path: "/wishList" },
 ];

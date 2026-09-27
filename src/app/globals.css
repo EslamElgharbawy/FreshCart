@@ -173,7 +173,7 @@ header {
   --color-2: rgba(255, 255, 255, 0.2);
   --color-3: rgba(255, 255, 255, 0.5);
   --color-4: rgba(255, 255, 255, 0.7);
-  --size: 0.20px;
+  --size: 0.2px;
 
   font-size: calc(10 * var(--size));
   width: 1em;
@@ -282,4 +282,43 @@ header {
       -2.6em 0em 0 0em var(--color-4),
       -1.8em -1.8em 0 0em var(--color-1);
   }
+}
+
+@keyframes accordion-down {
+  from {
+    height: 0;
+  }
+
+  to {
+    height: var(--radix-accordion-content-height);
+  }
+}
+
+@keyframes accordion-up {
+  from {
+    height: var(--radix-accordion-content-height);
+  }
+
+  to {
+    height: 0;
+  }
+}
+[data-slot="accordion-content"][data-state="open"] {
+  animation: accordion-down 0.3s ease-out;
+}
+
+[data-slot="accordion-content"][data-state="closed"] {
+  animation: accordion-up 0.3s ease-out;
+}
+
+
+
+.hide-arrows::-webkit-inner-spin-button,
+.hide-arrows::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.hide-arrows {
+  -moz-appearance: textfield;
 }

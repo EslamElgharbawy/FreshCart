@@ -17,6 +17,7 @@
     "axios": "1.15.2",
     "class-variance-authority": "0.7.1",
     "clsx": "2.1.1",
+    "cn": "^0.4.0",
     "dayjs": "^1.11.21",
     "formik": "^2.4.9",
     "framer-motion": "12.40.0",
