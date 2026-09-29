@@ -8,11 +8,13 @@ type BreadcrumbProps = {
   category?: string;
   subCategory?: string;
   brand?: string;
+  shopPage?: boolean;
 };
 export default function BreadCrumb({
   currentPage,
   category,
   subCategory,
+  shopPage,
 }: BreadcrumbProps) {
   const { t } = useTranslation();
   return (
@@ -25,6 +27,16 @@ export default function BreadCrumb({
           >
             {t("breadcrumb.home")}
           </Link>
+
+          {shopPage && (
+            <div className="flex items-center gap-2">
+              <ChevronRight size={14} className="text-[#bbb] shrink-0" />
+
+              <span className="font-medium text-[#333]">
+                 {currentPage || t("breadcrumb.shop")}
+              </span>
+            </div>
+          )}
 
           {category && (
             <div className="flex items-center gap-2">
@@ -52,7 +64,7 @@ export default function BreadCrumb({
             </div>
           )}
 
-          {currentPage && (
+          {currentPage && !shopPage && (
             <div className="flex items-center gap-2 min-w-0">
               <ChevronRight size={14} className="text-[#bbb] shrink-0" />
 

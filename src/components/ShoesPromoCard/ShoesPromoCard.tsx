@@ -2,6 +2,7 @@ import Image from "next/image";
 import promoCard5 from "@/assets/images/banner5.jpg";
 import i18n from "@/i18n";
 import { useTranslation } from "react-i18next";
+import Link from "next/link";
 export default function ShoesPromoCard() {
   const {t} = useTranslation();
   return (
@@ -24,9 +25,9 @@ export default function ShoesPromoCard() {
               {t("deals.ultimateSaleCollection")}
             </a>
           </div>
-          <a
+          <Link
             className="text-white text-[10px] xl:text-base 2xl:text-lg font-semibold leading-none flex justify-center items-center gap-2 group"
-            href=""
+            href="/shop"
           >
             {t("deals.shopNow")}
             <svg
@@ -43,7 +44,7 @@ export default function ShoesPromoCard() {
                 d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3"
               />
             </svg>
-          </a>
+          </Link>
         </div>
       </div>
     </div>

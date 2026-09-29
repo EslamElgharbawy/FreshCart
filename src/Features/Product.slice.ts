@@ -13,7 +13,7 @@ export const getProducts = createAsyncThunk(
   "Products/getProducts",
   async () => {
     const { data } = await axios.get(
-      "https://ecommerce.routemisr.com/api/v1/products",
+      "https://ecommerce.routemisr.com/api/v1/products?limit=56",
     );
     return data.data;
   },

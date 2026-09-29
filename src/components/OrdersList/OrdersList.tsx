@@ -1,8 +1,8 @@
 import OrderCard from "@/components/OrderCard/OrderCard";
 import { UserOrdersResponse } from "@/Types/order";
-import EmptyOrders from "../EmptyState/EmptyState";
 import { useTranslation } from "react-i18next";
 import OrdersListSkeleton from "../Skeletons/OrderListSkeleton";
+import EmptyState from "../EmptyState/EmptyState";
 
 interface OrdersListProps {
   orders: UserOrdersResponse;
@@ -20,7 +20,7 @@ export default function OrdersList({
     return <OrdersListSkeleton />;
   }
   if (orders.length === 0) {
-    return <EmptyOrders title={emptyMessage} />;
+    return <EmptyState title={emptyMessage} />;
   }
 
   return (

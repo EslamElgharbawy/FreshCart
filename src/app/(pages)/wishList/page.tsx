@@ -6,11 +6,12 @@ import { GetLoggedUserWishlist } from "@/Features/WishList.slice";
 import { useAppDispatch, useAppSelector } from "@/hooks/store.hooks";
 import useIsBusy from "@/hooks/useIsBusy.hooks";
 import { useEffect } from "react";
+import { useTranslation } from "react-i18next";
 
 export default function page() {
   const { wishlist, loading } = useAppSelector((store) => store.wishListSlice);
   const { authChecked, token } = useAppSelector((store) => store.user);
-
+  const { t } = useTranslation();
   const dispatch = useAppDispatch();
   useEffect(() => {
     if (authChecked && token) {
@@ -37,7 +38,7 @@ export default function page() {
             </div>
           ) : wishlist.length === 0 ? (
             <div className="py-8 px-5">
-              <EmptyState title="wish list is empty" />
+              <EmptyState title={t("wishlist.emptyMessage")} />
             </div>
           ) : (
             <div className="grid grid-cols-2 xl:grid-cols-3 2xl:grid-cols-6 gap-6 py-12 px-5">

@@ -375,6 +375,7 @@ const resources = {
       wishlist: {
         addedSuccessfully: "Product added to wishlist",
         removedSuccessfully: "Product removed ",
+        emptyMessage: "Your wishlist is empty",
       },
       footer: {
         supportText: "Got Question? Call us 24/7",
@@ -790,6 +791,7 @@ const resources = {
       wishlist: {
         addedSuccessfully: "تمت إضافة المنتج إلى المفضلة",
         removedSuccessfully: "تمت إزالة المنتج ",
+        emptyMessage: "قائمة المفضلة فارغة",
       },
       footer: {
         supportText: "هل لديك سؤال؟ اتصل بنا 24/7",

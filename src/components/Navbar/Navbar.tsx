@@ -408,9 +408,9 @@ export default function Navbar() {
                           </span>
                         )}
 
-                        <a href="/wishList">
+                        <Link href="/wishList">
                           <Heart size={27} />
-                        </a>
+                        </Link>
                       </span>
                     </div>
                     <div className="w-[1px] h-10 bg-[#EEEEEE1A] mx-5"></div>

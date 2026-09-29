@@ -8,15 +8,6 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import {
-  Pagination,
-  PaginationContent,
-  PaginationEllipsis,
-  PaginationItem,
-  PaginationLink,
-  PaginationNext,
-  PaginationPrevious,
-} from "@/components/ui/pagination";
 import ProductCard from "@/components/ProductCard/ProductCard";
 import { useAppDispatch, useAppSelector } from "@/hooks/store.hooks";
 import { useEffect, useState } from "react";
@@ -25,19 +16,41 @@ import { getCategories } from "@/Features/Categoreis.slice";
 import { getVendors } from "@/Features/Vendors.slice";
 export default function page() {
   const [CategoryActive, setCategoryActive] = useState("");
-  const [brandActive, setBrandActive] = useState<string | null>(null);
+  const [brandActive, setBrandActive] = useState("");
   const dispatch = useAppDispatch();
   const { products } = useAppSelector((store) => store.ProductSlice);
   const { categories } = useAppSelector((store) => store.categoriesSlice);
   const { vendors } = useAppSelector((store) => store.VendorsSlice);
   const [minPrice, setMinPrice] = useState("");
   const [maxPrice, setMaxPrice] = useState("");
+  const [appliedMinPrice, setAppliedMinPrice] = useState("");
+  const [appliedMaxPrice, setAppliedMaxPrice] = useState("");
 
   const priceRanges = [
-    { label: "$10.00 - $50.00", min: 10, max: 50 },
-    { label: "$50.00 - $100.00", min: 50, max: 100 },
-    { label: "$100.00 - $500.00", min: 100, max: 500 },
+    { label: "$149 - $499", min: 149, max: 499 },
+    { label: "$500 - $999", min: 500, max: 999 },
+    { label: "$1,000 - $4,999", min: 1000, max: 4999 },
+    { label: "$5,000 - $9,999", min: 5000, max: 9999 },
+    { label: "$10,000 - $42,960", min: 10000, max: 42960 },
   ];
+
+  const filteredProducts = products.filter((product) => {
+    const matchesCategory =
+      product.category._id === CategoryActive || !CategoryActive;
+
+    const matchesBrand = product.brand._id === brandActive || !brandActive;
+
+    const matchesMinPrice =
+      product.price >= Number(appliedMinPrice) || !appliedMinPrice;
+
+    const matchesMaxPrice =
+      product.price <= Number(appliedMaxPrice) || !appliedMaxPrice;
+
+    return (
+      matchesCategory && matchesBrand && matchesMinPrice && matchesMaxPrice
+    );
+  });
+
   useEffect(() => {
     dispatch(getProducts());
     dispatch(getCategories());
@@ -70,7 +83,7 @@ export default function page() {
       </section>
 
       <section className="mx-5">
-        <BreadCrumb category="" />
+        <BreadCrumb shopPage currentPage={categories?.find((category)=>category._id === CategoryActive)?.name} />
       </section>
 
       <section className="pb-12">
@@ -78,7 +91,17 @@ export default function page() {
           <div className="2xl:col-span-3 px-4">
             <div className="flex justify-between items-center mb-2">
               <div className="font-semibold">Filter :</div>
-              <button onClick={() => {}} className="text-sm text-[#333]">
+              <button
+                onClick={() => {
+                  (setBrandActive(""),
+                    setCategoryActive(""),
+                    setMinPrice(""),
+                    setMaxPrice(""),
+                    setAppliedMinPrice(""),
+                    setAppliedMaxPrice(""));
+                }}
+                className="text-sm text-[#333]"
+              >
                 Clean All
               </button>
             </div>
@@ -91,17 +114,25 @@ export default function page() {
               <AccordionItem value="AllCategories">
                 <AccordionTrigger>All Categories</AccordionTrigger>
                 <AccordionContent>
-                  {categories?.map((category) => (
-                    <div
-                      onClick={() => {
-                        setCategoryActive(category._id);
-                      }}
-                      key={category._id}
-                      className={`py-2 text-sm transition-colors duration-300 cursor-pointer ${CategoryActive === category._id ? "text-primary" : "text-[#333] hover:text-primary"}`}
-                    >
-                      {category.name}
-                    </div>
-                  ))}
+                  {categories?.map((category) => {
+                    const productCount = products.filter(
+                      (product) => product.category._id === category._id,
+                    ).length;
+                    if (productCount === 0) return null;
+                    return (
+                      <div
+                        onClick={() => {
+                          setCategoryActive(category._id);
+                        }}
+                        key={category._id}
+                        className={`flex justify-between items-center py-2 text-sm transition-colors duration-300 cursor-pointer ${CategoryActive === category._id ? "text-primary" : "text-[#333] hover:text-primary"}`}
+                      >
+                        {category.name}
+
+                        <span>{productCount}</span>
+                      </div>
+                    );
+                  })}
                 </AccordionContent>
               </AccordionItem>
               <AccordionItem value="Price">
@@ -115,6 +146,9 @@ export default function page() {
                         onClick={() => {
                           setMinPrice(range.min.toString());
                           setMaxPrice(range.max.toString());
+
+                          setAppliedMinPrice(range.min.toString());
+                          setAppliedMaxPrice(range.max.toString());
                         }}
                       >
                         <span>{range.label}</span>
@@ -154,8 +188,8 @@ export default function page() {
                         type="button"
                         className="h-9 rounded bg-[#fe4407] px-3 text-sm font-medium text-white transition-colors duration-300 hover:bg-[#e83d05]"
                         onClick={() => {
-                          console.log("Min:", minPrice);
-                          console.log("Max:", maxPrice);
+                          setAppliedMinPrice(minPrice);
+                          setAppliedMaxPrice(maxPrice);
                         }}
                       >
                         Go
@@ -193,13 +227,7 @@ export default function page() {
                             {brand.name}
                           </div>
                         </div>
-                        <span>
-                          {
-                            products.filter(
-                              (product) => product.brand?._id === brand._id,
-                            ).length
-                          }
-                        </span>
+                        <span>{productCount}</span>
                       </div>
                     );
                   })}
@@ -209,35 +237,9 @@ export default function page() {
           </div>
           <div className="2xl:col-span-9 px-4">
             <div className="grid grid-cols-2 2xl:grid-cols-4 gap-5">
-              {products.map((product) => (
+              {filteredProducts.map((product) => (
                 <ProductCard key={product._id} {...product} />
               ))}
-            </div>
-            <div className="mt-8">
-              <Pagination>
-                <PaginationContent>
-                  <PaginationItem>
-                    <PaginationPrevious href="#" />
-                  </PaginationItem>
-                  <PaginationItem>
-                    <PaginationLink href="#">1</PaginationLink>
-                  </PaginationItem>
-                  <PaginationItem>
-                    <PaginationLink href="#" isActive>
-                      2
-                    </PaginationLink>
-                  </PaginationItem>
-                  <PaginationItem>
-                    <PaginationLink href="#">3</PaginationLink>
-                  </PaginationItem>
-                  <PaginationItem>
-                    <PaginationEllipsis />
-                  </PaginationItem>
-                  <PaginationItem>
-                    <PaginationNext href="#" />
-                  </PaginationItem>
-                </PaginationContent>
-              </Pagination>
             </div>
           </div>
         </div>

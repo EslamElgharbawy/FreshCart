@@ -25,6 +25,7 @@ import { getProducts } from "@/Features/Product.slice";
 import LoaderProducts from "@/components/LoaderProducts/LoaderProducts";
 import SidebarClothesCategories from "@/components/SidebarClothesCategories/SidebarClothesCategories";
 import SidebarElectronicsCategories from "@/components/SidebarElectronicsCategories/SidebarElectronicsCategories";
+import Link from "next/link";
 
 export default function Home() {
   const dispatch = useAppDispatch();
@@ -34,6 +35,7 @@ export default function Home() {
   const [selectedClothesSubCategory, setSelectedClothesSubCategory] =
     useState("");
   const [filterLoading, setFilterLoading] = useState(false);
+  const MotionLink = motion(Link);
   const { t, i18n } = useTranslation();
 
   const features_data = [
@@ -156,7 +158,10 @@ export default function Home() {
   }, [dispatch]);
   return (
     <>
-      <section id="hero" className="pt-[151px] lg:pt-[169px] xl:pt-[239px] 2xl:pt-[110px]">
+      <section
+        id="hero"
+        className="pt-[151px] lg:pt-[169px] xl:pt-[239px] 2xl:pt-[110px]"
+      >
         <Swiper
           dir="ltr"
           navigation={true}
@@ -242,13 +247,13 @@ export default function Home() {
                   </motion.p>
                 </div>
 
-                <motion.a
+                <MotionLink
                   variants={{
                     hidden: { opacity: 0, y: 50 },
                     show: { opacity: 1, y: 0 },
                   }}
                   transition={{ duration: 1, delay: 0.8 }}
-                  href=""
+                  href="/shop"
                   className={`text-[10px] md:text-xs lg:text-sm xl:text-[14px] py-2 px-4 md:py-3 md:px-5 xl:py-4 xl:px-8  text-white bg-[#333] rounded-[4px] font-semibold flex items-center gap-2 w-fit transition-colors duration-300 hover:bg-[#454545]
                    ${i18n.language === "ar" ? "flex-row-reverse ms-auto" : ""}`}
                 >
@@ -270,13 +275,13 @@ export default function Home() {
                       d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3"
                     />
                   </svg>
-                </motion.a>
+                </MotionLink>
               </div>
             </motion.div>
           </SwiperSlide>
 
           {/* //* Slide 2 */}
-          <SwiperSlide className="">
+          <SwiperSlide className="relative">
             <motion.div
               key={`slide2-${activeSlide}`}
               initial="hidden"
@@ -366,13 +371,13 @@ export default function Home() {
                   {t("hero.sportswear")}
                 </motion.h3>
 
-                <motion.a
+                <MotionLink
                   variants={{
                     hidden: { opacity: 0, y: 50 },
                     show: { opacity: 1, y: 0 },
                   }}
                   transition={{ duration: 1, delay: 0.8 }}
-                  href=""
+                  href="/shop"
                   className="text-[10px] md:text-xs lg:text-sm xl:text-[14px] py-2 px-4 md:py-3 md:px-5 2xl:py-4 2xl:px-8 text-white bg-[#333] rounded-[4px] font-semibold flex justify-center items-center gap-2 w-fit  transition-colors duration-300 hover:bg-[#454545] "
                 >
                   {t("hero.shopCollection")}
@@ -390,7 +395,7 @@ export default function Home() {
                       d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3"
                     />
                   </svg>
-                </motion.a>
+                </MotionLink>
               </div>
             </motion.div>
           </SwiperSlide>
@@ -537,14 +542,16 @@ export default function Home() {
               <div
                 className={`grid grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-5 ${filterLoading ? "opacity-30" : ""} `}
               >
-                {filterelectronicsdProducts.slice(0, 4).map((product,index) => (
-                  <div
-                    key={product._id}
-                    className={`${index >= 2 ? "hidden 2xl:block" : ""} ${index >= 3 ? "hidden xl:max-2xl:block" : ""}`}
-                  >
-                    <ProductCard {...product} />
-                  </div>
-                ))}
+                {filterelectronicsdProducts
+                  .slice(0, 4)
+                  .map((product, index) => (
+                    <div
+                      key={product._id}
+                      className={`${index >= 2 ? "hidden 2xl:block" : ""} ${index >= 3 ? "hidden xl:max-2xl:block" : ""}`}
+                    >
+                      <ProductCard {...product} />
+                    </div>
+                  ))}
               </div>
             </div>
           </div>

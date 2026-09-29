@@ -292,7 +292,7 @@ export default function CartContent() {
                             <TableCell colSpan={5} className="p-0">
                               <div className="flex justify-between items-center my-5">
                                 <div>
-                                  <Button className="uppercase !px-7 !py-3 h-auto rounded-md bg-[#333] hover:bg-[#454545] transition-all duration-300 text-white font-semibold">
+                                  <Link href="/shop" className="flex justify-center items-center gap-2 uppercase !px-7 !py-3 h-auto rounded-md bg-[#333] hover:bg-[#454545] transition-all duration-300 text-white font-semibold">
                                     <svg
                                       xmlns="http://www.w3.org/2000/svg"
                                       fill="none"
@@ -308,7 +308,7 @@ export default function CartContent() {
                                       />
                                     </svg>
                                     {t("cart.continueShopping")}
-                                  </Button>
+                                  </Link>
                                 </div>
                                 <div>
                                   <Button

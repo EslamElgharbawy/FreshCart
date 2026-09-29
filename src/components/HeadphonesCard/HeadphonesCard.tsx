@@ -3,6 +3,7 @@ import promoCard1 from "@/assets/images/banner4.jpg";
 import headPhone from "@/assets/images/banner4.png";
 import i18n from "@/i18n";
 import { useTranslation } from "react-i18next";
+import Link from "next/link";
 
 export default function HeadphonesCard() {
   const {t} = useTranslation();
@@ -37,8 +38,8 @@ export default function HeadphonesCard() {
               <Image src={headPhone} alt="head phone"/>
             </div>
           </div>
-          <a
-            href=""
+          <Link
+            href="/shop"
             className="text-[#333] text-[10px] xl:text-lg font-semibold leading-none flex justify-center items-center gap-2 uppercase sm:max-xl:-tracking-tight xl:mt-[71px] group"
           >
             {t("deals.shopNow")}
@@ -56,7 +57,7 @@ export default function HeadphonesCard() {
                 d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3"
               />
             </svg>
-          </a>
+          </Link>
         </div>
       </div>
     </div>
