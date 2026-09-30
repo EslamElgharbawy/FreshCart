@@ -5,6 +5,7 @@ import { Accordion as AccordionPrimitive } from "radix-ui";
 
 import { cn } from "@/lib/utils";
 import { ChevronDownIcon, ChevronUpIcon, Minus, Plus } from "lucide-react";
+import i18n from "@/i18n";
 
 function Accordion({
   className,
@@ -50,11 +51,11 @@ function AccordionTrigger({
         {children}
         <Plus
           data-slot="accordion-trigger-icon"
-          className="pointer-events-none shrink-0 group-aria-expanded/accordion-trigger:hidden ml-auto size-4 text-textMain"
+          className={`pointer-events-none shrink-0 group-aria-expanded/accordion-trigger:hidden ${i18n.language=== "ar" ? "mr-auto" : "ml-auto"}  size-4 text-textMain`}
         />
         <Minus
           data-slot="accordion-trigger-icon"
-          className="pointer-events-none hidden shrink-0 group-aria-expanded/accordion-trigger:inline ml-auto size-4 text-textMain"
+          className={`pointer-events-none hidden shrink-0 group-aria-expanded/accordion-trigger:inline ${i18n.language=== "ar" ? "mr-auto" : "ml-auto"} size-4 text-textMain`}
         />
       </AccordionPrimitive.Trigger>
     </AccordionPrimitive.Header>

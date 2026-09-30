@@ -87,6 +87,7 @@ export default function ProductCard({
       bg-primary
       sm:max-2xl:opacity-80
       text-white text-center
+      max-xl:3
       py-4
       2xl:opacity-0
       transition-all duration-300

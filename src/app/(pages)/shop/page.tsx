@@ -14,18 +14,23 @@ import { useEffect, useState } from "react";
 import { getProducts } from "@/Features/Product.slice";
 import { getCategories } from "@/Features/Categoreis.slice";
 import { getVendors } from "@/Features/Vendors.slice";
+import { useTranslation } from "react-i18next";
+import useIsBusy from "@/hooks/useIsBusy.hooks";
 export default function page() {
   const [CategoryActive, setCategoryActive] = useState("");
   const [brandActive, setBrandActive] = useState("");
   const dispatch = useAppDispatch();
-  const { products } = useAppSelector((store) => store.ProductSlice);
+  const { products, loading } = useAppSelector((store) => store.ProductSlice);
   const { categories } = useAppSelector((store) => store.categoriesSlice);
   const { vendors } = useAppSelector((store) => store.VendorsSlice);
+  const { authChecked } = useAppSelector((store) => store.user);
+
   const [minPrice, setMinPrice] = useState("");
   const [maxPrice, setMaxPrice] = useState("");
   const [appliedMinPrice, setAppliedMinPrice] = useState("");
   const [appliedMaxPrice, setAppliedMaxPrice] = useState("");
-
+  const { t } = useTranslation();
+  const isBusy = useIsBusy({ authChecked, loading });
   const priceRanges = [
     { label: "$149 - $499", min: 149, max: 499 },
     { label: "$500 - $999", min: 500, max: 999 },
@@ -59,22 +64,21 @@ export default function page() {
   return (
     <>
       <section className="pt-[151px] lg:pt-[169px] xl:pt-[239px] 2xl:pt-[110px]">
-        <div className="relative h-[416px]">
+        <div className="relative h-[150px] 2xl:h-[416px]">
           <Image
             src={shopImg}
             alt="shopImg"
-            fill
-            className="w-full h-full object-cover object-[36%_center]"
+            className="w-full h-full object-cover object-[30%_center] xl:object-[36%_center]"
           />
           <div className="absolute inset-0 px-5 z-10">
-            <div className="absolute mt-7 z-10 left-[8.8%] top-[50%] -translate-y-1/2 uppercase">
+            <div className="absolute mt-7 z-10 left-[6.3%] xl:left-[8.8%] top-[50%] -translate-y-1/2 uppercase">
               <h3
-                className="text-[66px] leading-[66px] font-bold mb-2 text-transparent"
+                className="text-[25px] leading-[25px] xl:text-[66px] xl:leading-[66px] font-bold mb-2 text-transparent"
                 style={{ WebkitTextStroke: "1px white" }}
               >
                 Fashion
               </h3>
-              <h4 className="text-white text-[76px] leading-[76px] font-extrabold mb-8 tracking-[-0.75px]">
+              <h4 className="text-white text-[27px] xl:text-[76px] leading-[27px] xl:leading-[76px] font-extrabold mb-8 tracking-[-0.75px]">
                 Skiwears
               </h4>
             </div>
@@ -82,15 +86,24 @@ export default function page() {
         </div>
       </section>
 
-      <section className="mx-5">
-        <BreadCrumb shopPage currentPage={categories?.find((category)=>category._id === CategoryActive)?.name} />
+      <section className="mx-5 max-xl:py-2">
+        <BreadCrumb
+          shopPage
+          currentPage={
+            categories?.find((category) => category._id === CategoryActive)
+              ?.name
+          }
+          brand={vendors
+            ?.find((brand) => brand._id === brandActive)
+            ?.name.toLowerCase()}
+        />
       </section>
 
       <section className="pb-12">
         <div className="grid 2xl:grid-cols-12">
           <div className="2xl:col-span-3 px-4">
             <div className="flex justify-between items-center mb-2">
-              <div className="font-semibold">Filter :</div>
+              <div className="font-semibold">{t("shop.filter")} :</div>
               <button
                 onClick={() => {
                   (setBrandActive(""),
@@ -102,7 +115,7 @@ export default function page() {
                 }}
                 className="text-sm text-[#333]"
               >
-                Clean All
+                {t("shop.cleanAll")}
               </button>
             </div>
 
@@ -112,7 +125,7 @@ export default function page() {
               className="max-w-lg "
             >
               <AccordionItem value="AllCategories">
-                <AccordionTrigger>All Categories</AccordionTrigger>
+                <AccordionTrigger>{t("shop.allCategories")}</AccordionTrigger>
                 <AccordionContent>
                   {categories?.map((category) => {
                     const productCount = products.filter(
@@ -136,7 +149,7 @@ export default function page() {
                 </AccordionContent>
               </AccordionItem>
               <AccordionItem value="Price">
-                <AccordionTrigger>Price</AccordionTrigger>
+                <AccordionTrigger>{t("shop.price")}</AccordionTrigger>
                 <AccordionContent>
                   <div>
                     {priceRanges.map((range) => (
@@ -168,7 +181,7 @@ export default function page() {
                     <div className="mt-4 flex items-center gap-2">
                       <input
                         type="number"
-                        placeholder="$min"
+                        placeholder={t("shop.min")}
                         value={minPrice}
                         onChange={(e) => setMinPrice(e.target.value)}
                         className="hide-arrows h-9 w-[78px] rounded border border-[#ddd] py-1 px-2 text-sm outline-none placeholder:text-[#999] focus:border-primary bg-transparent"
@@ -178,7 +191,7 @@ export default function page() {
 
                       <input
                         type="number"
-                        placeholder="$max"
+                        placeholder={t("shop.max")}
                         value={maxPrice}
                         onChange={(e) => setMaxPrice(e.target.value)}
                         className="hide-arrows h-9 w-[78px] rounded border border-[#ddd] py-1 px-2 text-sm outline-none placeholder:text-[#999] focus:border-primary bg-transparent"
@@ -192,19 +205,20 @@ export default function page() {
                           setAppliedMaxPrice(maxPrice);
                         }}
                       >
-                        Go
+                        {t("shop.go")}
                       </button>
                     </div>
                   </div>
                 </AccordionContent>
               </AccordionItem>
               <AccordionItem value="Brand">
-                <AccordionTrigger>Brand</AccordionTrigger>
+                <AccordionTrigger>{t("shop.brand")}</AccordionTrigger>
                 <AccordionContent>
                   {vendors?.map((brand) => {
-                    const productCount = products.filter(
+                    const brandProducts = products.filter(
                       (product) => product.brand._id === brand._id,
-                    ).length;
+                    );
+                    const productCount = brandProducts.length;
                     if (productCount === 0) return null;
                     return (
                       <div
@@ -236,11 +250,29 @@ export default function page() {
             </Accordion>
           </div>
           <div className="2xl:col-span-9 px-4">
-            <div className="grid grid-cols-2 2xl:grid-cols-4 gap-5">
-              {filteredProducts.map((product) => (
-                <ProductCard key={product._id} {...product} />
-              ))}
-            </div>
+            {isBusy ? (
+              <div className="flex min-h-[400px] items-center justify-center">
+                <div className="loaderProducts"></div>
+              </div>
+            ) : filteredProducts.length > 0 ? (
+              <div className="grid grid-cols-2 2xl:grid-cols-4 gap-5">
+                {filteredProducts.map((product) => (
+                  <ProductCard key={product._id} {...product} />
+                ))}
+              </div>
+            ) : (
+              <div className="flex min-h-[400px] flex-1 items-center justify-center">
+                <div className="text-center">
+                  <h2 className="text-xl font-semibold text-gray-800">
+                    {t("shop.noProductsFound")}
+                  </h2>
+
+                  <p className="mt-2 text-sm text-gray-500">
+                    {t("shop.noProductsDescription")}
+                  </p>
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </section>

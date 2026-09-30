@@ -18,12 +18,11 @@ export default function ShoesPromoCard() {
             <h3 className="text-[18px] xl:text-[38px] xl:leading-[45px] 2xl:text-[50px] tracking-[-1.25px] font-bold text-white leading-5 2xl:leading-[60px] xl:mb-3 sm:max-2xl:-tracking-wide">
              {t("deals.upTo")}
             </h3>
-            <a
-              className=" text-[10px] xl:text-base 2xl:text-[22px] xl:mb-9 border-b-[1px] border-[#ffffff99] text-[#ffffff99] capitalize xl:leading-5 tracking-[-0.55px] hover:text-white transition-colors duration-300"
-              href="#"
+            <div
+              className=" text-[10px] xl:text-base 2xl:text-[22px] xl:mb-9 border-b-[1px] border-[#ffffff99] text-[#ffffff99] capitalize xl:leading-5 tracking-[-0.55px]"
             >
               {t("deals.ultimateSaleCollection")}
-            </a>
+            </div>
           </div>
           <Link
             className="text-white text-[10px] xl:text-base 2xl:text-lg font-semibold leading-none flex justify-center items-center gap-2 group"

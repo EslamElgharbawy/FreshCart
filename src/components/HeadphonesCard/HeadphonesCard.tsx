@@ -20,12 +20,11 @@ export default function HeadphonesCard() {
             <h3 className="text-[18px] xl:text-[30px] 2xl:text-[50px] font-bold tracking-tight xl:tracking-[-1.25px] text-[#333] xl:mb-3 uppercase leading-5  xl:leading-9 2xl:leading-[60px]">
               {t("deals.bestSeller")}
             </h3>
-            <a
-              href="#"
-              className="text-[10px] xl:text-[20px] 2xl:text-[22px] mb-5 xl:mb-9 block capitalize text-[#333333b3] border-b-[1px] border-[#333333b3] w-fit mx-auto  hover:text-[#333] transition-colors duration-300"
+            <div
+              className="text-[10px] xl:text-[20px] 2xl:text-[22px] mb-5 xl:mb-9 block capitalize text-[#333333b3] border-b-[1px] border-[#333333b3] w-fit mx-auto "
             >
               {t("deals.electricHeadphone")}
-            </a>
+            </div>
           </div>
           <div className="relative">
             <h3

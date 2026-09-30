@@ -485,8 +485,8 @@ export default function Navbar() {
                     <div className="w-[1px] h-5 bg-[#EEEEEE1A]"></div>
                   </div>
                   <div className="w-[30%] flex justify-center items-center gap-10 text-white text-[14px] font-semibold">
-                    <a
-                      href="#"
+                    <Link
+                      href="/shop"
                       className="flex justify-center items-center gap-2 hover:text-primary transition-all duration-300"
                     >
                       <svg
@@ -504,9 +504,9 @@ export default function Navbar() {
                         />
                       </svg>
                       {t("navbar.flashSale")}
-                    </a>
-                    <a
-                      href="#"
+                    </Link>
+                    <Link
+                      href="/shop"
                       className="flex justify-center items-center gap-2 hover:text-primary transition-all duration-300"
                     >
                       <svg
@@ -527,7 +527,7 @@ export default function Navbar() {
                         <path d="M15 15h.01" />
                       </svg>
                       {t("navbar.offers")}
-                    </a>
+                    </Link>
                   </div>
                 </div>
               </div>
