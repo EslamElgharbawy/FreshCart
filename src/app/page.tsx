@@ -540,7 +540,7 @@ export default function Home() {
             <div className="xl:col-span-9 relative">
               {filterLoading && <LoaderProducts />}
               <div
-                className={`grid grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-5 ${filterLoading ? "opacity-30" : ""} `}
+                className={`grid grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 max-xl:gap-8 gap-5 ${filterLoading ? "opacity-30" : ""} `}
               >
                 {filterelectronicsdProducts
                   .slice(0, 4)
@@ -609,7 +609,7 @@ export default function Home() {
             <div className="xl:col-span-9 relative">
               {filterLoading && <LoaderProducts />}
               <div
-                className={`grid grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-5 ${filterLoading ? "opacity-30" : ""} `}
+                className={`grid grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 max-xl:gap-8 gap-5 ${filterLoading ? "opacity-30" : ""} `}
               >
                 {filterclothesProducts.slice(0, 4).map((product, index) => (
                   <div

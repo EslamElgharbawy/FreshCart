@@ -187,7 +187,7 @@ const resources = {
         "cameras-and-accessories": "Cameras & Accessories",
         "video-games": "Video Games",
         "laptops-and-accessories": "Laptops & Accessories",
-         "tvs-satellites-and-accessories": "TVs, Satellites & Accessories",
+        "tvs-satellites-and-accessories": "TVs, Satellites & Accessories",
         browseAll: "Browse All",
       },
       subcategory: {
@@ -403,6 +403,7 @@ const resources = {
         noProductsFound: "No Products Found",
         noProductsDescription:
           "We couldn't find any products matching your selected filters.",
+        filterAndSort: "Filter & Sort",
       },
       footer: {
         supportText: "Got Question? Call us 24/7",
@@ -602,6 +603,8 @@ const resources = {
         samsung: "سامسونج",
         "jack & jones": "جاك آند جونز",
         "lc waikiki": "إل سي وايكيكي",
+        "jack-and-jones": "جاك آند جونز",
+        "lc-waikiki": "إل سي وايكيكي",
         puma: "بوما",
         adidas: "أديداس",
         defacto: "ديفاكتو",
@@ -671,7 +674,8 @@ const resources = {
         "cameras-and-accessories": "الكاميرات وملحقاتها",
         "video-games": "ألعاب الفيديو",
         "laptops-and-accessories": "أجهزة اللابتوب وملحقاتها",
-         "tvs-satellites-and-accessories": "التلفزيونات والأقمار الصناعية وملحقاتها",
+        "tvs-satellites-and-accessories":
+          "التلفزيونات والأقمار الصناعية وملحقاتها",
         browseAll: "عرض الكل",
       },
 
@@ -846,6 +850,7 @@ const resources = {
         noProductsFound: "لا توجد منتجات",
         noProductsDescription:
           "لم نتمكن من العثور على منتجات تطابق الفلاتر التي اخترتها.",
+        filterAndSort: "تصفية وترتيب",
       },
       footer: {
         supportText: "هل لديك سؤال؟ اتصل بنا 24/7",

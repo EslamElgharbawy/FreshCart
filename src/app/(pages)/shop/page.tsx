@@ -16,6 +16,7 @@ import { getCategories } from "@/Features/Categoreis.slice";
 import { getVendors } from "@/Features/Vendors.slice";
 import { useTranslation } from "react-i18next";
 import useIsBusy from "@/hooks/useIsBusy.hooks";
+import ShopFilter from "@/components/ShopFilter/ShopFilter";
 export default function page() {
   const [CategoryActive, setCategoryActive] = useState("");
   const [brandActive, setBrandActive] = useState("");
@@ -64,7 +65,7 @@ export default function page() {
   return (
     <>
       <section className="pt-[151px] lg:pt-[169px] xl:pt-[239px] 2xl:pt-[110px]">
-        <div className="relative h-[150px] 2xl:h-[416px]">
+        <div className="relative h-[150px] xl:h-[300px] 2xl:h-[416px]">
           <Image
             src={shopImg}
             alt="shopImg"
@@ -73,12 +74,12 @@ export default function page() {
           <div className="absolute inset-0 px-5 z-10">
             <div className="absolute mt-7 z-10 left-[6.3%] xl:left-[8.8%] top-[50%] -translate-y-1/2 uppercase">
               <h3
-                className="text-[25px] leading-[25px] xl:text-[66px] xl:leading-[66px] font-bold mb-2 text-transparent"
+                className="text-[30px] leading-[30px] xl:text-[45px] xl:leading-[45px] 2xl:text-[66px] 2xl:leading-[66px] font-bold mb-2 text-transparent"
                 style={{ WebkitTextStroke: "1px white" }}
               >
                 Fashion
               </h3>
-              <h4 className="text-white text-[27px] xl:text-[76px] leading-[27px] xl:leading-[76px] font-extrabold mb-8 tracking-[-0.75px]">
+              <h4 className="text-white text-[32px] leading-[32px] xl:text-[47px] xl:leading-[47px] 2xl:text-[76px] 2xl:leading-[76px] font-extrabold mb-8 tracking-[-0.75px]">
                 Skiwears
               </h4>
             </div>
@@ -89,19 +90,19 @@ export default function page() {
       <section className="mx-5 max-xl:py-2">
         <BreadCrumb
           shopPage
-          currentPage={
-            categories?.find((category) => category._id === CategoryActive)
-              ?.name
-          }
+          currentPage={categories
+            ?.find((category) => category._id === CategoryActive)
+            ?.slug.toLowerCase()}
           brand={vendors
             ?.find((brand) => brand._id === brandActive)
-            ?.name.toLowerCase()}
+            ?.slug.toLowerCase()}
         />
       </section>
 
       <section className="pb-12">
-        <div className="grid 2xl:grid-cols-12">
-          <div className="2xl:col-span-3 px-4">
+        <div className="2xl:grid 2xl:grid-cols-12">
+          {/* Desktop Filter */}
+          <div className="max-2xl:hidden 2xl:col-span-3 px-4">
             <div className="flex justify-between items-center mb-2">
               <div className="font-semibold">{t("shop.filter")} :</div>
               <button
@@ -113,17 +114,13 @@ export default function page() {
                     setAppliedMinPrice(""),
                     setAppliedMaxPrice(""));
                 }}
-                className="text-sm text-[#333]"
+                className="text-sm text-[#333] hover:text-primary transition-colors duration-300"
               >
                 {t("shop.cleanAll")}
               </button>
             </div>
 
-            <Accordion
-              type="multiple"
-              defaultValue={["shipping"]}
-              className="max-w-lg "
-            >
+            <Accordion type="multiple" className="max-w-lg ">
               <AccordionItem value="AllCategories">
                 <AccordionTrigger>{t("shop.allCategories")}</AccordionTrigger>
                 <AccordionContent>
@@ -140,7 +137,7 @@ export default function page() {
                         key={category._id}
                         className={`flex justify-between items-center py-2 text-sm transition-colors duration-300 cursor-pointer ${CategoryActive === category._id ? "text-primary" : "text-[#333] hover:text-primary"}`}
                       >
-                        {category.name}
+                        {t(`categories_menu.${category.slug}`)}
 
                         <span>{productCount}</span>
                       </div>
@@ -238,7 +235,7 @@ export default function page() {
                             }}
                             className={`text-sm transition-colors duration-300 cursor-pointer ${brandActive === brand._id ? "text-primary" : "text-[#333] hover:text-primary"}`}
                           >
-                            {brand.name}
+                            {t(`vendors.${brand.slug}`)}
                           </div>
                         </div>
                         <span>{productCount}</span>
@@ -249,13 +246,34 @@ export default function page() {
               </AccordionItem>
             </Accordion>
           </div>
+          {/* Mobile Filter */}
+          <div className="grid 2xl:grid-cols-12 2xl:hidden">
+            <div className="px-4">
+              <ShopFilter
+                categories={categories}
+                products={products}
+                vendors={vendors}
+                CategoryActive={CategoryActive}
+                setCategoryActive={setCategoryActive}
+                brandActive={brandActive}
+                setBrandActive={setBrandActive}
+                minPrice={minPrice}
+                setMinPrice={setMinPrice}
+                maxPrice={maxPrice}
+                setMaxPrice={setMaxPrice}
+                setAppliedMinPrice={setAppliedMinPrice}
+                setAppliedMaxPrice={setAppliedMaxPrice}
+              />
+            </div>
+          </div>
+
           <div className="2xl:col-span-9 px-4">
             {isBusy ? (
               <div className="flex min-h-[400px] items-center justify-center">
                 <div className="loaderProducts"></div>
               </div>
             ) : filteredProducts.length > 0 ? (
-              <div className="grid grid-cols-2 2xl:grid-cols-4 gap-5">
+              <div className="grid grid-cols-2 xl:grid-cols-4 max-xl:gap-8 gap-5">
                 {filteredProducts.map((product) => (
                   <ProductCard key={product._id} {...product} />
                 ))}

@@ -34,7 +34,9 @@ export default function BreadCrumb({
               <ChevronRight size={14} className="text-[#bbb] shrink-0" />
 
               <span className="font-medium text-[#333]">
-                {currentPage || t("breadcrumb.shop")}
+                {currentPage
+                  ? t(`categories_menu.${currentPage}`)
+                  : t("breadcrumb.shop")}
               </span>
             </div>
           )}
@@ -79,7 +81,7 @@ export default function BreadCrumb({
               <ChevronRight size={14} className="text-[#bbb] shrink-0" />
 
               <span className="font-medium text-[#333] truncate max-w-[120px] sm:max-w-[180px] md:max-w-none">
-                {currentPage}
+                {t(`categories_menu.${currentPage}`)}
               </span>
             </div>
           )}
