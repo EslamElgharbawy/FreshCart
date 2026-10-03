@@ -17,6 +17,8 @@ import { getVendors } from "@/Features/Vendors.slice";
 import { useTranslation } from "react-i18next";
 import useIsBusy from "@/hooks/useIsBusy.hooks";
 import ShopFilter from "@/components/ShopFilter/ShopFilter";
+import { useRouter, useSearchParams } from "next/navigation";
+import BreadcrumbSkeleton from "@/components/Skeletons/BreadcrumbSkeleton";
 export default function page() {
   const [CategoryActive, setCategoryActive] = useState("");
   const [brandActive, setBrandActive] = useState("");
@@ -25,13 +27,20 @@ export default function page() {
   const { categories } = useAppSelector((store) => store.categoriesSlice);
   const { vendors } = useAppSelector((store) => store.VendorsSlice);
   const { authChecked } = useAppSelector((store) => store.user);
-
   const [minPrice, setMinPrice] = useState("");
   const [maxPrice, setMaxPrice] = useState("");
   const [appliedMinPrice, setAppliedMinPrice] = useState("");
   const [appliedMaxPrice, setAppliedMaxPrice] = useState("");
   const { t } = useTranslation();
+  const router = useRouter();
+  const searchParams = useSearchParams();
   const isBusy = useIsBusy({ authChecked, loading });
+
+  const categoryFromUrl = searchParams.get("category") || "";
+  const brandFromUrl = searchParams.get("brand") || "";
+  const minFromUrl = searchParams.get("minPrice") || "";
+  const maxFromUrl = searchParams.get("maxPrice") || "";
+
   const priceRanges = [
     { label: "$149 - $499", min: 149, max: 499 },
     { label: "$500 - $999", min: 500, max: 999 },
@@ -57,6 +66,97 @@ export default function page() {
     );
   });
 
+  const updateFiltersInUrl = (
+    categoryId: string,
+    brandId: string,
+    min: string,
+    max: string,
+  ) => {
+    const params = new URLSearchParams();
+
+    if (categoryId) {
+      const category = categories?.find(
+        (category) => category._id === categoryId,
+      );
+
+      if (category) {
+        params.set("category", category.slug);
+      }
+    }
+
+    if (brandId) {
+      const brand = vendors?.find((brand) => brand._id === brandId);
+
+      if (brand) {
+        params.set("brand", brand.slug);
+      }
+    }
+
+    if (min) {
+      params.set("minPrice", min);
+    }
+
+    if (max) {
+      params.set("maxPrice", max);
+    }
+
+    const query = params.toString();
+
+    router.replace(query ? `/shop?${query}` : "/shop", {
+      scroll: false,
+    });
+  };
+  const handleApplyFilters = (
+    category: string,
+    brand: string,
+    min: string,
+    max: string,
+  ) => {
+    setCategoryActive(category);
+    setBrandActive(brand);
+
+    setAppliedMinPrice(min);
+    setAppliedMaxPrice(max);
+
+    updateFiltersInUrl(category, brand, min, max);
+  };
+  const handleCleanAll = () => {
+    setCategoryActive("");
+    setBrandActive("");
+
+    setMinPrice("");
+    setMaxPrice("");
+
+    setAppliedMinPrice("");
+    setAppliedMaxPrice("");
+
+    router.replace("/shop", {
+      scroll: false,
+    });
+  };
+  useEffect(() => {
+    const category = categories?.find(
+      (category) => category.slug === categoryFromUrl,
+    );
+
+    const brand = vendors?.find((brand) => brand.slug === brandFromUrl);
+
+    setCategoryActive(category?._id || "");
+    setBrandActive(brand?._id || "");
+
+    setMinPrice(minFromUrl);
+    setMaxPrice(maxFromUrl);
+
+    setAppliedMinPrice(minFromUrl);
+    setAppliedMaxPrice(maxFromUrl);
+  }, [
+    categories,
+    vendors,
+    categoryFromUrl,
+    brandFromUrl,
+    minFromUrl,
+    maxFromUrl,
+  ]);
   useEffect(() => {
     dispatch(getProducts());
     dispatch(getCategories());
@@ -88,15 +188,19 @@ export default function page() {
       </section>
 
       <section className="mx-5 max-xl:py-2">
-        <BreadCrumb
-          shopPage
-          currentPage={categories
-            ?.find((category) => category._id === CategoryActive)
-            ?.slug.toLowerCase()}
-          brand={vendors
-            ?.find((brand) => brand._id === brandActive)
-            ?.slug.toLowerCase()}
-        />
+        {isBusy ? (
+          <BreadcrumbSkeleton />
+        ) : (
+          <BreadCrumb
+            shopPage
+            currentPage={categories
+              ?.find((category) => category._id === CategoryActive)
+              ?.slug.toLowerCase()}
+            brand={vendors
+              ?.find((brand) => brand._id === brandActive)
+              ?.slug.toLowerCase()}
+          />
+        )}
       </section>
 
       <section className="pb-12">
@@ -107,12 +211,7 @@ export default function page() {
               <div className="font-semibold">{t("shop.filter")} :</div>
               <button
                 onClick={() => {
-                  (setBrandActive(""),
-                    setCategoryActive(""),
-                    setMinPrice(""),
-                    setMaxPrice(""),
-                    setAppliedMinPrice(""),
-                    setAppliedMaxPrice(""));
+                  handleCleanAll();
                 }}
                 className="text-sm text-[#333] hover:text-primary transition-colors duration-300"
               >
@@ -120,7 +219,11 @@ export default function page() {
               </button>
             </div>
 
-            <Accordion type="multiple" className="max-w-lg ">
+            <Accordion
+              type="multiple"
+              defaultValue={["AllCategories"]}
+              className="max-w-lg "
+            >
               <AccordionItem value="AllCategories">
                 <AccordionTrigger>{t("shop.allCategories")}</AccordionTrigger>
                 <AccordionContent>
@@ -132,7 +235,17 @@ export default function page() {
                     return (
                       <div
                         onClick={() => {
-                          setCategoryActive(category._id);
+                          const categoryId =
+                            CategoryActive === category._id ? "" : category._id;
+
+                          setCategoryActive(categoryId);
+
+                          updateFiltersInUrl(
+                            categoryId,
+                            brandActive,
+                            appliedMinPrice,
+                            appliedMaxPrice,
+                          );
                         }}
                         key={category._id}
                         className={`flex justify-between items-center py-2 text-sm transition-colors duration-300 cursor-pointer ${CategoryActive === category._id ? "text-primary" : "text-[#333] hover:text-primary"}`}
@@ -152,13 +265,39 @@ export default function page() {
                     {priceRanges.map((range) => (
                       <div
                         key={range.label}
-                        className="flex cursor-pointer items-center justify-between py-2 text-sm text-[#333] transition-colors duration-300 hover:text-primary"
+                        className={`flex cursor-pointer items-center justify-between py-2 text-sm text-[#333] transition-colors duration-300 hover:text-primary ${minPrice === range.min.toString() && maxPrice === range.max.toString() ? "text-primary" : ""}`}
                         onClick={() => {
-                          setMinPrice(range.min.toString());
-                          setMaxPrice(range.max.toString());
+                          const min = range.min.toString();
+                          const max = range.max.toString();
+                          const isActive = minPrice === min && maxPrice === max;
 
-                          setAppliedMinPrice(range.min.toString());
-                          setAppliedMaxPrice(range.max.toString());
+                          if (isActive) {
+                            setMinPrice("");
+                            setMaxPrice("");
+
+                            setAppliedMinPrice("");
+                            setAppliedMaxPrice("");
+
+                            updateFiltersInUrl(
+                              CategoryActive,
+                              brandActive,
+                              "",
+                              "",
+                            );
+                          } else {
+                            setMinPrice(min);
+                            setMaxPrice(max);
+
+                            setAppliedMinPrice(min);
+                            setAppliedMaxPrice(max);
+
+                            updateFiltersInUrl(
+                              CategoryActive,
+                              brandActive,
+                              min,
+                              max,
+                            );
+                          }
                         }}
                       >
                         <span>{range.label}</span>
@@ -200,6 +339,12 @@ export default function page() {
                         onClick={() => {
                           setAppliedMinPrice(minPrice);
                           setAppliedMaxPrice(maxPrice);
+                          updateFiltersInUrl(
+                            CategoryActive,
+                            brandActive,
+                            minPrice,
+                            maxPrice,
+                          );
                         }}
                       >
                         {t("shop.go")}
@@ -231,7 +376,17 @@ export default function page() {
                           />
                           <div
                             onClick={() => {
-                              setBrandActive(brand._id);
+                              const brandId =
+                                brandActive === brand._id ? "" : brand._id;
+
+                              setBrandActive(brandId);
+
+                              updateFiltersInUrl(
+                                CategoryActive,
+                                brandId,
+                                appliedMinPrice,
+                                appliedMaxPrice,
+                              );
                             }}
                             className={`text-sm transition-colors duration-300 cursor-pointer ${brandActive === brand._id ? "text-primary" : "text-[#333] hover:text-primary"}`}
                           >
@@ -263,6 +418,8 @@ export default function page() {
                 setMaxPrice={setMaxPrice}
                 setAppliedMinPrice={setAppliedMinPrice}
                 setAppliedMaxPrice={setAppliedMaxPrice}
+                onApplyFilters={handleApplyFilters}
+                onCleanAll={handleCleanAll}
               />
             </div>
           </div>

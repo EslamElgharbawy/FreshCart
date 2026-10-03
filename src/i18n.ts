@@ -161,6 +161,8 @@ const resources = {
         samsung: "Samsung",
         "jack & jones": "Jack & Jones",
         "lc waikiki": "LC Waikiki",
+        "jack-and-jones": "Jack & Jones",
+        "lc-waikiki": "LC Waikiki",
         puma: "Puma",
         adidas: "Adidas",
         defacto: "DeFacto",
@@ -404,6 +406,7 @@ const resources = {
         noProductsDescription:
           "We couldn't find any products matching your selected filters.",
         filterAndSort: "Filter & Sort",
+        applyFilters: "Apply Filters",
       },
       footer: {
         supportText: "Got Question? Call us 24/7",
@@ -851,6 +854,7 @@ const resources = {
         noProductsDescription:
           "لم نتمكن من العثور على منتجات تطابق الفلاتر التي اخترتها.",
         filterAndSort: "تصفية وترتيب",
+        applyFilters: "تطبيق الفلاتر",
       },
       footer: {
         supportText: "هل لديك سؤال؟ اتصل بنا 24/7",

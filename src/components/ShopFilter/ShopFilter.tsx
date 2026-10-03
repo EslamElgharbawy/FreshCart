@@ -1,9 +1,9 @@
+"use client";
 import { Button } from "@/components/ui/button";
 import {
   Sheet,
   SheetClose,
   SheetContent,
-  SheetFooter,
   SheetHeader,
   SheetTitle,
   SheetTrigger,
@@ -19,17 +19,16 @@ import { SlidersHorizontal, XIcon } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import Image from "next/image";
 import { useAppSelector } from "@/hooks/store.hooks";
+import { useState } from "react";
 export default function ShopFilter({
   CategoryActive,
-  setCategoryActive,
   brandActive,
-  setBrandActive,
   minPrice,
   setMinPrice,
   maxPrice,
   setMaxPrice,
-  setAppliedMinPrice,
-  setAppliedMaxPrice,
+  onApplyFilters,
+  onCleanAll,
 }: any) {
   const { products } = useAppSelector((store) => store.ProductSlice);
   const { categories } = useAppSelector((store) => store.categoriesSlice);
@@ -42,6 +41,12 @@ export default function ShopFilter({
     { label: "$5,000 - $9,999", min: 5000, max: 9999 },
     { label: "$10,000 - $42,960", min: 10000, max: 42960 },
   ];
+
+  const [tempCategory, setTempCategory] = useState(CategoryActive);
+  const [tempBrand, setTempBrand] = useState(brandActive);
+  const handleApply = () => {
+    onApplyFilters(tempCategory, tempBrand, minPrice, maxPrice);
+  };
   return (
     <Sheet>
       <SheetTrigger
@@ -75,22 +80,21 @@ export default function ShopFilter({
             </Button>
           </SheetClose>
         </SheetHeader>
-        <div className="2xl:col-span-3 px-4">
+        <div className="2xl:col-span-3 px-4 overflow-y-auto">
           <div className="flex justify-between items-center mb-4">
             <div className="text-sm text-[#333]">{t("shop.filter")} :</div>
-            <button
-              onClick={() => {
-                setBrandActive("");
-                setCategoryActive("");
-                setMinPrice("");
-                setMaxPrice("");
-                setAppliedMinPrice("");
-                setAppliedMaxPrice("");
-              }}
-              className="text-sm text-[#333]"
-            >
-              {t("shop.cleanAll")}
-            </button>
+            <SheetClose asChild>
+              <button
+                onClick={() => {
+                  setTempBrand("");
+                  setTempCategory("");
+                  onCleanAll();
+                }}
+                className="text-sm text-[#333]"
+              >
+                {t("shop.cleanAll")}
+              </button>
+            </SheetClose>
           </div>
 
           <Accordion
@@ -112,10 +116,12 @@ export default function ShopFilter({
                   return (
                     <div
                       onClick={() => {
-                        setCategoryActive(category._id);
+                        const categoryId =
+                          tempCategory === category._id ? "" : category._id;
+                        setTempCategory(categoryId);
                       }}
                       key={category._id}
-                      className={`flex justify-between items-center py-2 text-sm transition-colors duration-300 cursor-pointer ${CategoryActive === category._id ? "text-primary" : "text-[#333] hover:text-primary"}`}
+                      className={`flex justify-between items-center py-2 text-sm transition-colors duration-300 cursor-pointer ${tempCategory === category._id ? "text-primary" : "text-[#333] hover:text-primary"}`}
                     >
                       {t(`categories_menu.${category.slug}`)}
 
@@ -135,13 +141,24 @@ export default function ShopFilter({
                   {priceRanges.map((range) => (
                     <div
                       key={range.label}
-                      className="flex cursor-pointer items-center justify-between py-2 text-sm text-[#333] transition-colors duration-300 hover:text-primary"
+                      className={`flex cursor-pointer items-center justify-between py-2 text-sm transition-colors duration-300 ${
+                        minPrice === range.min.toString() &&
+                        maxPrice === range.max.toString()
+                          ? "text-primary"
+                          : "text-[#333] hover:text-primary"
+                      }`}
                       onClick={() => {
-                        setMinPrice(range.min.toString());
-                        setMaxPrice(range.max.toString());
+                        const min = range.min.toString();
+                        const max = range.max.toString();
+                        const isActive = minPrice === min && maxPrice === max;
 
-                        setAppliedMinPrice(range.min.toString());
-                        setAppliedMaxPrice(range.max.toString());
+                        if (isActive) {
+                          setMinPrice("");
+                          setMaxPrice("");
+                        } else {
+                          setMinPrice(min);
+                          setMaxPrice(max);
+                        }
                       }}
                     >
                       <span>{range.label}</span>
@@ -176,17 +193,6 @@ export default function ShopFilter({
                       onChange={(e) => setMaxPrice(e.target.value)}
                       className="hide-arrows h-9 w-[78px] rounded border border-[#ddd] py-1 px-2 text-sm outline-none placeholder:text-[#999] focus:border-primary bg-transparent"
                     />
-
-                    <button
-                      type="button"
-                      className="h-9 rounded bg-[#fe4407] px-3 text-sm font-medium text-white transition-colors duration-300 hover:bg-[#e83d05]"
-                      onClick={() => {
-                        setAppliedMinPrice(minPrice);
-                        setAppliedMaxPrice(maxPrice);
-                      }}
-                    >
-                      {t("shop.go")}
-                    </button>
                   </div>
                 </div>
               </AccordionContent>
@@ -214,9 +220,11 @@ export default function ShopFilter({
                         />
                         <div
                           onClick={() => {
-                            setBrandActive(brand._id);
+                            const brandId =
+                              tempBrand === brand._id ? "" : brand._id;
+                            setTempBrand(brandId);
                           }}
-                          className={`text-sm transition-colors duration-300 cursor-pointer ${brandActive === brand._id ? "text-primary" : "text-[#333] hover:text-primary"}`}
+                          className={`text-sm transition-colors duration-300 cursor-pointer ${tempBrand === brand._id ? "text-primary" : "text-[#333] hover:text-primary"}`}
                         >
                           {t(`vendors.${brand.slug}`)}
                         </div>
@@ -228,6 +236,16 @@ export default function ShopFilter({
               </AccordionContent>
             </AccordionItem>
           </Accordion>
+          <div className="mt-auto border-t border-[#ecf0f4] p-4">
+            <SheetClose asChild>
+              <Button
+                onClick={handleApply}
+                className="w-full h-11 bg-primary text-white hover:bg-primary/90"
+              >
+                {t("shop.applyFilters")}
+              </Button>
+            </SheetClose>
+          </div>
         </div>
       </SheetContent>
     </Sheet>
