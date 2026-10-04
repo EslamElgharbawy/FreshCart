@@ -59,7 +59,6 @@ export default function Navbar() {
   const pathname = usePathname();
   const isFullPage = pathname === "/" || pathname === "/shop";
   const { products } = useAppSelector((store) => store.ProductSlice);
-
  
   const filteredProducts =
     search.trim().length > 0
