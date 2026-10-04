@@ -121,7 +121,7 @@ export default function ShopFilter({
                         setTempCategory(categoryId);
                       }}
                       key={category._id}
-                      className={`flex justify-between items-center py-2 text-sm transition-colors duration-300 cursor-pointer ${tempCategory === category._id ? "text-primary" : "text-[#333] hover:text-primary"}`}
+                      className={`flex justify-between items-center py-2 text-sm transition-colors duration-300 cursor-pointer ${tempCategory === category._id ? "text-primary" : "text-[#333]"}`}
                     >
                       {t(`categories_menu.${category.slug}`)}
 
@@ -145,7 +145,7 @@ export default function ShopFilter({
                         minPrice === range.min.toString() &&
                         maxPrice === range.max.toString()
                           ? "text-primary"
-                          : "text-[#333] hover:text-primary"
+                          : "text-[#333]"
                       }`}
                       onClick={() => {
                         const min = range.min.toString();
@@ -209,7 +209,12 @@ export default function ShopFilter({
                   return (
                     <div
                       key={brand._id}
-                      className="flex justify-between items-center"
+                      onClick={() => {
+                        const brandId =
+                          tempBrand === brand._id ? "" : brand._id;
+                        setTempBrand(brandId);
+                      }}
+                      className={`flex justify-between items-center cursor-pointer transition-colors duration-300  ${tempBrand === brand._id ? "text-primary" : "text-[#333]"}`}
                     >
                       <div className="flex justify-center items-center gap-3 py-2 ">
                         <Image
@@ -218,14 +223,7 @@ export default function ShopFilter({
                           width={50}
                           height={50}
                         />
-                        <div
-                          onClick={() => {
-                            const brandId =
-                              tempBrand === brand._id ? "" : brand._id;
-                            setTempBrand(brandId);
-                          }}
-                          className={`text-sm transition-colors duration-300 cursor-pointer ${tempBrand === brand._id ? "text-primary" : "text-[#333] hover:text-primary"}`}
-                        >
+                        <div className="text-sm ">
                           {t(`vendors.${brand.slug}`)}
                         </div>
                       </div>
@@ -240,7 +238,7 @@ export default function ShopFilter({
             <SheetClose asChild>
               <Button
                 onClick={handleApply}
-                className="w-full h-11 bg-primary text-white hover:bg-primary/90"
+                className="w-full h-11 bg-primary text-white"
               >
                 {t("shop.applyFilters")}
               </Button>

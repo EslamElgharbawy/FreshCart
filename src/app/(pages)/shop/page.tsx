@@ -365,7 +365,20 @@ export default function page() {
                     return (
                       <div
                         key={brand._id}
-                        className="flex justify-between items-center"
+                        onClick={() => {
+                          const brandId =
+                            brandActive === brand._id ? "" : brand._id;
+
+                          setBrandActive(brandId);
+
+                          updateFiltersInUrl(
+                            CategoryActive,
+                            brandId,
+                            appliedMinPrice,
+                            appliedMaxPrice,
+                          );
+                        }}
+                        className={`flex justify-between items-center transition-colors duration-300 cursor-pointer ${brandActive === brand._id ? "text-primary" : "text-[#333] hover:text-primary"}`}
                       >
                         <div className="flex justify-center items-center gap-3 py-2 ">
                           <Image
@@ -374,22 +387,7 @@ export default function page() {
                             width={50}
                             height={50}
                           />
-                          <div
-                            onClick={() => {
-                              const brandId =
-                                brandActive === brand._id ? "" : brand._id;
-
-                              setBrandActive(brandId);
-
-                              updateFiltersInUrl(
-                                CategoryActive,
-                                brandId,
-                                appliedMinPrice,
-                                appliedMaxPrice,
-                              );
-                            }}
-                            className={`text-sm transition-colors duration-300 cursor-pointer ${brandActive === brand._id ? "text-primary" : "text-[#333] hover:text-primary"}`}
-                          >
+                          <div className="text-sm transition-colors duration-300 cursor-pointer">
                             {t(`vendors.${brand.slug}`)}
                           </div>
                         </div>

@@ -20,6 +20,7 @@ import {
   Scale,
   Search,
   User,
+  X,
 } from "lucide-react";
 import Image from "next/image";
 import logo from "../../assets/images/logo1.svg";
@@ -42,7 +43,7 @@ import { GetLoggedUserCart } from "@/Features/Cart.slice";
 import CartSheet from "../CartSheet/CartSheet";
 import useIsBusy from "@/hooks/useIsBusy.hooks";
 import { GetLoggedUserWishlist } from "@/Features/WishList.slice";
-
+import HighlightText from "../HighlightText/HighlightText";
 export default function Navbar() {
   const inputRef = useRef<HTMLInputElement | null>(null);
   const [selectedCategory, setSelectedCategory] = useState("all");
@@ -52,11 +53,24 @@ export default function Navbar() {
   const [openSheet, setOpenSheet] = useState(false);
   const [currencyOpen, setCurrencyOpen] = useState(false);
   const [languageOpen, setLanguageOpen] = useState(false);
+  const [search, setSearch] = useState("");
   const { t, i18n } = useTranslation();
   const dispatch = useAppDispatch();
   const pathname = usePathname();
   const isFullPage = pathname === "/" || pathname === "/shop";
+  const { products } = useAppSelector((store) => store.ProductSlice);
 
+ 
+  const filteredProducts =
+    search.trim().length > 0
+      ? products.filter((product) => {
+          const title = product.title.toLowerCase().replace(/\s+/g, "");
+
+          const searchText = search.trim().toLowerCase().replace(/\s+/g, "");
+
+          return title.includes(searchText);
+        })
+      : [];
   const { categories } = useAppSelector((store) => store.categoriesSlice);
 
   const { user, isLoggedIn, authChecked } = useAppSelector(
@@ -96,7 +110,9 @@ export default function Navbar() {
     <>
       {/* //& Desktop  */}
       <header className="fixed top-0 left-0 right-0 z-50 hidden 2xl:block">
-        <div className={`bg-background relative ${isFullPage ? "h-[110px]" : ""}`}>
+        <div
+          className={`bg-background relative ${isFullPage ? "h-[110px]" : ""}`}
+        >
           {/* // ? top_bar */}
           <motion.div
             initial={{ height: 45, opacity: 1 }}
@@ -423,12 +439,13 @@ export default function Navbar() {
                   </div>
                 </div>
                 <div className="search&offers flex items-center h-[54.2px]">
-                  <div className="flex items-center w-[70%] h-full">
+                  <div className="flex items-center w-[70%] h-full relative">
                     <div className="flex items-center">
                       <DropdownMenu modal={false}>
                         <DropdownMenuTrigger asChild>
                           <Button
                             variant="outline"
+                            onClick={() => setSearch("")}
                             className="border-0 bg-transparent text-xs font-normal px-10 text-[#AAAAAA] w-[240px] flex justify-between"
                           >
                             <p
@@ -463,6 +480,8 @@ export default function Navbar() {
                       <input
                         ref={inputRef}
                         type="text"
+                        value={search}
+                        onChange={(e) => setSearch(e.target.value)}
                         placeholder={t("navbar.search")}
                         className="bg-transparent 
                         text-[#AAAAAA] 
@@ -476,13 +495,60 @@ export default function Navbar() {
                     </div>
                     <button
                       onClick={() => {
-                        inputRef.current?.focus();
+                        if (search.trim()) {
+                          setSearch("");
+                        } else {
+                          inputRef.current?.focus();
+                        }
                       }}
                       className="text-[#AAAAAA] hover:text-primary transition-all duration-300 pe-10"
                     >
-                      <Search strokeWidth={1.5} />
+                      {search.trim() ? (
+                        <X strokeWidth={1.5} />
+                      ) : (
+                        <Search strokeWidth={1.5} />
+                      )}
                     </button>
                     <div className="w-[1px] h-5 bg-[#EEEEEE1A]"></div>
+                    {search.trim() && filteredProducts.length > 0 && (
+                      <div className="absolute top-full right-0 left-0 h-[300px] bg-white mt-1 rounded-sm z-20 overflow-y-auto">
+                        {filteredProducts.map((product) => (
+                          <Link
+                            href={`/ProductDetails/${product._id}`}
+                            key={product._id}
+                            onClick={() => setSearch("")}
+                          >
+                            <motion.div
+                              key={product._id}
+                              whileHover={{ x: 15 }}
+                              transition={{ duration: 0.2, ease: "easeInOut" }}
+                              className="flex items-center gap-3 mx-5 py-5 group cursor-pointer relative border-b border-[#ebebeb]"
+                            >
+                              <Image
+                                src={product.imageCover}
+                                alt={product.title}
+                                width={60}
+                                height={60}
+                                className="object-contain"
+                              />
+
+                              <div>
+                                <h3 className="text-sm  text-[#333] group-hover:text-primary transition-colors duration-300">
+                                  <HighlightText
+                                    text={product.title}
+                                    search={search}
+                                  />
+                                </h3>
+
+                                <span className="text-base text-[#333]">
+                                  ${product.price}
+                                </span>
+                              </div>
+                            </motion.div>
+                          </Link>
+                        ))}
+                      </div>
+                    )}
                   </div>
                   <div className="w-[30%] flex justify-center items-center gap-10 text-white text-[14px] font-semibold">
                     <Link
@@ -723,7 +789,7 @@ export default function Navbar() {
           <div className="nav-taps w-full bg-secondary">
             <div className="taps&cart text-white flex justify-between items-center px-5 py-3 lg:py-4 xl:py-6 border-b-[1px] border-[#EEEEEE12]">
               <div className="right-side flex justify-between items-center w-full">
-                <MobileMenu />
+                <MobileMenu search={search} setSearch={setSearch} filteredProducts={filteredProducts}/>
                 <div className="flex justify-center items-center gap-5 ms-auto">
                   {isLoggedIn ? (
                     <>

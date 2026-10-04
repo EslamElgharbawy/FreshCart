@@ -153,9 +153,8 @@ export default function page() {
         <div className="mx-4 2xl:mx-10">
           {productDetails ? (
             <BreadCrumb
-              currentPage={productDetails.title}
               category={productDetails.category.slug}
-              subCategory={productDetails.subcategory[0].slug}
+              productName={productDetails.title}
             />
           ) : (
             <BreadcrumbSkeleton />
@@ -250,21 +249,21 @@ export default function page() {
                     <div className="flex items-center gap-5">
                       <div className="border-[1px] rounded-md overflow-hidden border-[#eee]">
                         {productDetails?.brand.image && (
-                          <Link href="">
-                            <Image
-                              src={productDetails.brand.image}
-                              alt={productDetails.brand.name}
-                              width={100}
-                              height={100}
-                              className="h-14 w-auto"
-                            />
-                          </Link>
+                          <Image
+                            src={productDetails.brand.image}
+                            alt={productDetails.brand.name}
+                            width={100}
+                            height={100}
+                            className="h-14 w-auto"
+                          />
                         )}
                       </div>
                       <div className="text-[#666] text-sm leading-6">
                         {t("productDetails.category")} :{" "}
                         <span className="text-[#999]">
-                          {productDetails?.category.name}
+                          {t(
+                            `categories_menu.${productDetails?.category.slug}`,
+                          )}
                         </span>
                       </div>
                     </div>
@@ -397,7 +396,11 @@ export default function page() {
                         }}
                         className={`hover:text-primary transition-all duration-300 py-3 px-2 ${inWishList ? " text-primary" : ""}`}
                       >
-                        <Heart strokeWidth={1.5} size={22} className={`${inWishList ? "fill-primary text-primary" : ""}`}/>
+                        <Heart
+                          strokeWidth={1.5}
+                          size={22}
+                          className={`${inWishList ? "fill-primary text-primary" : ""}`}
+                        />
                       </button>
                       <button className="hover:text-primary transition-all duration-300 py-3 px-2">
                         <Scale strokeWidth={1.5} size={22} />

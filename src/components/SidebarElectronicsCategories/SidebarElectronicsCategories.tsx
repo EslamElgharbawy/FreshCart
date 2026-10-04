@@ -59,7 +59,7 @@ export default function SidebarElectronicsCategories({
         </div>
         <button className="group mt-2">
           <a
-            href="#"
+            href={`/shop?category=electronics`}
             className="text-sm xl:text-xs 2xl:text-sm font-semibold text-[#333] uppercase flex items-center gap-3 w-fit relative after:absolute after:left-1/2 after:-translate-x-1/2 after:-bottom-1
     after:h-[3px] after:w-0
     after:bg-[#333] after:transition-all after:duration-500 2xl:group-hover:after:w-full"

@@ -9,7 +9,7 @@ export default function EmptyState({ title }: EmptyStateProps) {
   const { t } = useTranslation();
   return (
     <div>
-      <div className="flex justify-center gap-2 mb-5 px-5 py-4 font-semibold text-[#777]">
+      <div className="flex justify-center gap-2 mb-5 px-5 py-4 font-semibold text-[#777] text-base">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="24"
@@ -46,9 +46,9 @@ export default function EmptyState({ title }: EmptyStateProps) {
         </svg>
       </div>
 
-      <Button className="uppercase !px-7 !py-3 h-auto rounded-md bg-[#333] hover:bg-[#454545] transition-all duration-300 text-white font-semibold block mx-auto">
+      <Link href="/shop" className="w-fit uppercase !px-7 !py-3 h-auto rounded-md bg-[#333] hover:bg-[#454545] transition-all duration-300 text-white font-semibold block mx-auto text-sm">
         {t("common.returnToShop")}
-      </Button>
+      </Link>
     </div>
   );
 }

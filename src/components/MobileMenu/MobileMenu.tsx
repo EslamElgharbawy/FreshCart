@@ -7,10 +7,10 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { Menu, XIcon } from "lucide-react";
+import { Menu, X, XIcon } from "lucide-react";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import Link from "next/link";
-import { useState } from "react";
+import { Dispatch, SetStateAction, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useAppSelector } from "@/hooks/store.hooks";
 import {
@@ -34,6 +34,10 @@ import {
 import i18n from "@/i18n";
 import { Button } from "../ui/button";
 import { usePathname } from "next/navigation";
+import { Product } from "@/Types/products";
+import Image from "next/image";
+import { motion } from "framer-motion";
+import HighlightText from "../HighlightText/HighlightText";
 
 const sections = [
   { name: "home", path: "/" },
@@ -41,12 +45,21 @@ const sections = [
   { name: "cartTap", path: "/cart" },
   { name: "wishList", path: "/wishList" },
 ];
+type MobileMenuProps = {
+  search: string;
+  setSearch: Dispatch<SetStateAction<string>>;
+  filteredProducts: Product[];
+};
 
-export function MobileMenu() {
+export function MobileMenu({
+  search,
+  setSearch,
+  filteredProducts,
+}: MobileMenuProps) {
   const [isSheetOpen, setIsSheetOpen] = useState(false);
   const { t } = useTranslation();
   const pathname = usePathname();
-
+  const inputRef = useRef<HTMLInputElement | null>(null);
   const { categories } = useAppSelector((store) => store.categoriesSlice);
 
   const categoryIcons: Record<string, React.ElementType> = {
@@ -98,16 +111,66 @@ export function MobileMenu() {
         </SheetClose>
         <SheetHeader>
           <SheetTitle className="sr-only">Mobile Menu</SheetTitle>
-          <InputGroup className="max-w-xs !h-10 !rounded-sm border-[1px] border-[#333] ">
+          <InputGroup className="max-w-xs !h-10 !rounded-sm border-[1px] border-[#333] relative">
             <InputGroupAddon
               className={`${i18n.language === "ar" ? "!pe-4" : "!pr-4"}`}
             >
-              <Search className="text-white" />
+              <button
+                onClick={() => {
+                  if (search.trim()) {
+                    setSearch("");
+                  } else {
+                    inputRef.current?.focus();
+                  }
+                }}
+                className="text-white hover:text-primary transition-all duration-300 "
+              >
+                {search.trim() ? (
+                  <X strokeWidth={1.5} />
+                ) : (
+                  <Search strokeWidth={1.5} />
+                )}
+              </button>
             </InputGroupAddon>
             <InputGroupInput
+              ref={inputRef}
               placeholder={t("Menu.search")}
-              className=" placeholder:!text-[#999] text-sm focus:placeholder:opacity-0 placeholder:transition-opacity placeholder:duration-300 "
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              className=" placeholder:!text-[#999] text-sm text-[#999] focus:placeholder:opacity-0 placeholder:transition-opacity placeholder:duration-300 "
             />
+            {search.trim() && filteredProducts.length > 0 && (
+              <div className="absolute top-full right-0 left-0 h-[300px] bg-white mt-1 rounded-sm z-20 overflow-y-auto">
+                {filteredProducts.map((product) => (
+                  <Link
+                    href={`/ProductDetails/${product._id}`}
+                    key={product._id}
+                    onClick={() => {
+                      (setSearch(""), setIsSheetOpen(false));
+                    }}
+                    className="flex items-center gap-3 mx-5 py-5 cursor-pointer border-b border-[#ebebeb]"
+                  >
+                    <Image
+                      src={product.imageCover}
+                      alt={product.title}
+                      width={60}
+                      height={60}
+                      className="object-contain"
+                    />
+
+                    <div>
+                      <h3 className="text-sm  text-[#333] line-clamp-2">
+                        <HighlightText text={product.title} search={search} />
+                      </h3>
+
+                      <span className="text-base text-[#333]">
+                        ${product.price}
+                      </span>
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            )}
           </InputGroup>
         </SheetHeader>
 
