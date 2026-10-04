@@ -1,6 +1,6 @@
 "use client";
 import Image from "next/image";
-import shopImg from "../../../assets/images/shop-banner.jpg";
+import shopImg from "../../assets/images/shop-banner.jpg";
 import BreadCrumb from "@/components/BreadCrumb/BreadCrumb";
 import {
   Accordion,
