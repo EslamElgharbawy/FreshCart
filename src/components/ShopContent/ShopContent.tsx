@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/accordion";
 import ProductCard from "@/components/ProductCard/ProductCard";
 import { useAppDispatch, useAppSelector } from "@/hooks/store.hooks";
-import { Suspense, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { getProducts } from "@/Features/Product.slice";
 import { getCategories } from "@/Features/Categoreis.slice";
 import { getVendors } from "@/Features/Vendors.slice";
@@ -19,6 +19,7 @@ import useIsBusy from "@/hooks/useIsBusy.hooks";
 import ShopFilter from "@/components/ShopFilter/ShopFilter";
 import { useRouter, useSearchParams } from "next/navigation";
 import BreadcrumbSkeleton from "@/components/Skeletons/BreadcrumbSkeleton";
+import i18n from "@/i18n";
 export default function ShopContent() {
   const [CategoryActive, setCategoryActive] = useState("");
   const [brandActive, setBrandActive] = useState("");
@@ -31,10 +32,11 @@ export default function ShopContent() {
   const [maxPrice, setMaxPrice] = useState("");
   const [appliedMinPrice, setAppliedMinPrice] = useState("");
   const [appliedMaxPrice, setAppliedMaxPrice] = useState("");
+  const [mounted, setMounted] = useState(false);
+
   const { t } = useTranslation();
   const router = useRouter();
   const searchParams = useSearchParams();
-  const isBusy = useIsBusy({ authChecked, loading });
 
   const categoryFromUrl = searchParams.get("category") || "";
   const brandFromUrl = searchParams.get("brand") || "";
@@ -162,6 +164,11 @@ export default function ShopContent() {
     dispatch(getCategories());
     dispatch(getVendors());
   }, []);
+
+  // & solve hydration error
+  useEffect(() => setMounted(true), []);
+  const isBusyRaw = useIsBusy({ authChecked, loading });
+  const isBusy = !mounted || isBusyRaw;
   return (
     <>
       <section className="pt-[151px] lg:pt-[169px] xl:pt-[239px] 2xl:pt-[110px]">
@@ -169,18 +176,26 @@ export default function ShopContent() {
           <Image
             src={shopImg}
             alt="shopImg"
-            className="w-full h-full object-cover object-[30%_center] xl:object-[36%_center]"
+            className={`w-full h-full object-cover object-[30%_center] xl:object-[36%_center] ${
+              i18n.language === "ar" ? "scale-x-[-1]" : ""
+            }`}
           />
           <div className="absolute inset-0 px-5 z-10">
-            <div className="absolute mt-7 z-10 left-[6.3%] xl:left-[8.8%] top-[50%] -translate-y-1/2 uppercase">
+            <div
+              className={`absolute mt-7 z-10 top-[50%] -translate-y-1/2 uppercase ${
+                i18n.language === "ar"
+                  ? "right-[6.3%] xl:right-[8.8%]"
+                  : "left-[6.3%] xl:left-[8.8%]"
+              }`}
+            >
               <h3
                 className="text-[30px] leading-[30px] xl:text-[45px] xl:leading-[45px] 2xl:text-[66px] 2xl:leading-[66px] font-bold mb-2 text-transparent"
                 style={{ WebkitTextStroke: "1px white" }}
               >
-                Fashion
+                {t("shop.fashion")}
               </h3>
               <h4 className="text-white text-[32px] leading-[32px] xl:text-[47px] xl:leading-[47px] 2xl:text-[76px] 2xl:leading-[76px] font-extrabold mb-8 tracking-[-0.75px]">
-                Skiwears
+                {t("shop.skiwears")}
               </h4>
             </div>
           </div>
@@ -188,7 +203,7 @@ export default function ShopContent() {
       </section>
 
       <section className="mx-5 max-xl:py-2">
-        {isBusy ? (
+        {isBusy  ? (
           <BreadcrumbSkeleton />
         ) : (
           <BreadCrumb
@@ -423,7 +438,7 @@ export default function ShopContent() {
           </div>
 
           <div className="2xl:col-span-9 px-4">
-            {isBusy ? (
+            {isBusy  ? (
               <div className="flex min-h-[400px] items-center justify-center">
                 <div className="loaderProducts"></div>
               </div>

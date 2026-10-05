@@ -224,8 +224,8 @@ export default function Home() {
                 </motion.h3>
 
                 <div
-                  className={`leading-none mb-4 2xl:mb-0  ${
-                    i18n.language === "ar" ? "" : "xl:ms-[327px]"
+                  className={`leading-none mb-4  ${
+                    i18n.language === "ar" ? "mb-5" : " xl:ms-[327px] 2xl:mb-0"
                   }`}
                 >
                   <motion.p

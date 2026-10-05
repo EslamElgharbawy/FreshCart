@@ -149,12 +149,12 @@ leading-4
           </div>
         </div>
         <div className="mt-4 text-[#333] text-center relative">
-          <a
-            href="#"
+          <Link
+            href={`/ProductDetails/${_id}`}
             className="text-sm font-medium mb-1 px-5 line-clamp-1 hover:text-primary transition-colors duration-300"
           >
             {title}
-          </a>
+          </Link>
           <div className="relative">
             <span
               className="

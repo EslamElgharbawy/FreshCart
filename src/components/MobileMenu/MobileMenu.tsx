@@ -61,17 +61,11 @@ export function MobileMenu({
   const pathname = usePathname();
   const inputRef = useRef<HTMLInputElement | null>(null);
   const { categories } = useAppSelector((store) => store.categoriesSlice);
+  const { products } = useAppSelector((store) => store.ProductSlice);
 
   const categoryIcons: Record<string, React.ElementType> = {
-    music: Music,
     "men's-fashion": Shirt,
     "women's-fashion": Shirt,
-    supermarket: ShoppingCart,
-    "baby-and-toys": Baby,
-    home: House,
-    books: BookOpen,
-    "beauty-and-health": HeartPulse,
-    mobiles: Smartphone,
     electronics: Laptop,
   };
 
@@ -123,7 +117,7 @@ export function MobileMenu({
                     inputRef.current?.focus();
                   }
                 }}
-                className="text-white hover:text-primary transition-all duration-300 "
+                className="text-white"
               >
                 {search.trim() ? (
                   <X strokeWidth={1.5} />
@@ -140,7 +134,7 @@ export function MobileMenu({
               className=" placeholder:!text-[#999] text-sm text-[#999] focus:placeholder:opacity-0 placeholder:transition-opacity placeholder:duration-300 "
             />
             {search.trim() && filteredProducts.length > 0 && (
-              <div className="absolute top-full right-0 left-0 h-[300px] bg-white mt-1 rounded-sm z-20 overflow-y-auto">
+              <div className="absolute top-full right-0 left-0 h-[400px] bg-white mt-1 rounded-sm z-20 overflow-y-auto">
                 {filteredProducts.map((product) => (
                   <Link
                     href={`/ProductDetails/${product._id}`}
@@ -175,7 +169,11 @@ export function MobileMenu({
         </SheetHeader>
 
         <Tabs defaultValue="Pages" className="w-full block">
-          <TabsList variant="line" className="w-full px-4 mb-4">
+          <TabsList
+            variant="line"
+            dir={i18n.language === "ar" ? "rtl" : "ltr"}
+            className="w-full px-4 mb-4"
+          >
             <TabsTrigger
               value="Pages"
               className="uppercase text-white p-2 text-sm font-semibold"
@@ -213,17 +211,22 @@ export function MobileMenu({
           </TabsContent>
           <TabsContent value="Categories">
             <div className="flex flex-col px-4">
-              {categories?.map((item) => {
-                const Icon = categoryIcons[item.slug];
+              {categories?.map((category) => {
+                const productCount = products.filter(
+                  (product) => product.category._id === category._id,
+                ).length;
+                if (productCount === 0) return null;
+                const Icon = categoryIcons[category.slug];
                 return (
-                  <a
-                    href=""
-                    key={item._id}
+                  <Link
+                    href="/shop"
+                    onClick={() => setIsSheetOpen(false)}
+                    key={category._id}
                     className={`flex gap-3 text-border focus:bg-transparent outline-none px-2 py-4 w-full rounded-none border-b-[1px] border-b-[#333] last:border-b-0 ${i18n.language === "ar" ? " flex-row-reverse " : ""}`}
                   >
                     {Icon && <Icon size={20} />}
-                    <span>{t(`categories_menu.${item.slug}`)}</span>
-                  </a>
+                    <span>{t(`categories_menu.${category.slug}`)}</span>
+                  </Link>
                 );
               })}
             </div>

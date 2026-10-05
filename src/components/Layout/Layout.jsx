@@ -5,6 +5,7 @@ import Footer1 from "../Footer1/Footer1";
 import Footer2 from "../Footer2/Footer2";
 import { usePathname } from "next/navigation";
 import AuthDialog from "../Auth/AuthDialog";
+import ScrollToTop from "../ScrollToTop/ScrollToTop";
 
 export default function Layout({ children }) {
   const pathname = usePathname()
@@ -15,6 +16,7 @@ export default function Layout({ children }) {
         <Navbar />
         <AuthDialog />
         <main className={`flex-1 ${isFullPage  ? "bg-background" : "mt-[152px] lg:mt-[169px] xl:mt-[240px] 2xl:mt-[185px]"}`}>{children}</main>
+       <ScrollToTop />
         <Footer1 />
         <Footer2 />
       </div> 
