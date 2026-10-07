@@ -362,7 +362,7 @@ export default function page() {
                       ))}
                     </div>
                     <div className="h-[18px] w-px bg-[#e1e1e1] ms-5 me-3" />
-                    <div className="flex items-center text-[#333] h-full">
+                    <div className="text-[#333] h-full">
                       <button
                         onClick={async () => {
                           if (!token) {
@@ -401,9 +401,6 @@ export default function page() {
                           size={22}
                           className={`${inWishList ? "fill-primary text-primary" : ""}`}
                         />
-                      </button>
-                      <button className="hover:text-primary transition-all duration-300 py-3 px-2">
-                        <Scale strokeWidth={1.5} size={22} />
                       </button>
                     </div>
                   </div>

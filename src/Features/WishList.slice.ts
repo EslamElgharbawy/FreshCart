@@ -62,7 +62,13 @@ export const GetLoggedUserWishlist = createAsyncThunk<
 const wishListSlice = createSlice({
   name: "wishlist",
   initialState,
-  reducers: {},
+  reducers: {
+    clearWishlistState: (state) => {
+      state.wishlist = [];
+      state.loading = false;
+      state.error = null;
+    },
+  },
   extraReducers: (builder) => {
     //* Add Product
     builder
@@ -111,4 +117,4 @@ const wishListSlice = createSlice({
   },
 });
 export default wishListSlice.reducer;
-export const actions = wishListSlice.actions;
+export const {clearWishlistState} = wishListSlice.actions;

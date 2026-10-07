@@ -26,7 +26,7 @@ export default function RootLayout({
       <body className="min-h-full flex flex-col">
         <DirectionProvider>
           <ReduxProvider>
-            <Layout>{children}</Layout>
+              <Layout>{children}</Layout>
             <Toaster position="top-center" reverseOrder={false} />
           </ReduxProvider>
         </DirectionProvider>

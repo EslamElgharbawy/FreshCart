@@ -33,6 +33,7 @@ const resources = {
         description: "Sign in or create a new account.",
         signIn: "Sign In",
         signUp: "Sign Up",
+        logoutSuccess: "Logged out successfully",
       },
 
       loginForm: {
@@ -478,6 +479,7 @@ const resources = {
         description: "سجل الدخول أو أنشئ حسابًا جديدًا.",
         signIn: "تسجيل الدخول",
         signUp: "إنشاء حساب",
+        logoutSuccess: "تم تسجيل الخروج بنجاح",
       },
 
       loginForm: {

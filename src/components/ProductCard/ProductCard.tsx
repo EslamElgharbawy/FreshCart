@@ -100,7 +100,7 @@ leading-4
           >
             {t("products.quickView")}
           </a>
-          <div className="flex justify-center items-center flex-col gap-2 absolute top-[10px] right-[10px] xl:top-4 xl:right-4 2xl:opacity-0 transition-all duration-300 2xl:group-hover:opacity-100">
+          <div className="absolute top-[10px] right-[10px] xl:top-4 xl:right-4 2xl:opacity-0 transition-all duration-300 2xl:group-hover:opacity-100">
             <button
               onClick={async () => {
                 if (!token) {
@@ -137,15 +137,6 @@ leading-4
                 className={`w-[18px] h-[18px] xl:w-[20px] xl:h-[20px] ${inWishList ? "fill-primary text-primary" : ""}`}
               />
             </button>
-            <a
-              href="#"
-              className="w-8 h-8 2xl:w-10 2xl:h-10 rounded-full bg-white flex justify-center items-center border-[1px] text-[#999999] 2xl:hover:bg-primary 2xl:hover:border-transparent 2xl:hover:text-white transition-colors duration-300 group"
-            >
-              <Scale
-                strokeWidth={1.8}
-                className="w-[20px] h-[20px] xl:w-[22px] xl:h-[22px]"
-              />
-            </a>
           </div>
         </div>
         <div className="mt-4 text-[#333] text-center relative">

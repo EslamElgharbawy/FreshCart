@@ -143,6 +143,12 @@ const CartSlice = createSlice({
     setStepInitialized: (state, action) => {
       state.stepInitialized = action.payload;
     },
+    clearCartState: (state) => {
+      state.cart = null;
+      state.loading = false;
+      state.updating = false;
+      state.error = null;
+    },
   },
   extraReducers: (builder) => {
     // * Add Product to Cart
@@ -216,5 +222,5 @@ const CartSlice = createSlice({
     });
   },
 });
-export const { setActiveStep, setStepInitialized } = CartSlice.actions;
+export const { setActiveStep, setStepInitialized , clearCartState } = CartSlice.actions;
 export default CartSlice.reducer;

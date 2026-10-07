@@ -36,7 +36,7 @@ import { lang } from "@/Types/Lang";
 import { useAppDispatch, useAppSelector } from "@/hooks/store.hooks";
 import { MobileMenu } from "../MobileMenu/MobileMenu";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { actions } from "@/Features/AuthDialog.slice";
 import { getCategories } from "@/Features/Categoreis.slice";
 import { GetLoggedUserCart } from "@/Features/Cart.slice";
@@ -44,13 +44,14 @@ import CartSheet from "../CartSheet/CartSheet";
 import useIsBusy from "@/hooks/useIsBusy.hooks";
 import { GetLoggedUserWishlist } from "@/Features/WishList.slice";
 import HighlightText from "../HighlightText/HighlightText";
+import AccountSheet from "../AccountSheet/AccountSheet";
 export default function Navbar() {
   const inputRef = useRef<HTMLInputElement | null>(null);
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [isScrolled, setIsScrolled] = useState(false);
   const [currency, setCurrency] = useState<Currency>("USD");
   const [language, setLanguage] = useState<lang>("ENG");
-  const [openSheet, setOpenSheet] = useState(false);
+  const [openSheetCart, setOpenSheetCart] = useState(false);
   const [currencyOpen, setCurrencyOpen] = useState(false);
   const [languageOpen, setLanguageOpen] = useState(false);
   const [search, setSearch] = useState("");
@@ -59,7 +60,7 @@ export default function Navbar() {
   const pathname = usePathname();
   const isFullPage = pathname === "/" || pathname === "/shop";
   const { products } = useAppSelector((store) => store.ProductSlice);
- 
+
   const filteredProducts =
     search.trim().length > 0
       ? products.filter((product) => {
@@ -84,7 +85,7 @@ export default function Navbar() {
     { name: "cartTap", path: "/cart" },
     { name: "wishList", path: "/wishList" },
   ];
-  const firstName = user?.name?.split(" ")[0];
+
   useEffect(() => {
     dispatch(getCategories());
 
@@ -288,58 +289,7 @@ export default function Navbar() {
                   <div className="w-20 h-5 bg-gray-200 animate-pulse rounded" />
                 ) : isLoggedIn ? (
                   <>
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <div className="auth flex justify-center items-center gap-1 text-[#666666] text-[11px]">
-                          <button className="flex justify-center items-center gap-1 hover:text-[#fe4407] transition-all duration-300">
-                            <User width={20} height={20} />
-                            {i18n.language === "ar"
-                              ? `${t("navbar.greeting")}، ${firstName}`
-                              : `${t("navbar.greeting")}, ${firstName}`}
-                          </button>
-                        </div>
-                      </DropdownMenuTrigger>
-
-                      <DropdownMenuContent
-                        align="end"
-                        className="w-64 bg-white"
-                      >
-                        <div className="border-b p-4">
-                          <p className="text-sm text-gray-500">Signed in as</p>
-                          <p className="font-semibold">{user?.name}</p>
-                        </div>
-
-                        <DropdownMenuItem className="cursor-pointer">
-                          <User className="mr-2 h-4 w-4" />
-                          My Profile
-                        </DropdownMenuItem>
-
-                        <DropdownMenuItem className="cursor-pointer">
-                          {/* <Package className="mr-2 h-4 w-4" /> */}
-                          My Orders
-                        </DropdownMenuItem>
-
-                        <DropdownMenuItem className="cursor-pointer">
-                          {/* <Heart className="mr-2 h-4 w-4" /> */}
-                          Wishlist
-                        </DropdownMenuItem>
-
-                        <DropdownMenuItem className="cursor-pointer">
-                          {/* <Settings className="mr-2 h-4 w-4" /> */}
-                          Settings
-                        </DropdownMenuItem>
-
-                        <DropdownMenuSeparator />
-
-                        <DropdownMenuItem
-                          // onClick={handleLogout}
-                          className="cursor-pointer text-red-500 focus:text-red-500"
-                        >
-                          {/* <LogOut className="mr-2 h-4 w-4" /> */}
-                          Logout
-                        </DropdownMenuItem>
-                      </DropdownMenuContent>
-                    </DropdownMenu>
+                    <AccountSheet />
                   </>
                 ) : (
                   <>
@@ -400,40 +350,11 @@ export default function Navbar() {
                     </ul>
                   </div>
                   <div className="right-side flex justify-center items-center">
-                    <div className="flex justify-center items-center gap-5">
-                      <span className="hover:text-primary transition-all duration-300">
-                        <a href="" className="h-full">
-                          <Scale size={33} strokeWidth={1.5} />
-                        </a>
-                      </span>
-                      <span className="relative hover:text-primary transition-all duration-300">
-                        {isBusy ? (
-                          <span
-                            className={`absolute -top-1 ${
-                              language === "EGY" ? "-left-2" : "-right-2"
-                            } w-[18px] h-[18px] bg-accent text-[#272b37] rounded-full flex justify-center items-center overflow-hidden`}
-                          >
-                            <span className="badge_loader" />
-                          </span>
-                        ) : (
-                          <span
-                            className={`absolute -top-1  ${language === "EGY" ? "-left-2" : "-right-2"} w-[18px] h-[18px] bg-accent text-[#272b37] text-[11px] rounded-full flex justify-center items-center`}
-                          >
-                            {wishlist.length}
-                          </span>
-                        )}
-
-                        <Link href="/wishList">
-                          <Heart size={27} />
-                        </Link>
-                      </span>
-                    </div>
-                    <div className="w-[1px] h-10 bg-[#EEEEEE1A] mx-5"></div>
                     <CartSheet
                       currency={currency}
                       language={language}
-                      openSheet={openSheet}
-                      setOpenSheet={setOpenSheet}
+                      openSheetCart={openSheetCart}
+                      setOpenSheetCart={setOpenSheetCart}
                     />
                   </div>
                 </div>
@@ -788,7 +709,11 @@ export default function Navbar() {
           <div className="nav-taps w-full bg-secondary">
             <div className="taps&cart text-white flex justify-between items-center px-5 py-3 lg:py-4 xl:py-6 border-b-[1px] border-[#EEEEEE12]">
               <div className="right-side flex justify-between items-center w-full">
-                <MobileMenu search={search} setSearch={setSearch} filteredProducts={filteredProducts}/>
+                <MobileMenu
+                  search={search}
+                  setSearch={setSearch}
+                  filteredProducts={filteredProducts}
+                />
                 <div className="flex justify-center items-center gap-5 ms-auto">
                   {isLoggedIn ? (
                     <>
@@ -855,7 +780,7 @@ export default function Navbar() {
                     </>
                   )}
 
-                  <a
+                  <Link
                     href="/wishList"
                     className="relative 2xl:hover:text-primary transition-all duration-300 "
                   >
@@ -876,10 +801,10 @@ export default function Navbar() {
                     )}
 
                     <Heart className="w-[24px] h-[24px] lg:w-[26px] lg:h-[26px] xl:w-[32px] xl:h-[32px]" />
-                  </a>
+                  </Link>
 
                   <button
-                    onClick={() => setOpenSheet(true)}
+                    onClick={() => setOpenSheetCart(true)}
                     className="relative mb-1 2xl:hover:text-primary transition-all duration-300"
                   >
                     {isBusy ? (

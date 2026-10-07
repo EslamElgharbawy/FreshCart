@@ -27,15 +27,15 @@ import useIsBusy from "@/hooks/useIsBusy.hooks";
 interface CartSheetProps {
   currency: Currency;
   language: string;
-  openSheet: boolean;
-  setOpenSheet: React.Dispatch<React.SetStateAction<boolean>>;
+  openSheetCart: boolean;
+  setOpenSheetCart: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export default function CartSheet({
   currency,
   language,
-  openSheet,
-  setOpenSheet,
+  openSheetCart,
+  setOpenSheetCart,
 }: CartSheetProps) {
   const { authChecked } = useAppSelector((store) => store.user);
   const { cart, loading } = useAppSelector((store) => store.CartSlice);
@@ -55,7 +55,7 @@ export default function CartSheet({
   });
 
   return (
-    <Sheet open={openSheet} onOpenChange={setOpenSheet}>
+    <Sheet open={openSheetCart} onOpenChange={setOpenSheetCart}>
       <SheetTrigger asChild>
         <Button
           variant="outline"
@@ -176,7 +176,7 @@ export default function CartSheet({
                 >
                   <CartSheetItem
                     item={item}
-                    onNavigate={() => setOpenSheet(false)}
+                    onNavigate={() => setOpenSheetCart(false)}
                   />
                 </div>
               ))}
@@ -198,7 +198,7 @@ export default function CartSheet({
               <Button
                 type="button"
                 onClick={() => {
-                  setOpenSheet(false);
+                  setOpenSheetCart(false);
                   dispatch(setActiveStep("checkout"));
                   router.push("/cart?step=checkout");
                 }}
@@ -210,7 +210,7 @@ export default function CartSheet({
               <Link
                 href="/cart"
                 onClick={() => {
-                  setOpenSheet(false);
+                  setOpenSheetCart(false);
                 }}
                 className="capitalize mx-auto font-medium mt-4 bg-transparent border-0 border-b border-b-current rounded-none px-0 h-auto w-fit justify-center"
               >

@@ -6,20 +6,26 @@ import Footer2 from "../Footer2/Footer2";
 import { usePathname } from "next/navigation";
 import AuthDialog from "../Auth/AuthDialog";
 import ScrollToTop from "../ScrollToTop/ScrollToTop";
+import { useAppSelector } from "@/hooks/store.hooks";
 
 export default function Layout({ children }) {
-  const pathname = usePathname()
-    const isFullPage  = pathname === "/" || pathname === "/shop";
+  const { authChecked, token } = useAppSelector((store) => store.user);
+  const pathname = usePathname();
+  const isFullPage = pathname === "/" || pathname === "/shop";
   return (
     <>
       <div className="min-h-screen flex-col flex">
         <Navbar />
         <AuthDialog />
-        <main className={`flex-1 ${isFullPage  ? "bg-background" : "mt-[152px] lg:mt-[169px] xl:mt-[240px] 2xl:mt-[185px]"}`}>{children}</main>
-       <ScrollToTop />
+        <main
+          className={`flex-1 ${isFullPage ? "bg-background" : "mt-[152px] lg:mt-[169px] xl:mt-[240px] 2xl:mt-[185px]"}`}
+        >
+          {children}
+        </main>
+        <ScrollToTop />
         <Footer1 />
         <Footer2 />
-      </div> 
+      </div>
     </>
   );
 }
