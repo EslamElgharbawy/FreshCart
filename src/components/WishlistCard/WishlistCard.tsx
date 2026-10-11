@@ -18,11 +18,11 @@ interface WishlistCardProps {
   product: WishlistProduct;
 }
 
-export default function WishlistCard({ product}: WishlistCardProps) {
+export default function WishlistCard({ product }: WishlistCardProps) {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const { token } = useAppSelector((store) => store.user);
- 
+
   const handleSubmit = async () => {
     if (!token) {
       dispatch(actions.openAuthDialog("SignIn"));
@@ -45,13 +45,23 @@ export default function WishlistCard({ product}: WishlistCardProps) {
           href={`/ProductDetails/${product._id}`}
           className="relative block overflow-hidden"
         >
-          <Image
-            src={product.imageCover}
-            width={100}
-            height={100}
-            alt={product.title}
-            className="w-full h-full object-cover"
-          />
+          {product.imageCover ? (
+            <Image
+              src={product.imageCover}
+              width={100}
+              height={100}
+              alt={product.title || "Product image"}
+              className="w-full h-full object-cover"
+            />
+          ) : (
+            <div
+              className="flex aspect-square w-full items-center justify-center bg-gray-100 text-sm text-gray-400"
+              role="img"
+              aria-label="Product image unavailable"
+            >
+              No image available
+            </div>
+          )}
         </Link>
 
         <a
@@ -91,12 +101,12 @@ leading-4
         </div>
       </div>
       <div className="mt-4 text-[#333] text-center relative">
-        <a
+        <Link
           href={`/ProductDetails/${product._id}`}
           className="text-sm font-medium mb-1 px-5 line-clamp-1 hover:text-primary transition-colors duration-300"
         >
           {product.title}
-        </a>
+        </Link>
         <div className="relative">
           <span
             className="

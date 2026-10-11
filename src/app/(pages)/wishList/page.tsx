@@ -17,7 +17,7 @@ export default function page() {
     if (authChecked && token) {
       dispatch(GetLoggedUserWishlist());
     }
-  }, [dispatch]);
+  }, [dispatch, authChecked, token]);
   const isBusy = useIsBusy({
     authChecked,
     loading,

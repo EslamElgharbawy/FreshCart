@@ -91,9 +91,8 @@ const wishListSlice = createSlice({
         state.loading = true;
         state.error = null;
       })
-      .addCase(RemoveProductFromWishlist.fulfilled, (state, action) => {
+      .addCase(RemoveProductFromWishlist.fulfilled, (state) => {
         state.loading = false;
-        state.wishlist = action.payload.data;
       })
       .addCase(RemoveProductFromWishlist.rejected, (state, action) => {
         state.loading = false;
