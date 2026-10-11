@@ -11,7 +11,7 @@ import {
 import CartSheetItem from "../CartSheetItem/CartSheetItem";
 import { LogOut, User, XIcon } from "lucide-react";
 import i18n from "@/i18n";
-import { useState } from "react";
+import { ReactNode, useState } from "react";
 import { Button } from "../ui/button";
 import { useAppDispatch, useAppSelector } from "@/hooks/store.hooks";
 import { usePathname, useSearchParams } from "next/navigation";
@@ -21,8 +21,8 @@ import { logout } from "@/Features/user.slice";
 import { actions } from "@/Features/AuthDialog.slice";
 import toast from "react-hot-toast";
 import { useTranslation } from "react-i18next";
-export default function AccountSheet() {
-  const { user } = useAppSelector((store) => store.user);
+import { clearOrdersState } from "@/Features/Order.slice";
+export default function AccountSheet({ children }: { children: ReactNode }) {
   const { t, i18n } = useTranslation();
   const [openSheetAccount, setOpenSheetAccount] = useState(false);
   const dispatch = useAppDispatch();
@@ -37,25 +37,16 @@ export default function AccountSheet() {
     setOpenSheetAccount(false);
     dispatch(clearCartState());
     dispatch(clearWishlistState());
+    dispatch(clearOrdersState());
     if (isCheckout) {
       dispatch(actions.openAuthDialog("SignIn"));
     } else {
       toast.success(t("authDialog.logoutSuccess"));
     }
   };
-  const firstName = user?.name?.split(" ")[0];
   return (
     <Sheet open={openSheetAccount} onOpenChange={setOpenSheetAccount}>
-      <SheetTrigger asChild>
-        <div className="auth flex justify-center items-center gap-1 text-[#666666] text-[11px]">
-          <button className="flex justify-center items-center gap-1 hover:text-[#fe4407] transition-all duration-300">
-            <User width={20} height={20} />
-            {i18n.language === "ar"
-              ? `${t("navbar.greeting")}، ${firstName}`
-              : `${t("navbar.greeting")}, ${firstName}`}
-          </button>
-        </div>
-      </SheetTrigger>
+      <SheetTrigger asChild>{children}</SheetTrigger>
 
       <SheetContent
         side={i18n.language === "ar" ? "left" : "right"}
@@ -130,7 +121,7 @@ export default function AccountSheet() {
             onClick={() => handleLogout()}
             className="text-base bg-transparent hover:bg-transparent hover:underline font-normal"
           >
-            <LogOut className="!w-5 !h-5" /> Log out
+            <LogOut className={`!w-5 !h-5 ${i18n.language === "ar" ? "-scale-x-100":""}`} /> {t("authDialog.logout")}
           </Button>
         </SheetFooter>
       </SheetContent>

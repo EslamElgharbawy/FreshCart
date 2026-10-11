@@ -10,7 +10,7 @@ const resources = {
         shop: "Shop",
         cart: "Shopping Cart",
         cartTap: "Cart",
-        wishList: "Wishlist",
+        orders: "Orders",
         search: "Search in...",
         categories: "All Categories",
         flashSale: "Flash Sale",
@@ -33,6 +33,7 @@ const resources = {
         description: "Sign in or create a new account.",
         signIn: "Sign In",
         signUp: "Sign Up",
+        logout: "Log Out",
         logoutSuccess: "Logged out successfully",
       },
 
@@ -456,7 +457,7 @@ const resources = {
         shop: "المتجر",
         cart: "سلة المشتريات",
         cartTap: "السلة",
-        wishList: "المفضلة",
+        orders: "الطلبات",
         search: "ابحث في...",
         categories: "كل الأقسام",
         flashSale: "عروض سريعة",
@@ -479,6 +480,7 @@ const resources = {
         description: "سجل الدخول أو أنشئ حسابًا جديدًا.",
         signIn: "تسجيل الدخول",
         signUp: "إنشاء حساب",
+        logout: "تسجيل الخروج",
         logoutSuccess: "تم تسجيل الخروج بنجاح",
       },
 

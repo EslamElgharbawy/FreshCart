@@ -43,7 +43,7 @@ const sections = [
   { name: "home", path: "/" },
   { name: "shop", path: "/shop" },
   { name: "cartTap", path: "/cart" },
-  { name: "wishList", path: "/wishList" },
+    { name: "orders", path: "/allorders" },
 ];
 type MobileMenuProps = {
   search: string;

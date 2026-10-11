@@ -12,9 +12,10 @@ export default function OrdersPage() {
   const [search, setSearch] = useState("");
   const dispatch = useAppDispatch();
   const { t, i18n } = useTranslation();
-  const { user } = useAppSelector((store) => store.user);
   const { orders, loading } = useAppSelector((store) => store.orderSlice);
-  const { authChecked } = useAppSelector((store) => store.user);
+  const { authChecked, isLoggedIn, user } = useAppSelector(
+    (store) => store.user,
+  );
   const inputRef = useRef<HTMLInputElement | null>(null);
   const searchedOrders = useMemo(() => {
     const query = search.trim().toLowerCase();
@@ -39,10 +40,10 @@ export default function OrdersPage() {
   );
 
   useEffect(() => {
-    if (user?.id) {
+    if (authChecked && isLoggedIn && user?.id) {
       dispatch(getUserOrders(user.id));
     }
-  }, [user?.id, dispatch]);
+  }, [authChecked, isLoggedIn, user?.id, dispatch]);
   const isBusy = useIsBusy({
     authChecked,
     loading,

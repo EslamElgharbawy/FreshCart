@@ -78,12 +78,13 @@ export default function Navbar() {
   );
   const { cart, loading } = useAppSelector((store) => store.CartSlice);
   const { wishlist } = useAppSelector((store) => store.wishListSlice);
+  const firstName = user?.name?.split(" ")[0];
 
   const sections = [
     { name: "home", path: "/" },
     { name: "shop", path: "/shop" },
     { name: "cartTap", path: "/cart" },
-    { name: "wishList", path: "/wishList" },
+    { name: "orders", path: "/allorders" },
   ];
 
   useEffect(() => {
@@ -289,7 +290,16 @@ export default function Navbar() {
                   <div className="w-20 h-5 bg-gray-200 animate-pulse rounded" />
                 ) : isLoggedIn ? (
                   <>
-                    <AccountSheet />
+                    <AccountSheet>
+                      <div className="auth flex justify-center items-center gap-1 text-[#666666] text-[11px]">
+                        <button className="flex justify-center items-center gap-1 hover:text-[#fe4407] transition-all duration-300">
+                          <User width={20} height={20} />
+                          {i18n.language === "ar"
+                            ? `${t("navbar.greeting")}، ${firstName}`
+                            : `${t("navbar.greeting")}, ${firstName}`}
+                        </button>
+                      </div>
+                    </AccountSheet>
                   </>
                 ) : (
                   <>
@@ -350,6 +360,30 @@ export default function Navbar() {
                     </ul>
                   </div>
                   <div className="right-side flex justify-center items-center">
+                    <div className="flex justify-center items-center gap-5">
+                      <span className="relative hover:text-primary transition-all duration-300">
+                        {isBusy ? (
+                          <span
+                            className={`absolute -top-1 ${
+                              language === "EGY" ? "-left-2" : "-right-2"
+                            } w-[18px] h-[18px] bg-accent text-[#272b37] rounded-full flex justify-center items-center overflow-hidden`}
+                          >
+                            <span className="badge_loader" />
+                          </span>
+                        ) : (
+                          <span
+                            className={`absolute -top-1  ${language === "EGY" ? "-left-2" : "-right-2"} w-[18px] h-[18px] bg-accent text-[#272b37] text-[11px] rounded-full flex justify-center items-center`}
+                          >
+                            {wishlist.length}
+                          </span>
+                        )}
+
+                        <Link href="/wishList">
+                          <Heart size={27} />
+                        </Link>
+                      </span>
+                    </div>
+                    <div className="w-[1px] h-10 bg-[#EEEEEE1A] mx-5"></div>
                     <CartSheet
                       currency={currency}
                       language={language}
@@ -717,55 +751,14 @@ export default function Navbar() {
                 <div className="flex justify-center items-center gap-5 ms-auto">
                   {isLoggedIn ? (
                     <>
-                      <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                          <button className="hover:text-[#fe4407] transition-all duration-300">
-                            <User className="w-[26px] h-[26px] lg:w-[28px] lg:h-[28px] xl:w-[34px] xl:h-[34px]" />
-                          </button>
-                        </DropdownMenuTrigger>
-
-                        <DropdownMenuContent
-                          align="end"
-                          className="w-64 p-0 !bg-red-500"
+                      <AccountSheet>
+                        <button
+                          type="button"
+                          className="hover:text-[#fe4407] transition-all duration-300"
                         >
-                          <div className="border-b p-4">
-                            <p className="text-sm text-gray-500">
-                              Signed in as
-                            </p>
-                            <p className="font-semibold">{user?.name}</p>
-                          </div>
-
-                          <DropdownMenuItem className="cursor-pointer">
-                            <User className="mr-2 h-4 w-4" />
-                            My Profile
-                          </DropdownMenuItem>
-
-                          <DropdownMenuItem className="cursor-pointer">
-                            {/* <Package className="mr-2 h-4 w-4" /> */}
-                            My Orders
-                          </DropdownMenuItem>
-
-                          <DropdownMenuItem className="cursor-pointer">
-                            {/* <Heart className="mr-2 h-4 w-4" /> */}
-                            Wishlist
-                          </DropdownMenuItem>
-
-                          <DropdownMenuItem className="cursor-pointer">
-                            {/* <Settings className="mr-2 h-4 w-4" /> */}
-                            Settings
-                          </DropdownMenuItem>
-
-                          <DropdownMenuSeparator />
-
-                          <DropdownMenuItem
-                            // onClick={handleLogout}
-                            className="cursor-pointer text-red-500 focus:text-red-500"
-                          >
-                            {/* <LogOut className="mr-2 h-4 w-4" /> */}
-                            Logout
-                          </DropdownMenuItem>
-                        </DropdownMenuContent>
-                      </DropdownMenu>
+                          <User className="w-[26px] h-[26px] lg:w-[28px] lg:h-[28px] xl:w-[34px] xl:h-[34px]" />
+                        </button>
+                      </AccountSheet>
                     </>
                   ) : (
                     <>
