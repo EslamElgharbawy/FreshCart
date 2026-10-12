@@ -81,7 +81,7 @@ export default function AccountSheet({ children }: { children: ReactNode }) {
     icon: <MapPin className="size-5 text-[#333]" />,
     title: "My Addresses",
     dis: "Manage your saved addresses",
-    href: "/addresses",
+    href: "/account/addresses",
   },
   
   {
@@ -146,10 +146,10 @@ export default function AccountSheet({ children }: { children: ReactNode }) {
               >
                 <div>{item.icon}</div>
                 <div className="group/account-link w-full">
-                  <h2 className="font-semibold text-[#333] group-hover/account-link:text-primary transition-colors duration-300">
+                  <h2 className="font-semibold text-[#333] 2xl:group-hover/account-link:text-primary transition-colors duration-300">
                     {item.title}
                   </h2>
-                  <p className="text-sm text-[#484848] group-hover/account-link:text-primary transition-colors duration-300">
+                  <p className="text-sm text-[#484848] 2xl:group-hover/account-link:text-primary transition-colors duration-300">
                     {item.dis}
                   </p>
                 </div>
@@ -161,7 +161,7 @@ export default function AccountSheet({ children }: { children: ReactNode }) {
           <Button
             type="button"
             onClick={() => handleLogout()}
-            className="text-base text-[#333] bg-transparent hover:bg-transparent hover:underline font-medium"
+            className="text-base text-[#333] bg-transparent 2xl:hover:bg-transparent 2xl:hover:underline font-medium"
           >
             <LogOut
               className={`!w-5 !h-5 text-[#333] ${i18n.language === "ar" ? "-scale-x-100" : ""}`}

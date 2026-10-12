@@ -420,7 +420,7 @@ export default function CartContent() {
                             <Input
                               type="text"
                               id="details"
-                              className="rounded-none py-2 px-5 h-auto text-sm"
+                              className="rounded-none py-2 px-5 h-auto text-sm focus:border-primary "
                               name="details"
                               value={formik.values.details}
                               onChange={formik.handleChange}
@@ -443,7 +443,7 @@ export default function CartContent() {
                             <Input
                               type="tel"
                               id="phone"
-                              className="rounded-none py-2 px-5 h-auto text-sm"
+                              className="rounded-none py-2 px-5 h-auto text-sm focus:border-primary "
                               name="phone"
                               value={formik.values.phone}
                               onChange={formik.handleChange}
@@ -465,7 +465,7 @@ export default function CartContent() {
                             <Input
                               type="text"
                               id="city"
-                              className="rounded-none py-2 px-5 h-auto text-sm"
+                              className="rounded-none py-2 px-5 h-auto text-sm focus:border-primary "
                               name="city"
                               value={formik.values.city}
                               onChange={formik.handleChange}
@@ -487,7 +487,7 @@ export default function CartContent() {
                             <Input
                               type="text"
                               id="postalCode"
-                              className="rounded-none py-2 px-5 h-auto text-sm"
+                              className="rounded-none py-2 px-5 h-auto text-sm focus:border-primary "
                               name="postalCode"
                               value={formik.values.postalCode}
                               onChange={formik.handleChange}
