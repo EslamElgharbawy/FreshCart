@@ -5,6 +5,8 @@ export type Userstate = {
     id: string;
     name: string;
     role: string;
+    email?: string;
+    phone?: string;
   } | null;
   authChecked: boolean;
   loading: boolean;

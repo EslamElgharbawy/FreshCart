@@ -428,6 +428,9 @@ const resources = {
         enterEmailAddress: "Enter email address",
         enterPhoneNumber: "Enter phone number",
         saveChanges: "Save Changes",
+        updating: "Updating profile...",
+        updateSuccess: "Profile updated successfully!",
+        notLoggedIn: "Please log in to update your profile",
       },
       footer: {
         supportText: "Got Question? Call us 24/7",
@@ -898,6 +901,9 @@ const resources = {
         enterEmailAddress: "أدخل البريد الإلكتروني",
         enterPhoneNumber: "أدخل رقم الهاتف",
         saveChanges: "حفظ التغييرات",
+        updating: "جاري تحديث البيانات...",
+        updateSuccess: "تم تحديث البيانات بنجاح!",
+        notLoggedIn: "يرجى تسجيل الدخول لتعديل البيانات",
       },
       footer: {
         supportText: "هل لديك سؤال؟ اتصل بنا 24/7",

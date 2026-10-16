@@ -107,6 +107,30 @@ export const VerifyToken = createAsyncThunk(
   },
 );
 
+export const updateUserData = createAsyncThunk(
+  "user/updateUserData",
+  async (
+    values: { name: string; email: string; phone: string },
+    { rejectWithValue },
+  ) => {
+    try {
+      const { data } = await axios.put(
+        "https://ecommerce.routemisr.com/api/v1/users/updateMe/",
+        values,
+        {
+          headers: {
+            token: localStorage.getItem("token"),
+          },
+        },
+      );
+
+      return data;
+    } catch (error: any) {
+      return rejectWithValue(error.response.data);
+    }
+  },
+);
+
 const initialState: Userstate = {
   isLoggedIn: false,
   token: null,
@@ -129,7 +153,11 @@ const userSlice = createSlice({
     logout: (state) => {
       state.isLoggedIn = false;
       state.token = null;
-      localStorage.removeItem("token");
+      state.user = null;
+      if (typeof window !== "undefined") {
+        localStorage.removeItem("token");
+        localStorage.removeItem("userData");
+      }
     },
   },
   extraReducers: (builder) => {
@@ -155,8 +183,21 @@ const userSlice = createSlice({
     builder.addCase(Login.fulfilled, (state, action) => {
       state.loading = false;
       state.token = action.payload.token;
-      localStorage.setItem("token", action.payload.token);
+      if (typeof window !== "undefined") {
+        localStorage.setItem("token", action.payload.token);
+      }
       state.isLoggedIn = true;
+      if (action.payload.user) {
+        state.user = {
+          id: action.payload.user._id || action.payload.user.id || "",
+          name: action.payload.user.name,
+          role: action.payload.user.role || "user",
+          email: action.payload.user.email,
+        };
+        if (typeof window !== "undefined") {
+          localStorage.setItem("userData", JSON.stringify(action.payload.user));
+        }
+      }
     });
 
     builder.addCase(Login.rejected, (state, action) => {
@@ -208,6 +249,7 @@ const userSlice = createSlice({
       state.loading = false;
       state.error = action.error.message ?? "Something went wrong";
     });
+
     // * VerifyToken
     builder.addCase(VerifyToken.pending, (state) => {
       state.loading = true;
@@ -216,10 +258,23 @@ const userSlice = createSlice({
 
     builder.addCase(VerifyToken.fulfilled, (state, action) => {
       state.loading = false;
-      state.user = action.payload.decoded;
+      let cachedUser: any = {};
+      if (typeof window !== "undefined") {
+        const storedUserData = localStorage.getItem("userData");
+        if (storedUserData) {
+          try {
+            cachedUser = JSON.parse(storedUserData);
+          } catch (e) {}
+        }
+      }
+      state.user = {
+        ...cachedUser,
+        ...action.payload.decoded,
+        name: action.payload.decoded?.name || cachedUser?.name || "",
+      };
       state.isLoggedIn = true;
       state.authChecked = true;
-      state.token = localStorage.getItem("token");
+      state.token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
     });
 
     builder.addCase(VerifyToken.rejected, (state, action) => {
@@ -230,7 +285,56 @@ const userSlice = createSlice({
       state.authChecked = true;
       state.user = null;
 
-      localStorage.removeItem("token");
+      if (typeof window !== "undefined") {
+        localStorage.removeItem("token");
+        localStorage.removeItem("userData");
+      }
+    });
+
+    // * Update User Data
+    builder.addCase(updateUserData.pending, (state) => {
+      state.loading = true;
+      state.error = null;
+    });
+
+    builder.addCase(updateUserData.fulfilled, (state, action) => {
+      state.loading = false;
+      const updatedUser = action.payload?.user;
+      if (updatedUser) {
+        state.user = {
+          ...state.user,
+          id: state.user?.id || "",
+          role: updatedUser.role || state.user?.role || "user",
+          name: updatedUser.name,
+          email: updatedUser.email,
+          phone: action.meta.arg.phone,
+        };
+        if (typeof window !== "undefined") {
+          const stored = localStorage.getItem("userData");
+          let parsed = {};
+          if (stored) {
+            try {
+              parsed = JSON.parse(stored);
+            } catch (e) {}
+          }
+          localStorage.setItem(
+            "userData",
+            JSON.stringify({
+              ...parsed,
+              ...updatedUser,
+              phone: action.meta.arg.phone,
+            }),
+          );
+        }
+      }
+    });
+
+    builder.addCase(updateUserData.rejected, (state, action) => {
+      state.loading = false;
+      state.error =
+        (action.payload as any)?.message ??
+        action.error.message ??
+        "Something went wrong";
     });
   },
 });
