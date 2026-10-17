@@ -95,12 +95,12 @@ export default function AccountDetailsPage() {
         className="rounded-xl border border-gray-200 p-6 md:p-8"
         noValidate
       >
-        <div className="grid gap-x-6 gap-y-5 grid-cols-1 xl:grid-cols-2">
+        <div className="grid gap-x-6 gap-y-5 grid-cols-1 xl:grid-cols-2 ">
           {/* Full Name */}
           <div className="space-y-2">
             <label
               htmlFor="name"
-              className="text-sm font-medium text-gray-700"
+              className="text-sm font-medium text-[#333]"
             >
               {t("accountDetails.fullName")}
             </label>
@@ -125,7 +125,7 @@ export default function AccountDetailsPage() {
           <div className="space-y-2">
             <label
               htmlFor="email"
-              className="text-sm font-medium text-gray-700"
+              className="text-sm font-medium text-[#333]"
             >
               {t("accountDetails.emailAddress")}
             </label>
@@ -150,7 +150,7 @@ export default function AccountDetailsPage() {
           <div className="space-y-2">
             <label
               htmlFor="phone"
-              className="text-sm font-medium text-gray-700"
+              className="text-sm font-medium text-[#333]"
             >
               {t("accountDetails.phoneNumber")}
             </label>
@@ -172,7 +172,7 @@ export default function AccountDetailsPage() {
           </div>
         </div>
 
-        <div className="mt-6 flex justify-end">
+        <div className="mt-6">
           <button
             type="submit"
             disabled={loading || formik.isSubmitting}

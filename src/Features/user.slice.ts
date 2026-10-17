@@ -1,7 +1,7 @@
 import { Userstate } from "@/Types/user";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
-import toast from "react-hot-toast";
+
 
 export const Register = createAsyncThunk(
   "user/register",
@@ -131,6 +131,30 @@ export const updateUserData = createAsyncThunk(
   },
 );
 
+export const updateUserPassword = createAsyncThunk(
+  "user/updateUserPassword",
+  async (
+    values: { currentPassword: string; password: string; rePassword: string },
+    { rejectWithValue },
+  ) => {
+    try {
+      const { data } = await axios.put(
+        "https://ecommerce.routemisr.com/api/v1/users/changeMyPassword",
+        values,
+        {
+          headers: {
+            token: localStorage.getItem("token"),
+          },
+        },
+      );
+
+      return data;
+    } catch (error: any) {
+      return rejectWithValue(error.response?.data || error.message);
+    }
+  },
+);
+
 const initialState: Userstate = {
   isLoggedIn: false,
   token: null,
@@ -154,10 +178,7 @@ const userSlice = createSlice({
       state.isLoggedIn = false;
       state.token = null;
       state.user = null;
-      if (typeof window !== "undefined") {
-        localStorage.removeItem("token");
-        localStorage.removeItem("userData");
-      }
+      localStorage.removeItem("token");
     },
   },
   extraReducers: (builder) => {
@@ -183,21 +204,8 @@ const userSlice = createSlice({
     builder.addCase(Login.fulfilled, (state, action) => {
       state.loading = false;
       state.token = action.payload.token;
-      if (typeof window !== "undefined") {
-        localStorage.setItem("token", action.payload.token);
-      }
+      localStorage.setItem("token", action.payload.token);
       state.isLoggedIn = true;
-      if (action.payload.user) {
-        state.user = {
-          id: action.payload.user._id || action.payload.user.id || "",
-          name: action.payload.user.name,
-          role: action.payload.user.role || "user",
-          email: action.payload.user.email,
-        };
-        if (typeof window !== "undefined") {
-          localStorage.setItem("userData", JSON.stringify(action.payload.user));
-        }
-      }
     });
 
     builder.addCase(Login.rejected, (state, action) => {
@@ -205,6 +213,7 @@ const userSlice = createSlice({
       state.error = action.error.message ?? "Something went wrong";
     });
 
+    
     // * ForgotPassword
     builder.addCase(forgotPassword.pending, (state) => {
       state.loading = true;
@@ -219,6 +228,7 @@ const userSlice = createSlice({
       state.loading = false;
       state.error = action.error.message ?? "Something went wrong";
     });
+
 
     // * VerifyResetCode
     builder.addCase(VerifyResetCode.pending, (state) => {
@@ -235,6 +245,7 @@ const userSlice = createSlice({
       state.error = action.error.message ?? "Something went wrong";
     });
 
+
     // * ResetPassword
     builder.addCase(resetPassword.pending, (state) => {
       state.loading = true;
@@ -250,6 +261,7 @@ const userSlice = createSlice({
       state.error = action.error.message ?? "Something went wrong";
     });
 
+
     // * VerifyToken
     builder.addCase(VerifyToken.pending, (state) => {
       state.loading = true;
@@ -258,23 +270,10 @@ const userSlice = createSlice({
 
     builder.addCase(VerifyToken.fulfilled, (state, action) => {
       state.loading = false;
-      let cachedUser: any = {};
-      if (typeof window !== "undefined") {
-        const storedUserData = localStorage.getItem("userData");
-        if (storedUserData) {
-          try {
-            cachedUser = JSON.parse(storedUserData);
-          } catch (e) {}
-        }
-      }
-      state.user = {
-        ...cachedUser,
-        ...action.payload.decoded,
-        name: action.payload.decoded?.name || cachedUser?.name || "",
-      };
+      state.user = action.payload.decoded;
       state.isLoggedIn = true;
       state.authChecked = true;
-      state.token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
+      state.token = localStorage.getItem("token");
     });
 
     builder.addCase(VerifyToken.rejected, (state, action) => {
@@ -284,12 +283,9 @@ const userSlice = createSlice({
       state.token = null;
       state.authChecked = true;
       state.user = null;
-
-      if (typeof window !== "undefined") {
-        localStorage.removeItem("token");
-        localStorage.removeItem("userData");
-      }
+      localStorage.removeItem("token");
     });
+
 
     // * Update User Data
     builder.addCase(updateUserData.pending, (state) => {
@@ -299,37 +295,34 @@ const userSlice = createSlice({
 
     builder.addCase(updateUserData.fulfilled, (state, action) => {
       state.loading = false;
-      const updatedUser = action.payload?.user;
-      if (updatedUser) {
-        state.user = {
-          ...state.user,
-          id: state.user?.id || "",
-          role: updatedUser.role || state.user?.role || "user",
-          name: updatedUser.name,
-          email: updatedUser.email,
-          phone: action.meta.arg.phone,
-        };
-        if (typeof window !== "undefined") {
-          const stored = localStorage.getItem("userData");
-          let parsed = {};
-          if (stored) {
-            try {
-              parsed = JSON.parse(stored);
-            } catch (e) {}
-          }
-          localStorage.setItem(
-            "userData",
-            JSON.stringify({
-              ...parsed,
-              ...updatedUser,
-              phone: action.meta.arg.phone,
-            }),
-          );
-        }
-      }
+      state.user = action.payload?.user;
     });
 
     builder.addCase(updateUserData.rejected, (state, action) => {
+      state.loading = false;
+      state.error =
+        (action.payload as any)?.message ??
+        action.error.message ??
+        "Something went wrong";
+    });
+
+
+    // * Update User Password
+    builder.addCase(updateUserPassword.pending, (state) => {
+      state.loading = true;
+      state.error = null;
+    });
+
+    builder.addCase(updateUserPassword.fulfilled, (state, action) => {
+      state.loading = false;
+      state.token = action.payload.token;
+      if (action.payload?.user) {
+        state.user = action.payload.user;
+      }
+      localStorage.setItem("token", action.payload.token);
+    });
+
+    builder.addCase(updateUserPassword.rejected, (state, action) => {
       state.loading = false;
       state.error =
         (action.payload as any)?.message ??
